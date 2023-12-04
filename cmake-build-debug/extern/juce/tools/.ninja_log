@@ -1,0 +1,10 @@
+# ninja log v5
+0	49	0	/Users/aszokalski/Downloads/pybind/cmake-build-debug/extern/juce/tools/CMakeFiles/cmake.verify_globs	68e6de5f7be77a4f
+1	881	1701696253799576586	extras/Build/juceaide/CMakeFiles/juceaide.dir/__/__/__/modules/juce_data_structures/juce_data_structures.mm.o	1566644b26549a1f
+0	1407	1701696254322983486	extras/Build/juceaide/CMakeFiles/juceaide.dir/__/juce_build_tools/juce_build_tools.cpp.o	fa9b0aa8e1d666e9
+0	1450	1701696254368477134	extras/Build/juceaide/CMakeFiles/juceaide.dir/Main.cpp.o	7e985c74d4c65924
+1	1736	1701696254652499617	extras/Build/juceaide/CMakeFiles/juceaide.dir/__/__/__/modules/juce_events/juce_events.mm.o	9c1eb7b41411bc7e
+1	3696	1701696256607362477	extras/Build/juceaide/CMakeFiles/juceaide.dir/__/__/__/modules/juce_core/juce_core.mm.o	9a4bba856e8d820c
+1	3904	1701696256814461919	extras/Build/juceaide/CMakeFiles/juceaide.dir/__/__/__/modules/juce_graphics/juce_graphics.mm.o	5bfc0a999adc4595
+1	11753	1701696264642060738	extras/Build/juceaide/CMakeFiles/juceaide.dir/__/__/__/modules/juce_gui_basics/juce_gui_basics.mm.o	7cb38b30dbe7b71c
+11754	12528	1701696265450021412	extras/Build/juceaide/juceaide_artefacts/Debug/juceaide	ddabd2dd101d806f

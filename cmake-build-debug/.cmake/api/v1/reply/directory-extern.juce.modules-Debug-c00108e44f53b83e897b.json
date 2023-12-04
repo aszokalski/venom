@@ -1,0 +1,498 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install",
+			"juce_add_module",
+			"juce_add_modules"
+		],
+		"files" : 
+		[
+			"extern/juce/extras/Build/CMake/JUCEModuleSupport.cmake",
+			"extern/juce/modules/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 24,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 654,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 641,
+				"parent" : 2
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 654,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 641,
+				"parent" : 4
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 654,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 641,
+				"parent" : 6
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 654,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 641,
+				"parent" : 8
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 654,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 641,
+				"parent" : 10
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 654,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 641,
+				"parent" : 12
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 654,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 641,
+				"parent" : 14
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 654,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 641,
+				"parent" : 16
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 654,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 641,
+				"parent" : 18
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 654,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 641,
+				"parent" : 20
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 654,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 641,
+				"parent" : 22
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 654,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 641,
+				"parent" : 24
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 654,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 641,
+				"parent" : 26
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 654,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 641,
+				"parent" : 28
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 654,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 641,
+				"parent" : 30
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 654,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 641,
+				"parent" : 32
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 654,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 641,
+				"parent" : 34
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 654,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 641,
+				"parent" : 36
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 654,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 641,
+				"parent" : 38
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 654,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 641,
+				"parent" : 40
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 654,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 641,
+				"parent" : 42
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 3,
+			"component" : "Unspecified",
+			"destination" : "include/JUCE-7.0.9/modules",
+			"paths" : 
+			[
+				"extern/juce/modules/juce_analytics"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 5,
+			"component" : "Unspecified",
+			"destination" : "include/JUCE-7.0.9/modules",
+			"paths" : 
+			[
+				"extern/juce/modules/juce_audio_basics"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 7,
+			"component" : "Unspecified",
+			"destination" : "include/JUCE-7.0.9/modules",
+			"paths" : 
+			[
+				"extern/juce/modules/juce_audio_devices"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 9,
+			"component" : "Unspecified",
+			"destination" : "include/JUCE-7.0.9/modules",
+			"paths" : 
+			[
+				"extern/juce/modules/juce_audio_formats"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 11,
+			"component" : "Unspecified",
+			"destination" : "include/JUCE-7.0.9/modules",
+			"paths" : 
+			[
+				"extern/juce/modules/juce_audio_plugin_client"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 13,
+			"component" : "Unspecified",
+			"destination" : "include/JUCE-7.0.9/modules",
+			"paths" : 
+			[
+				"extern/juce/modules/juce_audio_processors"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 15,
+			"component" : "Unspecified",
+			"destination" : "include/JUCE-7.0.9/modules",
+			"paths" : 
+			[
+				"extern/juce/modules/juce_audio_utils"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 17,
+			"component" : "Unspecified",
+			"destination" : "include/JUCE-7.0.9/modules",
+			"paths" : 
+			[
+				"extern/juce/modules/juce_box2d"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 19,
+			"component" : "Unspecified",
+			"destination" : "include/JUCE-7.0.9/modules",
+			"paths" : 
+			[
+				"extern/juce/modules/juce_core"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 21,
+			"component" : "Unspecified",
+			"destination" : "include/JUCE-7.0.9/modules",
+			"paths" : 
+			[
+				"extern/juce/modules/juce_cryptography"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 23,
+			"component" : "Unspecified",
+			"destination" : "include/JUCE-7.0.9/modules",
+			"paths" : 
+			[
+				"extern/juce/modules/juce_data_structures"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 25,
+			"component" : "Unspecified",
+			"destination" : "include/JUCE-7.0.9/modules",
+			"paths" : 
+			[
+				"extern/juce/modules/juce_dsp"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 27,
+			"component" : "Unspecified",
+			"destination" : "include/JUCE-7.0.9/modules",
+			"paths" : 
+			[
+				"extern/juce/modules/juce_events"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 29,
+			"component" : "Unspecified",
+			"destination" : "include/JUCE-7.0.9/modules",
+			"paths" : 
+			[
+				"extern/juce/modules/juce_graphics"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 31,
+			"component" : "Unspecified",
+			"destination" : "include/JUCE-7.0.9/modules",
+			"paths" : 
+			[
+				"extern/juce/modules/juce_gui_basics"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 33,
+			"component" : "Unspecified",
+			"destination" : "include/JUCE-7.0.9/modules",
+			"paths" : 
+			[
+				"extern/juce/modules/juce_gui_extra"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 35,
+			"component" : "Unspecified",
+			"destination" : "include/JUCE-7.0.9/modules",
+			"paths" : 
+			[
+				"extern/juce/modules/juce_midi_ci"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 37,
+			"component" : "Unspecified",
+			"destination" : "include/JUCE-7.0.9/modules",
+			"paths" : 
+			[
+				"extern/juce/modules/juce_opengl"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 39,
+			"component" : "Unspecified",
+			"destination" : "include/JUCE-7.0.9/modules",
+			"paths" : 
+			[
+				"extern/juce/modules/juce_osc"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 41,
+			"component" : "Unspecified",
+			"destination" : "include/JUCE-7.0.9/modules",
+			"paths" : 
+			[
+				"extern/juce/modules/juce_product_unlocking"
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 43,
+			"component" : "Unspecified",
+			"destination" : "include/JUCE-7.0.9/modules",
+			"paths" : 
+			[
+				"extern/juce/modules/juce_video"
+			],
+			"type" : "directory"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "extern/juce/modules",
+		"source" : "extern/juce/modules"
+	}
+}

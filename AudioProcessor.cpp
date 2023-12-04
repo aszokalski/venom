@@ -5,33 +5,33 @@
 
 namespace py = pybind11;
 
-class PyAudioProcessorEditor : protected juce::AudioProcessorEditor {
+class PyAudioProcessorEditor : public juce::AudioProcessorEditor
+{
 public:
-    /* Inherit the constructors */
-    explicit PyAudioProcessorEditor(juce::AudioProcessor& p) : juce::AudioProcessorEditor(p) {}
-    explicit PyAudioProcessorEditor(juce::AudioProcessor* p) : juce::AudioProcessorEditor(p) {}
+    explicit PyAudioProcessorEditor(juce::AudioProcessor &p) : juce::AudioProcessorEditor(p) {}
+    explicit PyAudioProcessorEditor(juce::AudioProcessor *p) : juce::AudioProcessorEditor(p) {}
 
     void paint(juce::Graphics &g) override
     {
         PYBIND11_OVERRIDE_PURE(
-            void,               /* Return type */
+            void,
             juce::AudioProcessorEditor, /* Parent class */
-            paint,              /* Name of function in C++ (must match Python name) */
-            g                   /* Argument(s) */
+            paint,                      /* Name of function in C++ (must match Python name) */
+            g                           /* Argument(s) */
         );
     }
 
     void resized() override
     {
         PYBIND11_OVERRIDE_PURE(
-            void,               /* Return type */
+            void,                       /* Return type */
             juce::AudioProcessorEditor, /* Parent class */
-            resized,            /* Name of function in C++ (must match Python name) */
+            resized,                    /* Name of function in C++ (must match Python name) */
         );
     }
 };
 
-class PyAudioProcessor : protected juce::AudioProcessor
+class PyAudioProcessor : public juce::AudioProcessor
 {
 public:
     /* Inherit the constructors */
@@ -78,12 +78,12 @@ public:
 
     using juce::AudioProcessor::processBlock;
 
-    juce::AudioProcessorEditor* createEditor() override{
+    juce::AudioProcessorEditor *createEditor() override
+    {
         PYBIND11_OVERLOAD_PURE(
-                juce::AudioProcessorEditor*,
-                juce::AudioProcessor,
-                createEditor
-        );
+            juce::AudioProcessorEditor *,
+            juce::AudioProcessor,
+            createEditor);
     }
 
     bool hasEditor() const override
@@ -97,152 +97,168 @@ public:
     const juce::String getName() const override
     {
         PYBIND11_OVERRIDE_PURE(
-                juce::String,         /* Return type */
-                juce::AudioProcessor, /* Parent class */
-                getName               /* Name of function in C++ (must match Python name) */
+            juce::String,         /* Return type */
+            juce::AudioProcessor, /* Parent class */
+            getName               /* Name of function in C++ (must match Python name) */
         );
     }
 
-
-    bool acceptsMidi() const override{
+    bool acceptsMidi() const override
+    {
         PYBIND11_OVERRIDE_PURE(
-                bool,
-                juce::AudioProcessor,
-                acceptsMidi
-                );
+            bool,
+            juce::AudioProcessor,
+            acceptsMidi);
     }
 
-    bool producesMidi() const override{
+    bool producesMidi() const override
+    {
         PYBIND11_OVERLOAD_PURE(
-                bool,
-                juce::AudioProcessor,
-                producesMidi
-                );
+            bool,
+            juce::AudioProcessor,
+            producesMidi);
     }
 
-    bool isMidiEffect() const override{
+    bool isMidiEffect() const override
+    {
         PYBIND11_OVERLOAD_PURE(
-                bool,
-                juce::AudioProcessor,
-                isMidiEffect
-                );
+            bool,
+            juce::AudioProcessor,
+            isMidiEffect);
     }
 
-    double getTailLengthSeconds() const override{
+    double getTailLengthSeconds() const override
+    {
         PYBIND11_OVERLOAD_PURE(
-                double,
-                juce::AudioProcessor,
-                getTailLengthSeconds
-                );
+            double,
+            juce::AudioProcessor,
+            getTailLengthSeconds);
     }
 
-    int getNumPrograms() override{
+    int getNumPrograms() override
+    {
         PYBIND11_OVERLOAD_PURE(
-                int,
-                juce::AudioProcessor,
-                getNumPrograms
-                );
+            int,
+            juce::AudioProcessor,
+            getNumPrograms);
     }
 
-    int getCurrentProgram() override{
+    int getCurrentProgram() override
+    {
         PYBIND11_OVERLOAD_PURE(
-                int,
-                juce::AudioProcessor,
-                getCurrentProgram
-                );
+            int,
+            juce::AudioProcessor,
+            getCurrentProgram);
     }
 
-    void setCurrentProgram (int index) override{
+    void setCurrentProgram(int index) override
+    {
         PYBIND11_OVERLOAD_PURE(
-                void,
-                juce::AudioProcessor,
-                setCurrentProgram,
-                index
-                );
+            void,
+            juce::AudioProcessor,
+            setCurrentProgram,
+            index);
     }
 
-    const juce::String getProgramName (int index) override{
+    const juce::String getProgramName(int index) override
+    {
         PYBIND11_OVERLOAD_PURE(
-                juce::String,
-                juce::AudioProcessor,
-                getProgramName,
-                index
-                );
+            juce::String,
+            juce::AudioProcessor,
+            getProgramName,
+            index);
     }
 
-    void changeProgramName (int index, const juce::String& newName) override{
+    void changeProgramName(int index, const juce::String &newName) override
+    {
         PYBIND11_OVERLOAD_PURE(
-                void,
-                juce::AudioProcessor,
-                changeProgramName,
-                index,
-                newName
-                );
+            void,
+            juce::AudioProcessor,
+            changeProgramName,
+            index,
+            newName);
     }
 
-    void getStateInformation (juce::MemoryBlock& destData) override{
+    void getStateInformation(juce::MemoryBlock &destData) override
+    {
         PYBIND11_OVERLOAD_PURE(
-                void,
-                juce::AudioProcessor,
-                getStateInformation,
-                destData
-                );
+            void,
+            juce::AudioProcessor,
+            getStateInformation,
+            destData);
     }
 
-    void setStateInformation (const void* data, int sizeInBytes) override{
+    void setStateInformation(const void *data, int sizeInBytes) override
+    {
         PYBIND11_OVERLOAD_PURE(
-                void,
-                juce::AudioProcessor,
-                setStateInformation,
-                data,
-                sizeInBytes
-                );
+            void,
+            juce::AudioProcessor,
+            setStateInformation,
+            data,
+            sizeInBytes);
     }
-
 };
 
 PYBIND11_MODULE(juce, m)
 {
-     py::class_<juce::AudioBuffer<float>>(m, "AudioBuffer")
-         .def(py::init<>());
+    py::class_<juce::AudioBuffer<float>>(m, "AudioBuffer")
+        .def(py::init<>());
 
-     py::class_<juce::MidiBuffer>(m, "MidiBuffer")
-         .def(py::init<>());
+    py::class_<juce::MidiBuffer>(m, "MidiBuffer")
+        .def(py::init<>());
 
-     py::class_<juce::String>(m, "String")
-         .def(py::init<>());
+    py::class_<juce::String>(m, "String")
+        .def(py::init<>());
 
-     py::class_<juce::MemoryBlock>(m, "MemoryBlock")
-         .def(py::init<>());
+    py::class_<juce::MemoryBlock>(m, "MemoryBlock")
+        .def(py::init<>());
 
     py::class_<juce::AudioProcessorEditor, PyAudioProcessorEditor>(m, "AudioProcessorEditor")
-            .def(py::init([](juce::AudioProcessor& p) {
-                return std::unique_ptr<PyAudioProcessorEditor>(new PyAudioProcessorEditor(p));
-            }))
-            .def(py::init([](juce::AudioProcessor* p) {
-                return std::unique_ptr<PyAudioProcessorEditor>(new PyAudioProcessorEditor(p));
-            }))
-            .def("resized", &PyAudioProcessorEditor::resized)
-            .def("paint", &PyAudioProcessorEditor::paint);
+        .def(py::init([](juce::AudioProcessor &p)
+                      { return new PyAudioProcessorEditor(p); }))
+        .def(py::init([](juce::AudioProcessor *p)
+                      { return new PyAudioProcessorEditor(p); }))
+        .def("resized", [](PyAudioProcessorEditor &self)
+             { return self.resized(); })
+        .def("paint", [](PyAudioProcessorEditor &self, juce::Graphics &g)
+             { return self.paint(g); });
 
     py::class_<juce::AudioProcessor, PyAudioProcessor>(m, "AudioProcessor", py::dynamic_attr())
         .def(py::init<>())
-        .def("getName", &PyAudioProcessor::getName)
-        .def("prepareToPlay", &PyAudioProcessor::prepareToPlay)
-        .def("releaseResources", &PyAudioProcessor::releaseResources)
-        .def("isBusesLayoutSupported", &PyAudioProcessor::isBusesLayoutSupported)
-        .def("processBlock", &PyAudioProcessor::processBlock)
-        .def("createEditor", &PyAudioProcessor::createEditor)
-        .def("hasEditor", &PyAudioProcessor::hasEditor)
-        .def("acceptsMidi", &PyAudioProcessor::acceptsMidi)
-        .def("producesMidi", &PyAudioProcessor::producesMidi)
-        .def("isMidiEffect", &PyAudioProcessor::isMidiEffect)
-        .def("getTailLengthSeconds", &PyAudioProcessor::getTailLengthSeconds)
-        .def("getNumPrograms", &PyAudioProcessor::getNumPrograms)
-        .def("getCurrentProgram", &PyAudioProcessor::getCurrentProgram)
-        .def("setCurrentProgram", &PyAudioProcessor::setCurrentProgram)
-        .def("getProgramName", &PyAudioProcessor::getProgramName)
-        .def("changeProgramName", &PyAudioProcessor::changeProgramName)
-        .def("getStateInformation", &PyAudioProcessor::getStateInformation)
-        .def("setStateInformation", &PyAudioProcessor::setStateInformation);
+        .def("getName", [](PyAudioProcessor &self)
+             { return self.getName(); })
+        .def("prepareToPlay", [](PyAudioProcessor &self, double sampleRate, int samplesPerBlock)
+             { self.prepareToPlay(sampleRate, samplesPerBlock); })
+        .def("releaseResources", [](PyAudioProcessor &self)
+             { self.releaseResources(); })
+        .def("isBusesLayoutSupported", [](PyAudioProcessor &self, const juce::AudioProcessor::BusesLayout &layouts)
+             { return self.isBusesLayoutSupported(layouts); })
+        .def("processBlock", [](PyAudioProcessor &self, juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages)
+             { self.processBlock(buffer, midiMessages); })
+        .def("createEditor", [](PyAudioProcessor &self)
+             { return self.createEditor(); })
+        .def("hasEditor", [](PyAudioProcessor &self)
+             { return self.hasEditor(); })
+        .def("acceptsMidi", [](PyAudioProcessor &self)
+             { return self.acceptsMidi(); })
+        .def("producesMidi", [](PyAudioProcessor &self)
+             { return self.producesMidi(); })
+        .def("isMidiEffect", [](PyAudioProcessor &self)
+             { return self.isMidiEffect(); })
+        .def("getTailLengthSeconds", [](PyAudioProcessor &self)
+             { return self.getTailLengthSeconds(); })
+        .def("getNumPrograms", [](PyAudioProcessor &self)
+             { return self.getNumPrograms(); })
+        .def("getCurrentProgram", [](PyAudioProcessor &self)
+             { return self.getCurrentProgram(); })
+        .def("setCurrentProgram", [](PyAudioProcessor &self, int index)
+             { self.setCurrentProgram(index); })
+        .def("getProgramName", [](PyAudioProcessor &self, int index)
+             { return self.getProgramName(index); })
+        .def("changeProgramName", [](PyAudioProcessor &self, int index, const juce::String &newName)
+             { self.changeProgramName(index, newName); })
+        .def("getStateInformation", [](PyAudioProcessor &self, juce::MemoryBlock &destData)
+             { self.getStateInformation(destData); })
+        .def("setStateInformation", [](PyAudioProcessor &self, const void *data, int sizeInBytes)
+             { self.setStateInformation(data, sizeInBytes); });
 }

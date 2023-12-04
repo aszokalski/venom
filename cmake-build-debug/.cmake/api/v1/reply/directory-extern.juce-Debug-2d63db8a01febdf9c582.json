@@ -1,0 +1,60 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install"
+		],
+		"files" : 
+		[
+			"extern/juce/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 146,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/JUCE-7.0.9",
+			"paths" : 
+			[
+				"cmake-build-debug/extern/juce/JUCEConfigVersion.cmake",
+				"cmake-build-debug/extern/juce/JUCEConfig.cmake",
+				"extern/juce/extras/Build/CMake/JUCECheckAtomic.cmake",
+				"extern/juce/extras/Build/CMake/JUCEHelperTargets.cmake",
+				"extern/juce/extras/Build/CMake/JUCEModuleSupport.cmake",
+				"extern/juce/extras/Build/CMake/JUCEUtils.cmake",
+				"extern/juce/extras/Build/CMake/JuceLV2Defines.h.in",
+				"extern/juce/extras/Build/CMake/LaunchScreen.storyboard",
+				"extern/juce/extras/Build/CMake/PIPAudioProcessor.cpp.in",
+				"extern/juce/extras/Build/CMake/PIPAudioProcessorWithARA.cpp.in",
+				"extern/juce/extras/Build/CMake/PIPComponent.cpp.in",
+				"extern/juce/extras/Build/CMake/PIPConsole.cpp.in",
+				"extern/juce/extras/Build/CMake/RecentFilesMenuTemplate.nib",
+				"extern/juce/extras/Build/CMake/UnityPluginGUIScript.cs.in",
+				"extern/juce/extras/Build/CMake/checkBundleSigning.cmake",
+				"extern/juce/extras/Build/CMake/copyDir.cmake",
+				"extern/juce/extras/Build/CMake/juce_runtime_arch_detection.cpp",
+				"extern/juce/extras/Build/CMake/juce_LinuxSubprocessHelper.cpp"
+			],
+			"type" : "file"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "extern/juce",
+		"source" : "extern/juce"
+	}
+}

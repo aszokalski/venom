@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.5...3.26)
 project(venom VERSION 0.1.0)
+set(FORMATS AU VST3 Standalone)
 
 add_subdirectory(extern/juce)
 add_subdirectory(extern/pybind11)
@@ -46,12 +47,12 @@ set_target_properties(juce PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/src/python
         )
 
-                        
- juce_add_plugin(VenomPlugin
+
+juce_add_plugin(VenomPlugin
          PLUGIN_MANUFACTURER_CODE Veno
          PLUGIN_CODE Veno
-         FORMATS AU VST3 Standalone
-         PRODUCT_NAME "Venom Plugin")
+         FORMATS ${FORMATS}
+         PRODUCT_NAME ${PROJECT_NAME})
 
  juce_generate_juce_header(VenomPlugin)
 
@@ -94,3 +95,20 @@ set_target_properties(juce PROPERTIES
          juce::juce_recommended_warning_flags
          )
 
+# Loop through each search path
+foreach(FORMAT ${FORMATS})
+    if(${FORMAT} STREQUAL "Standalone")
+        set(PACKAGE_NAME ${PROJECT_NAME}.app)
+    elseif (${FORMAT} STREQUAL "VST3")
+        set(PACKAGE_NAME ${PROJECT_NAME}.vst3)
+    elseif (${FORMAT} STREQUAL "AU")
+        set(PACKAGE_NAME ${PROJECT_NAME}.component)
+
+    add_custom_command(TARGET VenomPlugin POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            ${CMAKE_CURRENT_SOURCE_DIR}/src/python/juce.cpython-311-darwin.so
+            ${CMAKE_CURRENT_SOURCE_DIR}/src/python/PyAudioProcessor.py
+            $<TARGET_FILE_DIR:VenomPlugin>/${FORMAT}/${PACKAGE_NAME}/Contents/MacOS/
+    )
+    endif()
+endforeach()

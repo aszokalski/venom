@@ -10,6 +10,8 @@ namespace py = pybind11;
 // Global variable to hold the Python interpreter
 std::unique_ptr<py::scoped_interpreter> guard;
 
+
+
 //==============================================================================
 // This creates new instances of the plugin..
 juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter()
@@ -19,7 +21,5 @@ juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter()
     {
         guard = std::make_unique<py::scoped_interpreter>();
     }
-
-    py::module::import("sys").attr("path").attr("append")("../src/python");
     return new PyAudioProcessor();
 }

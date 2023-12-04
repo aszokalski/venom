@@ -1213,6 +1213,15 @@ CMakeFiles/juce.dir/AudioProcessor.cpp.o: \
   /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_processors/utilities/juce_PluginHostType.h \
   /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_processors/utilities/ARA/juce_ARADebug.h \
   /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_processors/utilities/ARA/juce_ARA_utils.h \
+  /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/juce_audio_devices.h \
+  /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/midi_io/juce_MidiDevices.h \
+  /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/midi_io/juce_MidiMessageCollector.h \
+  /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/audio_io/juce_AudioIODevice.h \
+  /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/audio_io/juce_AudioIODeviceType.h \
+  /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/audio_io/juce_SystemAudioVolume.h \
+  /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/sources/juce_AudioSourcePlayer.h \
+  /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/sources/juce_AudioTransportSource.h \
+  /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/audio_io/juce_AudioDeviceManager.h \
   /Users/aszokalski/Downloads/pybind/extern/pybind11/include/pybind11/pybind11.h \
   /Users/aszokalski/Downloads/pybind/extern/pybind11/include/pybind11/detail/class.h \
   /Users/aszokalski/Downloads/pybind/extern/pybind11/include/pybind11/detail/../attr.h \

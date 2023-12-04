@@ -1215,6 +1215,15 @@ CMakeFiles/juce.dir/AudioProcessor.cpp.o: /Users/aszokalski/Downloads/pybind/Aud
   /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_processors/utilities/juce_PluginHostType.h \
   /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_processors/utilities/ARA/juce_ARADebug.h \
   /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_processors/utilities/ARA/juce_ARA_utils.h \
+  /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/juce_audio_devices.h \
+  /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/midi_io/juce_MidiDevices.h \
+  /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/midi_io/juce_MidiMessageCollector.h \
+  /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/audio_io/juce_AudioIODevice.h \
+  /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/audio_io/juce_AudioIODeviceType.h \
+  /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/audio_io/juce_SystemAudioVolume.h \
+  /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/sources/juce_AudioSourcePlayer.h \
+  /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/sources/juce_AudioTransportSource.h \
+  /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/audio_io/juce_AudioDeviceManager.h \
   /Users/aszokalski/Downloads/pybind/extern/pybind11/include/pybind11/pybind11.h \
   /Users/aszokalski/Downloads/pybind/extern/pybind11/include/pybind11/detail/class.h \
   /Users/aszokalski/Downloads/pybind/extern/pybind11/include/pybind11/attr.h \
@@ -1497,6 +1506,14 @@ CMakeFiles/juce.dir/AudioProcessor.cpp.o: /Users/aszokalski/Downloads/pybind/Aud
 
 /Users/aszokalski/Downloads/pybind/extern/pybind11/include/pybind11/attr.h:
 
+/Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/audio_io/juce_AudioDeviceManager.h:
+
+/Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/audio_io/juce_AudioIODevice.h:
+
+/Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/midi_io/juce_MidiMessageCollector.h:
+
+/Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/juce_audio_devices.h:
+
 /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_processors/utilities/ARA/juce_ARADebug.h:
 
 /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_processors/utilities/juce_PluginHostType.h:
@@ -1722,6 +1739,8 @@ CMakeFiles/juce.dir/AudioProcessor.cpp.o: /Users/aszokalski/Downloads/pybind/Aud
 /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_gui_basics/layout/juce_ResizableEdgeComponent.h:
 
 /opt/homebrew/opt/python@3.11/Frameworks/Python.framework/Versions/3.11/include/python3.11/object.h:
+
+/Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/sources/juce_AudioSourcePlayer.h:
 
 /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_gui_basics/layout/juce_GroupComponent.h:
 
@@ -1959,6 +1978,8 @@ CMakeFiles/juce.dir/AudioProcessor.cpp.o: /Users/aszokalski/Downloads/pybind/Aud
 
 /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_core/javascript/juce_JSON.h:
 
+/Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/midi_io/juce_MidiDevices.h:
+
 /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_core/streams/juce_FileInputSource.h:
 
 /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_core/files/juce_WildcardFileFilter.h:
@@ -2086,6 +2107,8 @@ CMakeFiles/juce.dir/AudioProcessor.cpp.o: /Users/aszokalski/Downloads/pybind/Aud
 /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_core/logging/juce_Logger.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/sys/_types/_s_ifmt.h:
+
+/Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/sources/juce_AudioTransportSource.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/version:
 
@@ -2788,6 +2811,8 @@ CMakeFiles/juce.dir/AudioProcessor.cpp.o: /Users/aszokalski/Downloads/pybind/Aud
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__chrono/year_month_day.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__iterator/move_sentinel.h:
+
+/Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/audio_io/juce_SystemAudioVolume.h:
 
 /Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_gui_basics/drawables/juce_Drawable.h:
 
@@ -3670,6 +3695,8 @@ CMakeFiles/juce.dir/AudioProcessor.cpp.o: /Users/aszokalski/Downloads/pybind/Aud
 /opt/homebrew/opt/python@3.11/Frameworks/Python.framework/Versions/3.11/include/python3.11/pymacconfig.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/c++/v1/__numeric/iota.h:
+
+/Users/aszokalski/Downloads/pybind/extern/juce/modules/juce_audio_devices/audio_io/juce_AudioIODeviceType.h:
 
 /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.3.sdk/usr/include/_types/_intmax_t.h:
 

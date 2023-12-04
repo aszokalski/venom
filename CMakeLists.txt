@@ -1,0 +1,91 @@
+cmake_minimum_required(VERSION 3.5...3.26)
+project(venom VERSION 0.1.0)
+
+add_subdirectory(extern/juce)
+add_subdirectory(extern/pybind11)
+
+# Juce python bindings
+pybind11_add_module(juce AudioProcessor.cpp)
+
+target_compile_definitions(juce
+                           PRIVATE VERSION_INFO=${EXAMPLE_VERSION_INFO}
+                           PUBLIC
+                           JUCE_WEB_BROWSER=0 
+                           JUCE_USE_CURL=0 
+                           JUCE_VST3_CAN_REPLACE_VST2=0
+                           )
+
+target_link_libraries(juce
+                           PRIVATE
+                           juce::juce_analytics
+                           juce::juce_audio_basics
+                           juce::juce_audio_devices
+                           juce::juce_audio_formats
+                           juce::juce_audio_processors
+                           juce::juce_audio_utils
+                           juce::juce_core
+                           juce::juce_cryptography
+                           juce::juce_data_structures
+                           juce::juce_dsp
+                           juce::juce_events
+                           juce::juce_graphics
+                           juce::juce_gui_basics
+                           juce::juce_gui_extra
+                           juce::juce_opengl
+                           juce::juce_osc
+                           juce::juce_video
+                           ${Python_LIBRARIES}
+                           PUBLIC
+                           juce::juce_recommended_config_flags
+                           juce::juce_recommended_lto_flags
+                           juce::juce_recommended_warning_flags
+                           )
+
+                        
+# juce_add_plugin(VenomPlugin
+#         PLUGIN_MANUFACTURER_CODE Veno              
+#         PLUGIN_CODE Veno                           
+#         FORMATS AU VST3 Standalone                  
+#         PRODUCT_NAME "Venom Plugin")
+
+# juce_generate_juce_header(VenomPlugin)
+
+
+# target_link_libraries(VenomPlugin
+#         PRIVATE
+#         pybind11::embed
+#         juce::juce_audio_utils
+#         juce::juce_dsp
+#         ${Python_LIBRARIES}
+#         PUBLIC
+#         juce::juce_recommended_config_flags
+#         juce::juce_recommended_lto_flags
+#         juce::juce_recommended_warning_flags
+#         )
+
+
+# target_sources(VenomPlugin
+#         PRIVATE
+#         src/cpp/create_plugin.cpp
+#         )
+
+# target_compile_definitions(VenomPlugin
+#         PUBLIC
+#         JUCE_WEB_BROWSER=0 
+#         JUCE_USE_CURL=0 
+#         JUCE_VST3_CAN_REPLACE_VST2=0
+#         )
+
+
+# target_link_libraries(VenomPlugin
+#         PRIVATE
+#         pybind11::embed
+#         juce::juce_audio_utils
+#         juce::juce_dsp
+#         ${Python_LIBRARIES}
+#         PUBLIC
+#         juce::juce_recommended_config_flags
+#         juce::juce_recommended_lto_flags
+#         juce::juce_recommended_warning_flags
+#         )
+

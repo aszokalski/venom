@@ -5,7 +5,7 @@ add_subdirectory(extern/juce)
 add_subdirectory(extern/pybind11)
 
 # Juce python bindings
-pybind11_add_module(juce AudioProcessor.cpp)
+pybind11_add_module(juce src/cpp/AudioProcessor/AudioProcessor.cpp)
 
 target_compile_definitions(juce
                            PRIVATE VERSION_INFO=${EXAMPLE_VERSION_INFO}
@@ -41,51 +41,56 @@ target_link_libraries(juce
                            juce::juce_recommended_warning_flags
                            )
 
+# build juce bindings .so to src/python
+set_target_properties(juce PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/src/python
+        )
+
                         
-# juce_add_plugin(VenomPlugin
-#         PLUGIN_MANUFACTURER_CODE Veno              
-#         PLUGIN_CODE Veno                           
-#         FORMATS AU VST3 Standalone                  
-#         PRODUCT_NAME "Venom Plugin")
+ juce_add_plugin(VenomPlugin
+         PLUGIN_MANUFACTURER_CODE Veno
+         PLUGIN_CODE Veno
+         FORMATS AU VST3 Standalone
+         PRODUCT_NAME "Venom Plugin")
 
-# juce_generate_juce_header(VenomPlugin)
-
-
-# target_link_libraries(VenomPlugin
-#         PRIVATE
-#         pybind11::embed
-#         juce::juce_audio_utils
-#         juce::juce_dsp
-#         ${Python_LIBRARIES}
-#         PUBLIC
-#         juce::juce_recommended_config_flags
-#         juce::juce_recommended_lto_flags
-#         juce::juce_recommended_warning_flags
-#         )
+ juce_generate_juce_header(VenomPlugin)
 
 
-# target_sources(VenomPlugin
-#         PRIVATE
-#         src/cpp/create_plugin.cpp
-#         )
+ target_link_libraries(VenomPlugin
+         PRIVATE
+         pybind11::embed
+         juce::juce_audio_utils
+         juce::juce_dsp
+         ${Python_LIBRARIES}
+         PUBLIC
+         juce::juce_recommended_config_flags
+         juce::juce_recommended_lto_flags
+         juce::juce_recommended_warning_flags
+         )
 
-# target_compile_definitions(VenomPlugin
-#         PUBLIC
-#         JUCE_WEB_BROWSER=0 
-#         JUCE_USE_CURL=0 
-#         JUCE_VST3_CAN_REPLACE_VST2=0
-#         )
+
+ target_sources(VenomPlugin
+         PRIVATE
+         src/cpp/create_plugin.cpp
+         )
+
+ target_compile_definitions(VenomPlugin
+         PUBLIC
+         JUCE_WEB_BROWSER=0
+         JUCE_USE_CURL=0
+         JUCE_VST3_CAN_REPLACE_VST2=0
+         )
 
 
-# target_link_libraries(VenomPlugin
-#         PRIVATE
-#         pybind11::embed
-#         juce::juce_audio_utils
-#         juce::juce_dsp
-#         ${Python_LIBRARIES}
-#         PUBLIC
-#         juce::juce_recommended_config_flags
-#         juce::juce_recommended_lto_flags
-#         juce::juce_recommended_warning_flags
-#         )
+ target_link_libraries(VenomPlugin
+         PRIVATE
+         pybind11::embed
+         juce::juce_audio_utils
+         juce::juce_dsp
+         ${Python_LIBRARIES}
+         PUBLIC
+         juce::juce_recommended_config_flags
+         juce::juce_recommended_lto_flags
+         juce::juce_recommended_warning_flags
+         )
 

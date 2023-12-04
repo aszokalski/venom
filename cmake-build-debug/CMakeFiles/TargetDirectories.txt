@@ -1,4 +1,10 @@
 /Users/aszokalski/Downloads/pybind/cmake-build-debug/CMakeFiles/juce.dir
+/Users/aszokalski/Downloads/pybind/cmake-build-debug/CMakeFiles/VenomPlugin.dir
+/Users/aszokalski/Downloads/pybind/cmake-build-debug/CMakeFiles/VenomPlugin_All.dir
+/Users/aszokalski/Downloads/pybind/cmake-build-debug/CMakeFiles/VenomPlugin_Standalone.dir
+/Users/aszokalski/Downloads/pybind/cmake-build-debug/CMakeFiles/VenomPlugin_AU.dir
+/Users/aszokalski/Downloads/pybind/cmake-build-debug/CMakeFiles/VenomPlugin_VST3.dir
+/Users/aszokalski/Downloads/pybind/cmake-build-debug/CMakeFiles/juce_vst3_helper.dir
 /Users/aszokalski/Downloads/pybind/cmake-build-debug/CMakeFiles/edit_cache.dir
 /Users/aszokalski/Downloads/pybind/cmake-build-debug/CMakeFiles/rebuild_cache.dir
 /Users/aszokalski/Downloads/pybind/cmake-build-debug/CMakeFiles/list_install_components.dir

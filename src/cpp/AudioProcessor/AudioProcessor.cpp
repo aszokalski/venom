@@ -213,7 +213,9 @@ public:
 PYBIND11_MODULE(juce, m)
 {
     py::class_<juce::AudioBuffer<float>>(m, "AudioBuffer")
-        .def(py::init<>());
+        .def(py::init<>())
+        .def("applyGain", [](juce::AudioBuffer<float> &self, float gain)
+             { self.applyGain(gain); });
 
     py::class_<juce::MidiBuffer>(m, "MidiBuffer")
         .def(py::init<>());

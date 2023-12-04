@@ -95,7 +95,6 @@ juce_add_plugin(VenomPlugin
          juce::juce_recommended_warning_flags
          )
 
-# Loop through each search path
 foreach(FORMAT ${FORMATS})
     if(${FORMAT} STREQUAL "Standalone")
         set(PACKAGE_NAME ${PROJECT_NAME}.app)

@@ -1,4 +1,4 @@
-from juce import AudioProcessor
+from juce import AudioProcessor, AudioBuffer
 from pprint import pprint
 
 class PyAudioProcessor(AudioProcessor):
@@ -10,8 +10,9 @@ class PyAudioProcessor(AudioProcessor):
     def releaseResources(self):
         pass
 
-    def processBlock(self, buffer, midiMessages):
-        pass
+    def processBlock(self, buffer: AudioBuffer, midiMessages):
+        buffer.applyGain(14)
+
 
     def createEditor(self):
         return None
@@ -21,7 +22,7 @@ class PyAudioProcessor(AudioProcessor):
 
     def getName(self):
         return "PyAudioProcessor"
-    #
+
     def acceptsMidi(self):
         return True
 
@@ -56,18 +57,22 @@ class PyAudioProcessor(AudioProcessor):
 
 if __name__ == "__main__":
     proc = PyAudioProcessor()
+    buff = AudioBuffer()
+    buff.applyGain(7)
+    pprint(dir(buff))
 
-    for method_name in dir(proc):
-        method = getattr(proc, method_name)
-        if callable(method) and not method_name.startswith("__"):
-            for i in range(5):
-                try:
-                    pprint(method(*range(i)))
-                    break
-                except TypeError:
-                    continue
-                except RuntimeError as e:
-                    raise NotImplementedError("Method %s not implemented" % method_name) from None
+
+    # for method_name in dir(proc):
+    #     method = getattr(proc, method_name)
+    #     if callable(method) and not method_name.startswith("__"):
+    #         for i in range(5):
+    #             try:
+    #                 method(*range(i))
+    #                 break
+    #             except TypeError:
+    #                 continue
+    #             except RuntimeError as e:
+    #                 raise NotImplementedError("Method %s not implemented" % method_name) from None
 
 
 

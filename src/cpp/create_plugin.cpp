@@ -2,15 +2,13 @@
 // Created by Adam Szokalski on 10/05/2023.
 //
 #include <JuceHeader.h>
-#include "AudioProcessor/PyAudioProcessor.h"
+#include "juce_audio_processors/AudioProcessor/PyAudioProcessor.h"
 #include <pybind11/embed.h> // everything needed for embedding
 
 namespace py = pybind11;
 
 // Global variable to hold the Python interpreter
 std::unique_ptr<py::scoped_interpreter> guard;
-
-
 
 //==============================================================================
 // This creates new instances of the plugin..

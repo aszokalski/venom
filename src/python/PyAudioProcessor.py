@@ -1,4 +1,4 @@
-from juce import AudioProcessor, AudioBuffer
+from juce.juce_audio_processors import AudioProcessor, AudioBuffer
 from pprint import pprint
 
 class PyAudioProcessor(AudioProcessor):

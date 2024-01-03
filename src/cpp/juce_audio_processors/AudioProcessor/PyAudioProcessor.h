@@ -5,6 +5,7 @@
 
 namespace py = pybind11;
 
+// This class links the python class back to the C++ class
 class PyAudioProcessor : public juce::AudioProcessor{
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PyAudioProcessor)

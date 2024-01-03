@@ -1,35 +1,7 @@
-#include "juce_audio_processors/juce_audio_processors.h"
-#include "juce_audio_basics/juce_audio_basics.h" // for juce::AudioBuffer
-#include "juce_audio_devices/juce_audio_devices.h"
-#include <pybind11/pybind11.h>
-
-namespace py = pybind11;
-
-class PyAudioProcessorEditor : public juce::AudioProcessorEditor
-{
-public:
-    explicit PyAudioProcessorEditor(juce::AudioProcessor &p) : juce::AudioProcessorEditor(p) {}
-    explicit PyAudioProcessorEditor(juce::AudioProcessor *p) : juce::AudioProcessorEditor(p) {}
-
-    void paint(juce::Graphics &g) override
-    {
-        PYBIND11_OVERRIDE(
-            void,
-            juce::AudioProcessorEditor, /* Parent class */
-            paint,                      /* Name of function in C++ (must match Python name) */
-            g                           /* Argument(s) */
-        );
-    }
-
-    void resized() override
-    {
-        PYBIND11_OVERRIDE(
-            void,                       /* Return type */
-            juce::AudioProcessorEditor, /* Parent class */
-            resized,                    /* Name of function in C++ (must match Python name) */
-        );
-    }
-};
+#include "AudioProcessor.h"
+#include <juce_audio_processors/juce_audio_processors.h>
+#include <juce_audio_basics/juce_audio_basics.h> // for juce::AudioBuffer
+#include <juce_audio_devices/juce_audio_devices.h>
 
 class PyAudioProcessor : public juce::AudioProcessor
 {
@@ -210,33 +182,8 @@ public:
     }
 };
 
-PYBIND11_MODULE(juce, m)
-{
-    py::class_<juce::AudioBuffer<float>>(m, "AudioBuffer")
-        .def(py::init<>())
-        .def("applyGain", [](juce::AudioBuffer<float> &self, float gain)
-             { self.applyGain(gain); });
-
-    py::class_<juce::MidiBuffer>(m, "MidiBuffer")
-        .def(py::init<>());
-
-    py::class_<juce::String>(m, "String")
-        .def(py::init<>());
-
-    py::class_<juce::MemoryBlock>(m, "MemoryBlock")
-        .def(py::init<>());
-
-    py::class_<juce::AudioProcessorEditor, PyAudioProcessorEditor>(m, "AudioProcessorEditor")
-        .def(py::init([](juce::AudioProcessor &p)
-                      { return new PyAudioProcessorEditor(p); }))
-        .def(py::init([](juce::AudioProcessor *p)
-                      { return new PyAudioProcessorEditor(p); }))
-        .def("resized", [](juce::AudioProcessorEditor &self)
-             { return self.resized(); })
-        .def("paint", [](juce::AudioProcessorEditor &self, juce::Graphics &g)
-             { return self.paint(g); });
-
-    py::class_<juce::AudioProcessor, PyAudioProcessor>(m, "AudioProcessor", py::dynamic_attr())
+void init_AudioProcessor(py::module& m) {
+        py::class_<juce::AudioProcessor, PyAudioProcessor>(m, "AudioProcessor", py::dynamic_attr())
         .def(py::init<>())
         .def("getName", [](juce::AudioProcessor &self)
              { return self.getName(); })

@@ -6,7 +6,15 @@ add_subdirectory(extern/juce)
 add_subdirectory(extern/pybind11)
 
 # Juce python bindings
-pybind11_add_module(juce src/cpp/AudioProcessor/AudioProcessor.cpp)
+pybind11_add_module(juce
+        src/cpp/juce_audio_processors/AudioProcessor/AudioProcessor.cpp
+        src/cpp/juce_audio_processors/AudioProcessor/AudioProcessor.h
+        src/cpp/juce_audio_processors/AudioProcessorEditor/AudioProcessorEditor.cpp
+        src/cpp/juce_audio_processors/AudioProcessorEditor/AudioProcessorEditor.h
+        src/cpp/juce.cpp
+        src/cpp/juce_audio_processors/juce_audio_processors.cpp
+        src/cpp/juce_audio_processors/juce_audio_processors.h
+)
 
 target_compile_definitions(juce
                            PRIVATE VERSION_INFO=${EXAMPLE_VERSION_INFO}
@@ -73,6 +81,7 @@ juce_add_plugin(VenomPlugin
  target_sources(VenomPlugin
          PRIVATE
          src/cpp/create_plugin.cpp
+         src/cpp/juce_audio_processors/AudioProcessor/PyAudioProcessor.h
          )
 
  target_compile_definitions(VenomPlugin

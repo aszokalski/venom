@@ -15,6 +15,10 @@ private:
 public:
 
     PyAudioProcessor() : juce::AudioProcessor() {
+//        print python path
+        py::print(py::module::import("sys").attr("path"));
+        // print executable path
+        py::print(py::module::import("sys").attr("executable"));
         this->altered_module = py::module_::import("PyAudioProcessor");
 
         this->altered_class_instance = this->altered_module.attr("PyAudioProcessor")();

@@ -1,5 +1,7 @@
-from juce.juce_audio_processors import AudioProcessor, AudioBuffer
+from juce.juce_audio_processors import AudioProcessor
+from juce.utils import AudioBuffer
 from pprint import pprint
+
 
 class PyAudioProcessor(AudioProcessor):
     pass
@@ -12,7 +14,6 @@ class PyAudioProcessor(AudioProcessor):
 
     def processBlock(self, buffer: AudioBuffer, midiMessages):
         buffer.applyGain(14)
-
 
     def createEditor(self):
         return None
@@ -58,8 +59,6 @@ class PyAudioProcessor(AudioProcessor):
 if __name__ == "__main__":
     proc = PyAudioProcessor()
     buff = AudioBuffer()
-    buff.applyGain(7)
-    pprint(dir(buff))
 
 
     # for method_name in dir(proc):

@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, find_namespace_packages
 import os
 import re
 import subprocess
@@ -129,10 +129,12 @@ class CMakeBuild(build_ext):
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
     name="venom",
-    version="0.0.11",
+    version="0.0.12",
     ext_modules=[CMakeExtension("juce")],
-    packages=find_packages(exclude=["build", "build.*", "cmake", "cmake.*", "src", "src.*", "extern", "extern.*"]),
+    packages=find_namespace_packages(exclude=["build", "build.*", "cmake", "cmake.*", "src", "src.*", "extern", "extern.*"]),
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
+    # setup_requires=['setuptools_scm'],
+    # include_package_data=True,
     python_requires=">=3.7",
 )

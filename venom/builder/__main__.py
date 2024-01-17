@@ -1,5 +1,5 @@
 import tempfile
-from venom.builder.utils import package, project
+from venom.builder.tools import package, project
 import click
 
 @click.group()
@@ -18,8 +18,9 @@ def build(source_path):
     print("Building venom project")
     with tempfile.TemporaryDirectory() as tmp_dir:
         print("Created temporary directory: ", tmp_dir)
-    package.create(source_path, "PyAudioProcessor", tmp_dir)
-    package.install(tmp_dir)
+        package.create(source_path, "PyAudioProcessor", tmp_dir)
+        package.install(tmp_dir)
+    project.build(source_path)
 
 
 cli.add_command(init)

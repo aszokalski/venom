@@ -1,9 +1,10 @@
 import shutil
 import os
-from venom.builder.utils.Config import Config
+from venom.builder.tools.utils.Config import Config
+from venom.builder.tools import cmake
 
 
-def init(source_path):
+def init(source_path: str):
     if not os.path.exists(source_path):
         raise Exception("Source path does not exist: " + source_path)
     if not os.path.isdir(source_path):
@@ -13,26 +14,28 @@ def init(source_path):
 
     # Clean previous build
     if os.path.exists(os.path.join(source_path, "build")):
+        print("Cleaning old ./build")
         shutil.rmtree(os.path.join(source_path, "build"))
-    if os.path.exists(os.path.join(source_path, "dist")):
-        shutil.rmtree(os.path.join(source_path, "dist"))
 
-    config = None
+    try:
+        os.remove(os.path.join(source_path, "dist"))
+    finally:
+        print("Cleaning old ./dist")
+
     with open(os.path.join(source_path, "venom.yaml")) as file_handle:
         config = Config.from_yaml(file_handle)
         print(config)
+        # Create dist directory as a symbolic link to source_pats/build/build/VenomPlugin_artefacts
+        os.symlink(os.path.join(source_path, "build", "VenomPlugin_artefacts"),
+                   os.path.join(source_path, "dist"))
 
-    # Create dist directory
-    os.mkdir(os.path.join(source_path, "dist"))
+        # copy boilerplate project from the same directory as this file
+        shutil.copytree(os.path.join(os.path.dirname(__file__), "..", "boilerplate_plugin_project"),
+                        os.path.join(source_path, "build"))
 
-    # copy boilerplate project from the same directory as this file
-    shutil.copytree(os.path.join(os.path.dirname(__file__), "..", "boilerplate_plugin_project"),
-                    os.path.join(source_path, "build"))
-
-    # setup CMakeLists.txt with config
-    modify_cmake_lists(source_path, config)
-
-
+        # setup CMakeLists.txt with config
+        modify_cmake_lists(source_path, config)
+        cmake.init(os.path.join(source_path, "build"))
 
 
 def modify_cmake_lists(source_path: str, config: Config):
@@ -49,3 +52,13 @@ def modify_cmake_lists(source_path: str, config: Config):
                 lines[index] = "set(FORMATS " + " ".join(config.targets) + ")\n"
     with open(os.path.join(source_path, "build", "CMakeLists.txt"), "w") as file_handle:
         file_handle.writelines(lines)
+
+
+def build(source_path):
+    if not os.path.exists(source_path):
+        raise Exception("Source path does not exist: " + source_path)
+    if not os.path.isdir(source_path):
+        raise Exception("Source path is not a directory: " + source_path)
+    if not os.path.exists(os.path.join(source_path, "venom.yaml")):
+        raise Exception("venom.yaml file does not exist in source path: " + source_path)
+    cmake.build_target(os.path.join(source_path, "build"))

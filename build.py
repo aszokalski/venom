@@ -124,7 +124,3 @@ class CMakeBuild(build_ext):
             ["cmake", "--build", ".", *build_args], cwd=build_temp, check=True
         )
 
-        # subprocess.run(
-        #     ["cmake", "--build", ".", "--target VenomPlugin"],  cwd=build_temp, check=True
-        # )
-

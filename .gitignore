@@ -209,3 +209,4 @@ _deps
 .idea/
 .vscode/
 cmake-build-debug/
+dist

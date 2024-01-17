@@ -1,0 +1,6 @@
+name: VenomPlugin1
+version: 1.0.0
+author: Adam
+entrypoint: plugin.py
+targets:
+  - STANDALONE

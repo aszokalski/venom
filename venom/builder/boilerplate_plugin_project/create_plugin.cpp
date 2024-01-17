@@ -2,7 +2,7 @@
 // Created by Adam Szokalski on 10/05/2023.
 //
 #include <JuceHeader.h>
-#include "juce_audio_processors/AudioProcessor/PyAudioProcessor.h"
+#include "PyAudioProcessor.h"
 #include <pybind11/embed.h> // everything needed for embedding
 
 namespace py = pybind11;

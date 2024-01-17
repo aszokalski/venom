@@ -2,7 +2,7 @@
 
 ## Setup
 ```
-git submodule --update
+git submodule update --init --recursive
 ```
 ## Installng
 ```shell

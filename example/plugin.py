@@ -2,7 +2,7 @@ from juce.juce_audio_processors import AudioProcessor
 from juce.utils import AudioBuffer
 
 
-class VAudioProcessor(AudioProcessor):
+class PyAudioProcessor(AudioProcessor):
     # Todo: implement a simple plugin
     def prepareToPlay(self, sampleRate, samplesPerBlock):
         pass

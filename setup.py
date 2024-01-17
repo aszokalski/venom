@@ -7,7 +7,7 @@ from build import CMakeExtension, CMakeBuild
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
     name="venom",
-    version="0.0.10",
+    version="0.0.11",
     ext_modules=[CMakeExtension("juce")],
     packages=find_packages(exclude=["build", "build.*", "cmake", "cmake.*", "src", "src.*", "extern", "extern.*"]),
     cmdclass={"build_ext": CMakeBuild},

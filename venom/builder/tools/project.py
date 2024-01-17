@@ -12,6 +12,8 @@ def init(source_path: str):
 
     try:
         os.remove(os.path.join(source_path, "dist"))
+    except:
+        pass
     finally:
         print("Cleaning old ./dist")
 

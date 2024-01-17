@@ -1,10 +1,8 @@
 from juce.juce_audio_processors import AudioProcessor
 from juce.utils import AudioBuffer
-from pprint import pprint
 
 
-class PyAudioProcessor(AudioProcessor):
-    pass
+class VAudioProcessor(AudioProcessor):
     # Todo: implement a simple plugin
     def prepareToPlay(self, sampleRate, samplesPerBlock):
         pass
@@ -22,6 +20,7 @@ class PyAudioProcessor(AudioProcessor):
         return False
 
     def getName(self):
+        print("PyAudioProcessor.getName()")
         return "PyAudioProcessor"
 
     def acceptsMidi(self):
@@ -53,26 +52,3 @@ class PyAudioProcessor(AudioProcessor):
 
     def setStateInformation(self, data, sizeInBytes):
         pass
-
-
-
-if __name__ == "__main__":
-    proc = PyAudioProcessor()
-    buff = AudioBuffer()
-
-
-    # for method_name in dir(proc):
-    #     method = getattr(proc, method_name)
-    #     if callable(method) and not method_name.startswith("__"):
-    #         for i in range(5):
-    #             try:
-    #                 method(*range(i))
-    #                 break
-    #             except TypeError:
-    #                 continue
-    #             except RuntimeError as e:
-    #                 raise NotImplementedError("Method %s not implemented" % method_name) from None
-
-
-
-

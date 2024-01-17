@@ -5,13 +5,6 @@ from venom.builder.tools import cmake
 
 
 def init(source_path: str):
-    if not os.path.exists(source_path):
-        raise Exception("Source path does not exist: " + source_path)
-    if not os.path.isdir(source_path):
-        raise Exception("Source path is not a directory: " + source_path)
-    if not os.path.exists(os.path.join(source_path, "venom.yaml")):
-        raise Exception("venom.yaml file does not exist in source path: " + source_path)
-
     # Clean previous build
     if os.path.exists(os.path.join(source_path, "build")):
         print("Cleaning old ./build")
@@ -24,7 +17,6 @@ def init(source_path: str):
 
     with open(os.path.join(source_path, "venom.yaml")) as file_handle:
         config = Config.from_yaml(file_handle)
-        print(config)
         # Create dist directory as a symbolic link to source_pats/build/build/VenomPlugin_artefacts
         os.symlink(os.path.join(source_path, "build", "VenomPlugin_artefacts"),
                    os.path.join(source_path, "dist"))
@@ -55,10 +47,4 @@ def modify_cmake_lists(source_path: str, config: Config):
 
 
 def build(source_path):
-    if not os.path.exists(source_path):
-        raise Exception("Source path does not exist: " + source_path)
-    if not os.path.isdir(source_path):
-        raise Exception("Source path is not a directory: " + source_path)
-    if not os.path.exists(os.path.join(source_path, "venom.yaml")):
-        raise Exception("venom.yaml file does not exist in source path: " + source_path)
     cmake.build_target(os.path.join(source_path, "build"))

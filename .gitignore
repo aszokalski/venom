@@ -208,6 +208,4 @@ CTestTestfile.cmake
 _deps
 .idea/
 .vscode/
-__pycache__/
-build/
 cmake-build-debug/

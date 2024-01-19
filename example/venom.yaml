@@ -4,3 +4,5 @@ author: Adam
 entrypoint: plugin.py
 targets:
   - Standalone
+#  - VST3
+#  - AU

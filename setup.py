@@ -125,16 +125,22 @@ class CMakeBuild(build_ext):
             ["cmake", "--build", ".", *build_args], cwd=build_temp, check=True
         )
 
+
 # The information here can also be placed in setup.cfg - better separation of
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
     name="venom",
-    version="0.0.12",
+    version="0.0.14",
     ext_modules=[CMakeExtension("juce")],
-    packages=find_namespace_packages(exclude=["build", "build.*", "cmake", "cmake.*", "src", "src.*", "extern", "extern.*"]),
+    packages=find_namespace_packages(
+        exclude=["build", "build.*", "cmake", "cmake.*", "src", "src.*", "extern", "extern.*"]),
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
-    # setup_requires=['setuptools_scm'],
-    # include_package_data=True,
+    setup_requires=['setuptools_scm'],
+    include_package_data=True,
     python_requires=">=3.7",
 )
+
+# poetry
+# pdm
+# Hatch

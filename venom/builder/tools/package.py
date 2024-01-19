@@ -16,12 +16,12 @@ def create(source_path: str, package_name: str, tmp_path: str):
         raise FileNotFoundError(f"Entrypoint file not found: {config.entrypoint}")
 
     setup_content = f"""
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(
-    name='{package_name}',
-    version='{config.version}',
-    packages=find_packages(),
+    name='PyAudioProcessor',
+    version='1.0.0',
+    py_modules=['PyAudioProcessor'],
     install_requires=['venom']
 )
 """

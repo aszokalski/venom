@@ -11,8 +11,8 @@ project(${PLUGIN_NAME} VERSION ${PLUGIN_VERSION})
 #find_package(Python COMPONENTS Interpreter Development REQUIRED)
 #ex
 
-add_subdirectory(extern/juce)
-add_subdirectory(extern/pybind11)
+add_subdirectory(external/juce)
+add_subdirectory(external/pybind11)
 
 juce_add_plugin(VenomPlugin
         PLUGIN_MANUFACTURER_CODE Veno

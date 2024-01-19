@@ -139,7 +139,7 @@ def generate_package_data(directory):
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
     name="venom",
-    version="0.0.16",
+    version="0.0.17",
     ext_modules=[CMakeExtension("juce")],
     packages=find_namespace_packages(),
     cmdclass={"build_ext": CMakeBuild
@@ -147,8 +147,6 @@ setup(
     include_package_data=True,
     zip_safe=False,
     python_requires=">=3.7",
+    scripts=["bin/venom"],
+    install_requires=["click", "pyyaml", "pybind11"],
 )
-
-# poetry
-# pdm
-# Hatch

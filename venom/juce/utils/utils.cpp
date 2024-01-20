@@ -20,7 +20,9 @@ void init_utils(py::module &super) {
         .def(py::init<>());
 
     py::class_<juce::String>(m, "String")
-        .def(py::init<>());
+        .def(py::init<>())
+        .def(py::init([](const char* text)
+                { return new juce::String(text); }));
 
     py::class_<juce::MemoryBlock>(m, "MemoryBlock")
         .def(py::init<>());

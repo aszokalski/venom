@@ -4,6 +4,7 @@
 
 #include "AudioProcessorEditor.h"
 #include <juce_audio_processors/juce_audio_processors.h>
+#include <juce_gui_basics/juce_gui_basics.h>
 
 class PyAudioProcessorEditor : public juce::AudioProcessorEditor
 {
@@ -29,6 +30,33 @@ public:
             resized,                    /* Name of function in C++ (must match Python name) */
         );
     }
+
+    juce::AudioProcessor* getAudioProcessor() const noexcept
+    {
+        PYBIND11_OVERRIDE(
+            juce::AudioProcessor*,                       /* Return type */
+            juce::AudioProcessorEditor, /* Parent class */
+            getAudioProcessor,                    /* Name of function in C++ (must match Python name) */
+        );
+    }
+
+    void addAndMakeVisible (juce::Component& child, int zOrder = -1) {
+        PYBIND11_OVERRIDE(
+            void,                       /* Return type */
+            juce::AudioProcessorEditor, /* Parent class */
+            addAndMakeVisible,                    /* Name of function in C++ (must match Python name) */
+            child, zOrder
+        );
+    }
+
+    void setSize (int newWidth, int newHeight) {
+        PYBIND11_OVERRIDE(
+            void,                       /* Return type */
+            juce::AudioProcessorEditor, /* Parent class */
+            setSize,                    /* Name of function in C++ (must match Python name) */
+            newWidth, newHeight
+        );
+    }
 };
 
 void init_AudioProcessorEditor(py::module& m) {
@@ -40,5 +68,11 @@ void init_AudioProcessorEditor(py::module& m) {
     .def("resized", [](juce::AudioProcessorEditor &self)
          { return self.resized(); })
     .def("paint", [](juce::AudioProcessorEditor &self, juce::Graphics &g)
-         { return self.paint(g); });
+         { return self.paint(g); })
+    .def("getAudioProcessor", [](juce::AudioProcessorEditor &self)
+         { return self.getAudioProcessor(); })
+    .def("addAndMakeVisible", [](juce::AudioProcessorEditor &self, juce::Component& child, int zOrder = -1)
+         { self.addAndMakeVisible(child, zOrder); })
+    .def("setSize", [](juce::AudioProcessorEditor &self, int newWidth, int newHeight)
+         { self.setSize(newWidth, newHeight); });
 }

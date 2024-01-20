@@ -1,19 +1,20 @@
 from juce.juce_audio_processors import AudioProcessor, AudioProcessorEditor
-from juce.utils import AudioBuffer
-from juce.juce_gui_basics import Slider
+from juce.utils import AudioBuffer, String
+from juce.juce_gui_basics import Slider, Component
+
 class PyAudioProcessorEditor(AudioProcessorEditor):
     def __init__(self, processor):
         super().__init__(processor)
-        self.slider = Slider("Gain")
-        self.slider.setRange(-48, 48)
-        self.slider.setSliderStyle(Slider.SliderStyle.linearVertical)
+        self.slider = Slider(String("Gain"))
+        self.slider.setRange(-48, 48, 100)
+        self.slider.setSliderStyle(Slider.SliderStyle.LinearHorizontal)
         self.slider.setTextBoxStyle(Slider.TextBoxBelow, True, 50, 20)
-        self.slider.onValueChange = self.onSliderValueChanged
+        # self.slider.onValueChange = self.onSliderValueChanged
         self.addAndMakeVisible(self.slider)
-        self.setSize(200, 200)
+        self.slider.setSize(100, 50)
 
     def onSliderValueChanged(self, value):
-        self.getProcessor().gain = value
+        self.getAudioProcessor().gain = value
 
     def paint(self, graphics):
         graphics.fillAll(self.findColour(0x1000000))

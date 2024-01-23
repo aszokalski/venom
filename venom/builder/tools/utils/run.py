@@ -22,7 +22,7 @@ def run_with_progress(command, progress_bar: tqdm, max_val=100, **kwargs):
             progress = int(found.group(1))
             progress_after_max = int((progress / 100) * (max_val - start_progress / 2))
             if progress == 100:
-                progress_bar.update(max_val - progress_bar.n)
+                progress_bar.update(max_val - progress_bar.n - 4)
             else:
                 progress_bar.update(max(progress_after_max - progress_bar.n, 0))
         progress_bar.write(line, end="")

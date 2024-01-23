@@ -13,10 +13,13 @@ class PyAudioProcessorEditor(AudioProcessorEditor):
         self.addAndMakeVisible(self.slider, -1)
         self.slider.setSize(100, 50)
 
+        self.setSize(600, 600)
+
     def onSliderValueChanged(self, value):
         self.getAudioProcessor().gain = value
 
     def paint(self, graphics):
+        print("paint")
         graphics.fillAll(self.findColour(0x1000000))
 
     def resized(self):
@@ -34,7 +37,6 @@ class PyAudioProcessor(AudioProcessor):
         buffer.applyGain(14)
 
     def createEditor(self):
-        # TODO: THIS DOESN'T WORK  - segmenation fault
         return PyAudioProcessorEditor(self)
 
     def hasEditor(self):

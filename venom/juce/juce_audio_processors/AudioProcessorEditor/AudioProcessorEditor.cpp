@@ -30,33 +30,6 @@ public:
             resized,                    /* Name of function in C++ (must match Python name) */
         );
     }
-
-    juce::AudioProcessor* getAudioProcessor() const noexcept
-    {
-        PYBIND11_OVERRIDE(
-            juce::AudioProcessor*,                       /* Return type */
-            juce::AudioProcessorEditor, /* Parent class */
-            getAudioProcessor,                    /* Name of function in C++ (must match Python name) */
-        );
-    }
-
-    void addAndMakeVisible (juce::Component& child, int zOrder = -1) {
-        PYBIND11_OVERRIDE(
-            void,                       /* Return type */
-            juce::AudioProcessorEditor, /* Parent class */
-            addAndMakeVisible,                    /* Name of function in C++ (must match Python name) */
-            child, zOrder
-        );
-    }
-
-    void setSize (int newWidth, int newHeight) {
-        PYBIND11_OVERRIDE(
-            void,                       /* Return type */
-            juce::AudioProcessorEditor, /* Parent class */
-            setSize,                    /* Name of function in C++ (must match Python name) */
-            newWidth, newHeight
-        );
-    }
 };
 
 void init_AudioProcessorEditor(py::module& m) {

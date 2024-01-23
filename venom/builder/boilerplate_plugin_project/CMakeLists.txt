@@ -42,6 +42,7 @@ target_sources(VenomPlugin
         PRIVATE
         create_plugin.cpp
         PyAudioProcessor.h
+        PyAudioProcessorEditor.h
 )
 
 target_compile_definitions(VenomPlugin

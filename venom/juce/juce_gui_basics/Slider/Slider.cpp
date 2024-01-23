@@ -1,96 +1,13 @@
 #include "Slider.h"
 #include <juce_gui_basics/juce_gui_basics.h>
 
-class PySlider : public juce::Slider, juce::Component
-{
-public:
-    /* Inherit the constructors */
-    using juce::Slider::Slider;
-
-    explicit PySlider (const juce::String& componentName) : juce::Slider(componentName) {};
-    PySlider (juce::Slider::SliderStyle style, juce::Slider::TextEntryBoxPosition textBoxPosition) : juce::Slider(style, textBoxPosition) {};
-    
-    void setRange(double newMinimum, double newMaximum, double newInterval) {
-        PYBIND11_OVERRIDE(
-            void,                       /* Return type */
-            juce::Slider,       /* Parent class */
-            setRange,              /* Name of function in C++ (must match Python name) */
-            newMinimum, newMaximum, newInterval
-        );
-    }
-
-    double getValue() const {
-        PYBIND11_OVERRIDE(
-            double,                       /* Return type */
-            juce::Slider,       /* Parent class */
-            getValue,              /* Name of function in C++ (must match Python name) */
-        );
-    }
-
-    void setSliderStyle (juce::Slider::SliderStyle newStyle) {
-        PYBIND11_OVERRIDE(
-            void,                       /* Return type */
-            juce::Slider,       /* Parent class */
-            setSliderStyle,              /* Name of function in C++ (must match Python name) */
-            newStyle
-        );
-    }
-
-    juce::Slider::SliderStyle getSliderStyle() const noexcept {
-        PYBIND11_OVERRIDE(
-            juce::Slider::SliderStyle,                       /* Return type */
-            juce::Slider,       /* Parent class */
-            getSliderStyle,              /* Name of function in C++ (must match Python name) */
-        );
-    }
-
-    void setTextBoxStyle (juce::Slider::TextEntryBoxPosition newPosition,
-                          bool isReadOnly,
-                          int textEntryBoxWidth,
-                          int textEntryBoxHeight) {
-        PYBIND11_OVERRIDE(
-            void,                       /* Return type */
-            juce::Slider,       /* Parent class */
-            setTextBoxStyle,              /* Name of function in C++ (must match Python name) */
-            newPosition, isReadOnly, textEntryBoxWidth, textEntryBoxHeight
-        );
-    }
-
-    void setVisible (bool shouldBeVisible) {
-        PYBIND11_OVERRIDE(
-            void,                       /* Return type */
-            juce::Slider,       /* Parent class */
-            setVisible,              /* Name of function in C++ (must match Python name) */
-            shouldBeVisible
-        );
-    }
-
-    void setBounds (int x, int y, int w, int h) {
-        PYBIND11_OVERRIDE(
-            void,                       /* Return type */
-            juce::Slider,       /* Parent class */
-            setBounds,              /* Name of function in C++ (must match Python name) */
-            x, y, w, h
-        );
-    }
-
-    void setSize (int newWidth, int newHeight) {
-        PYBIND11_OVERRIDE(
-            void,                       /* Return type */
-            juce::Slider,       /* Parent class */
-            setSize,              /* Name of function in C++ (must match Python name) */
-            newWidth, newHeight
-        );
-    }
-};
-
 void init_Slider(py::module& m) {
-        auto slider = py::class_<juce::Slider, PySlider>(m, "Slider", py::dynamic_attr())
+        auto slider = py::class_<juce::Slider, juce::Component>(m, "Slider", py::dynamic_attr())
         .def(py::init<>())
         .def(py::init([](const juce::String& componentName)
-                { return new PySlider(componentName); }))
+                { return new juce::Slider(componentName); }))
         .def(py::init([](juce::Slider::SliderStyle style, juce::Slider::TextEntryBoxPosition textBoxPosition)
-                { return new PySlider(style, textBoxPosition); }))
+                { return new juce::Slider(style, textBoxPosition); }))
         .def("setRange", [](juce::Slider &self, double newMinimum, double newMaximum, double newInterval)
             { self.setRange(newMinimum, newMaximum, newInterval); })
         .def("getValue", [](juce::Slider &self)

@@ -11,24 +11,6 @@ public:
     using juce::Component::Component;
     explicit PyComponent (const juce::String& componentName) noexcept : juce::Component(componentName) {}
 
-
-    juce::String getName() const noexcept {
-        PYBIND11_OVERRIDE_PURE(
-            juce::String,                       /* Return type */
-            juce::Component,       /* Parent class */
-            getName,              /* Name of function in C++ (must match Python name) */
-        );
-    }
-
-    void addAndMakeVisible (juce::Component* child, int zOrder = -1) {
-        PYBIND11_OVERRIDE_PURE(
-            void,                       /* Return type */
-            juce::Component,       /* Parent class */
-            addAndMakeVisible,              /* Name of function in C++ (must match Python name) */
-            child, zOrder /* Argument(s) */
-        );
-    }
-
     void paint(juce::Graphics& g) override
     {
          PYBIND11_OVERRIDE_PURE(

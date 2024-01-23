@@ -60,7 +60,7 @@ public:
 };
 
 void init_AudioProcessorEditor(py::module& m) {
-    py::class_<juce::AudioProcessorEditor, PyAudioProcessorEditor>(m, "AudioProcessorEditor")
+    py::class_<juce::AudioProcessorEditor, std::shared_ptr<juce::AudioProcessorEditor>, PyAudioProcessorEditor>(m, "AudioProcessorEditor")
     .def(py::init([](juce::AudioProcessor &p)
                   { return new PyAudioProcessorEditor(p); }))
     .def(py::init([](juce::AudioProcessor *p)

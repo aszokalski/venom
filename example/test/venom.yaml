@@ -1,0 +1,8 @@
+
+name: aa
+version: 1.0.0
+author: aa
+entrypoint: plugin.py
+targets:
+  - Standalone
+  - VST3

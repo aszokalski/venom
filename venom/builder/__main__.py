@@ -1,10 +1,11 @@
 import tempfile
 from venom.builder.tools import package, project, template
+from venom.builder.tools.utils.Config import Config
 import click
 import survey
 from tqdm import tqdm
 import os
-
+import shutil
 
 @click.group()
 def cli():
@@ -53,6 +54,27 @@ def build(source_path):
     project.build(source_path, p_bar)
 
 
+@click.command(help="Allows faster building (for dev testing) on macOS. It only replaces the juce bindings.")
+@click.option('--source-path', default='.', help='Path to the source directory')
+@click.option('--juce-bindings-path', default='../venv/lib/python3.11/site-packages/juce.cpython-311-darwin.so', help='Path to the source directory')
+@click.option('--mac-bundle-path', default='./dist/Standalone/VenomPlugin1.app', help='Path to a macOS bundle')
+def test(source_path, juce_bindings_path, mac_bundle_path):
+    verify_source_path(source_path)
+    with open(os.path.join(source_path, "venom.yaml")) as file:
+        config = Config.from_yaml(file)
+        print("Fast building for " + config.name + " " + config.version)
+
+        # copy all python files from source_path to mac_bundle_path and rename config.entrypoint to PyAudioProcessor.py
+        shutil.copy(os.path.join(source_path, config.entrypoint), os.path.join(mac_bundle_path, "Contents", "Resources", "site-packages", "PyAudioProcessor.py"))
+        for file in tqdm(os.listdir(source_path), desc="Copying python files"):
+            if file.endswith(".py") and file != config.entrypoint:
+                shutil.copy(os.path.join(source_path, file), os.path.join(mac_bundle_path, "Contents", "Resources", "site-packages", file))
+
+        # copy juce bindings to mac_bundle_path
+        shutil.copy(juce_bindings_path, os.path.join(mac_bundle_path, "Contents", "Resources", "site-packages", "juce.cpython-311-darwin.so"))
+
+
+cli.add_command(test)
 cli.add_command(build)
 cli.add_command(init)
 

@@ -1,10 +1,31 @@
 import shutil
 import os
+import sys
 from venom.builder.tools.utils.Config import Config
 from venom.builder.tools import cmake
 
 
-def init(source_path: str):
+def modify_cmake_lists(source_path: str, config: Config):
+    with open(os.path.join(source_path, "build", "CMakeLists.txt"), "r") as file_handle:
+        lines = file_handle.readlines()
+        for index, line in enumerate(lines):
+            if "set(PLUGIN_NAME" in line:
+                lines[index] = "set(PLUGIN_NAME " + config.name + ")\n"
+            if "set(PLUGIN_VERSION" in line:
+                lines[index] = "set(PLUGIN_VERSION " + config.version + ")\n"
+            if "set(PLUGIN_AUTHOR" in line:
+                lines[index] = "set(PLUGIN_AUTHOR " + config.author + ")\n"
+            if "set(FORMATS" in line:
+                lines[index] = "set(FORMATS " + " ".join(config.targets) + ")\n"
+            if "set(SITE_PACKAGES_DIRS" in line:
+                site_packages_dirs = [f'"{path}"' for path in sys.path if "site-packages" in path]
+                lines[index] = "set(SITE_PACKAGES_DIRS " + " ".join(site_packages_dirs) + ")\n"
+
+    with open(os.path.join(source_path, "build", "CMakeLists.txt"), "w") as file_handle:
+        file_handle.writelines(lines)
+
+
+def build(source_path):
     # Clean previous build
     if os.path.exists(os.path.join(source_path, "build")):
         print("Cleaning old ./build")
@@ -31,22 +52,4 @@ def init(source_path: str):
         modify_cmake_lists(source_path, config)
         cmake.init(os.path.join(source_path, "build"))
 
-
-def modify_cmake_lists(source_path: str, config: Config):
-    with open(os.path.join(source_path, "build", "CMakeLists.txt"), "r") as file_handle:
-        lines = file_handle.readlines()
-        for index, line in enumerate(lines):
-            if "set(PLUGIN_NAME" in line:
-                lines[index] = "set(PLUGIN_NAME " + config.name + ")\n"
-            if "set(PLUGIN_VERSION" in line:
-                lines[index] = "set(PLUGIN_VERSION " + config.version + ")\n"
-            if "set(PLUGIN_AUTHOR" in line:
-                lines[index] = "set(PLUGIN_AUTHOR " + config.author + ")\n"
-            if "set(FORMATS" in line:
-                lines[index] = "set(FORMATS " + " ".join(config.targets) + ")\n"
-    with open(os.path.join(source_path, "build", "CMakeLists.txt"), "w") as file_handle:
-        file_handle.writelines(lines)
-
-
-def build(source_path):
     cmake.build_target(os.path.join(source_path, "build"))

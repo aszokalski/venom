@@ -20,9 +20,9 @@ Example project in `example/` folder.
 ```shell
 cd example
 ```
-### Setup the build system
+### Build the project
 ```shell
-python -m venom.builder init
+venom build
 ```
 
 It will generate `build` and `dist` folders:
@@ -30,10 +30,4 @@ It will generate `build` and `dist` folders:
 - `build` folder contains the build system files
 - `dist` folder contains the built binaries
 
-### Build the project
-```shell
-python -m venom.builder build
-```
-
-The built binaries will be in `dist` folder.
-
+> Note: this may take a long time

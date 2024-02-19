@@ -11,13 +11,6 @@ def cli():
 
 @click.command()
 @click.option('--source-path', default='.', help='Path to the source directory')
-def init(source_path):
-    verify_source_path(source_path)
-    project.init(source_path)
-
-
-@click.command()
-@click.option('--source-path', default='.', help='Path to the source directory')
 def build(source_path):
     verify_source_path(source_path)
     print("Building venom project")
@@ -29,7 +22,6 @@ def build(source_path):
     project.build(source_path)
 
 
-cli.add_command(init)
 cli.add_command(build)
 
 

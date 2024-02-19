@@ -125,16 +125,28 @@ class CMakeBuild(build_ext):
             ["cmake", "--build", ".", *build_args], cwd=build_temp, check=True
         )
 
+
+def generate_package_data(directory):
+    package_data = {}
+    for root, _, files in os.walk(directory):
+        relative_path = os.path.relpath(root, directory)
+        file_paths = [os.path.join(relative_path, file) for file in files]
+        package_data[root.replace(os.path.sep, ".")] = file_paths
+    return package_data
+
+
 # The information here can also be placed in setup.cfg - better separation of
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
     name="venom",
-    version="0.0.12",
+    version="0.0.18",
     ext_modules=[CMakeExtension("juce")],
-    packages=find_namespace_packages(exclude=["build", "build.*", "cmake", "cmake.*", "src", "src.*", "extern", "extern.*"]),
-    cmdclass={"build_ext": CMakeBuild},
+    packages=find_namespace_packages(),
+    cmdclass={"build_ext": CMakeBuild
+              },
+    include_package_data=True,
     zip_safe=False,
-    # setup_requires=['setuptools_scm'],
-    # include_package_data=True,
     python_requires=">=3.7",
+    scripts=["bin/venom"],
+    install_requires=["click", "pyyaml", "pybind11"],
 )

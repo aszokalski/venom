@@ -63,7 +63,7 @@ And the best part is that it is simple to use. Just write a Python script, run i
 
 VENOM is not just a port of JUCE to Python. It is a new way to build audio plugins. Alongside JUCE bindings it provides a new **Pythonic API** that drops the C++ code style and makes it easier to use. Benefits of this approach include:
 * **Rapid prototyping** - Python is a high-level language that allows you to quickly test your ideas
-* **Easier to learn** - Python is a language that is easy to learn and use so much more people can start building audio plugins without the need to learn C++ (eg. artists, sound designers, etc.)
+* **Easier to learn** - Python is a language that is easy to learn and use so much more people can start building audio plugins without the need to learn C++ (eg. artists, audio engineers, etc.)
 * **Potential for use of machine learning** - Python is a language that is widely used in machine learning and data science. This opens up the possibility of easily using machine learning in audio plugins
 
 

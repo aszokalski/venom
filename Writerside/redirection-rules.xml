@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rules SYSTEM "https://resources.jetbrains.com/writerside/1.0/redirection-rules.dtd">
+<rules>
+    <!-- format is as follows
+    <rule id="<unique id>">
+        <accepts>page.html</accepts>
+    </rule>
+    -->
+    <rule id="13390f21">
+        <description>Created after removal of "How to" from Docs</description>
+        <accepts>How-to.html</accepts>
+    </rule>
+    <rule id="6a069944">
+        <description>Created after removal of "Overview" from Docs</description>
+        <accepts>Overview.html</accepts>
+    </rule>
+    <rule id="2293382e">
+        <description>Created after removal of "Reference" from Docs</description>
+        <accepts>Reference.html</accepts>
+    </rule>
+    <rule id="2bbe6e92">
+        <description>Created after removal of "Tutorial" from Docs</description>
+        <accepts>Tutorial.html</accepts>
+    </rule>
+    <rule id="7cc6ced6">
+        <description>Created after removal of "About Docs" from Docs</description>
+        <accepts>starter-topic.html</accepts>
+    </rule>
+    <rule id="22bb7f5d">
+        <description><![CDATA[Created after removal of "<Getting-Started.md>" from Docs]]></description>
+        <accepts>Getting-Started.html</accepts>
+    </rule>
+    <rule id="55d601a7">
+        <description>Created after removal of "Empty MD Topic" from Docs</description>
+        <accepts>Empty-MD-Topic.html</accepts>
+    </rule>
+    <rule id="40145b4b">
+        <description>Created after removal of "Tutorial" from Docs</description>
+        <accepts>Tutorial.html</accepts>
+    </rule>
+    <rule id="4e98ceab">
+        <description>Created after removal of "Starter" from Docs</description>
+        <accepts>Starter.html</accepts>
+    </rule>
+    <rule id="3f044a65">
+        <description>Created after removal of "How to" from Docs</description>
+        <accepts>How-to.html</accepts>
+    </rule>
+    <rule id="363dd406">
+        <description>Created after removal of "Reference" from Docs</description>
+        <accepts>Reference.html</accepts>
+    </rule>
+</rules>

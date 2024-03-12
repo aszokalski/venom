@@ -9,6 +9,7 @@ class PyComponent : public juce::Component
 public:
     /* Inherit the constructors */
     using juce::Component::Component;
+    explicit PyComponent (const juce::String& componentName) noexcept : juce::Component(componentName) {}
 
     void paint(juce::Graphics& g) override
     {
@@ -37,5 +38,9 @@ void init_Component(py::module& m) {
         .def("paint", [](juce::Component &self, juce::Graphics& g)
             { self.paint(g); })
         .def("resized", [](juce::Component &self)
-            { self.resized(); });
+            { self.resized(); })
+        .def("getName", [](juce::Component &self)
+            { return self.getName(); })
+        .def("addAndMakeVisible", [](juce::Component &self, juce::Component* child, int zOrder = -1)
+            { return self.addAndMakeVisible(child, zOrder); });
 }

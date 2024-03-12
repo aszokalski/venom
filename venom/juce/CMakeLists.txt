@@ -1,5 +1,3 @@
-file(GLOB SOURCE_FILES "${CMAKE_SOURCE_DIR}/*.cpp" "${CMAKE_SOURCE_DIR}/*.h")
-
 pybind11_add_module(juce
         juce_audio_processors/AudioProcessor/AudioProcessor.cpp
         juce_audio_processors/AudioProcessor/AudioProcessor.h

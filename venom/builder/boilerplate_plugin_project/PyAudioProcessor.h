@@ -2,6 +2,7 @@
 #include "juce_audio_basics/juce_audio_basics.h" // for juce::AudioBuffer
 #include "juce_audio_devices/juce_audio_devices.h"
 #include <pybind11/embed.h> // everything needed for embedding
+#include "PyAudioProcessorEditor.h"
 
 namespace py = pybind11;
 
@@ -79,12 +80,11 @@ public:
 
     juce::AudioProcessorEditor *createEditor() override
     {
-        try{
-            return this->altered_class_instance.attr("createEditor")().cast<juce::AudioProcessorEditor *>();
-        } catch (const std::exception& e) {
-            std::cout << e.what() << std::endl;
-            return nullptr;
-        }
+            auto editor = this->altered_class_instance.attr("createEditor")();
+            if (editor.is_none()) {
+                return nullptr;
+            }
+            return new PyAudioProcessorEditor(this, editor);
     }
 
     bool hasEditor() const override

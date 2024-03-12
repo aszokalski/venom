@@ -4,6 +4,7 @@
 
 #include "AudioProcessorEditor.h"
 #include <juce_audio_processors/juce_audio_processors.h>
+#include <juce_gui_basics/juce_gui_basics.h>
 
 class PyAudioProcessorEditor : public juce::AudioProcessorEditor
 {
@@ -32,7 +33,7 @@ public:
 };
 
 void init_AudioProcessorEditor(py::module& m) {
-    py::class_<juce::AudioProcessorEditor, PyAudioProcessorEditor>(m, "AudioProcessorEditor")
+    py::class_<juce::AudioProcessorEditor, std::shared_ptr<juce::AudioProcessorEditor>, PyAudioProcessorEditor>(m, "AudioProcessorEditor")
     .def(py::init([](juce::AudioProcessor &p)
                   { return new PyAudioProcessorEditor(p); }))
     .def(py::init([](juce::AudioProcessor *p)
@@ -40,5 +41,11 @@ void init_AudioProcessorEditor(py::module& m) {
     .def("resized", [](juce::AudioProcessorEditor &self)
          { return self.resized(); })
     .def("paint", [](juce::AudioProcessorEditor &self, juce::Graphics &g)
-         { return self.paint(g); });
+         { return self.paint(g); })
+    .def("getAudioProcessor", [](juce::AudioProcessorEditor &self)
+         { return self.getAudioProcessor(); })
+    .def("addAndMakeVisible", [](juce::AudioProcessorEditor &self, juce::Component& child, int zOrder = -1)
+         { self.addAndMakeVisible(child, zOrder); })
+    .def("setSize", [](juce::AudioProcessorEditor &self, int newWidth, int newHeight)
+         { self.setSize(newWidth, newHeight); });
 }

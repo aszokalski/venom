@@ -3,6 +3,7 @@ import os
 import sys
 from venom.builder.tools.utils.Config import Config
 from venom.builder.tools import cmake
+from tqdm import tqdm
 
 
 def modify_cmake_lists(source_path: str, config: Config):
@@ -25,20 +26,25 @@ def modify_cmake_lists(source_path: str, config: Config):
         file_handle.writelines(lines)
 
 
-def build(source_path):
+def build(source_path, p_bar: tqdm):
     # Clean previous build
+    p_bar.update(1)
     if os.path.exists(os.path.join(source_path, "build")):
-        print("Cleaning old ./build")
+        p_bar.set_description("Cleaning old ./build")
         shutil.rmtree(os.path.join(source_path, "build"))
+    p_bar.refresh()
 
     try:
         os.remove(os.path.join(source_path, "dist"))
     except:
         pass
     finally:
-        print("Cleaning old ./dist")
+        p_bar.set_description("Creating ./dist")
+    p_bar.refresh()
 
     with open(os.path.join(source_path, "venom.yaml")) as file_handle:
+        p_bar.set_description("Copying boilerplate project")
+        p_bar.refresh()
         config = Config.from_yaml(file_handle)
         # Create dist directory as a symbolic link to source_pats/build/build/VenomPlugin_artefacts
         os.symlink(os.path.join(source_path, "build", "VenomPlugin_artefacts"),
@@ -50,6 +56,15 @@ def build(source_path):
 
         # setup CMakeLists.txt with config
         modify_cmake_lists(source_path, config)
-        cmake.init(os.path.join(source_path, "build"))
+        p_bar.update(2)
+        p_bar.set_description("Initializing CMake")
+        p_bar.refresh()
+        cmake.init(os.path.join(source_path, "build"), p_bar)
 
-    cmake.build_target(os.path.join(source_path, "build"))
+    p_bar.update(1)
+    p_bar.set_description("Building CMake")
+    p_bar.refresh()
+    cmake.build_target(os.path.join(source_path, "build"), p_bar)
+    p_bar.update(4)
+    p_bar.set_description("Done")
+    p_bar.refresh()

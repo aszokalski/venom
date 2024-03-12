@@ -32,9 +32,8 @@ setup(
 
 def install(tmp_path: str):
     try:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", tmp_path])
+        subprocess.check_call([sys.executable, "-m", "pip", "install", tmp_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     except subprocess.CalledProcessError as e:
         print(f"PIP: Error installing package from {tmp_path}: {e}")
     finally:
-        print(f"Package installed successfully from {tmp_path}")
         shutil.rmtree(tmp_path, ignore_errors=True)

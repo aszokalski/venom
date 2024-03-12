@@ -13,8 +13,7 @@ class PyAudioProcessorEditor(AudioProcessorEditor):
         self.addAndMakeVisible(self.slider, -1)
         self.slider.setSize(100, 50)
 
-        self.setSize(600, 600)
-
+        self.setSize(600, 600
     def onSliderValueChanged(self, value):
         self.getAudioProcessor().gain = value
 

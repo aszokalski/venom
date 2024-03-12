@@ -22,9 +22,6 @@ juce_add_plugin(VenomPlugin
 
 juce_generate_juce_header(VenomPlugin)
 
-pybind11_find_import(PyAudioProcessor REQUIRED)
-pybind11_find_import(venom REQUIRED)
-
 target_link_libraries(VenomPlugin
         PRIVATE
         pybind11::embed

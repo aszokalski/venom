@@ -181,7 +181,7 @@ public:
 };
 
 void init_AudioProcessor(py::module& m) {
-        py::class_<juce::AudioProcessor, PyAudioProcessor>(m, "AudioProcessor", py::dynamic_attr())
+        py::class_<juce::AudioProcessor, std::shared_ptr<juce::AudioProcessor>, PyAudioProcessor>(m, "AudioProcessor", py::dynamic_attr())
         .def(py::init<>())
         .def("getName", [](juce::AudioProcessor &self)
              { return self.getName(); })

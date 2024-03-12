@@ -1,24 +1,21 @@
-from juce.juce_audio_processors import AudioProcessor, AudioProcessorEditor
-from juce.utils import AudioBuffer, String
-from juce.juce_gui_basics import Slider, Component
-
+from venom.juce.juce_audio_processors import AudioProcessor, AudioProcessorEditor
+from venom.juce.utils import AudioBuffer
+from venom.juce.juce_gui_basics import Slider
 class PyAudioProcessorEditor(AudioProcessorEditor):
     def __init__(self, processor):
         super().__init__(processor)
-        self.slider = Slider(String("Gain"))
-        self.slider.setRange(-48, 48, 100)
-        self.slider.setSliderStyle(Slider.SliderStyle.LinearHorizontal)
+        self.slider = Slider("Gain")
+        self.slider.setRange(-48, 48)
+        self.slider.setSliderStyle(Slider.SliderStyle.linearVertical)
         self.slider.setTextBoxStyle(Slider.TextBoxBelow, True, 50, 20)
-        # self.slider.onValueChange = self.onSliderValueChanged
-        self.addAndMakeVisible(self.slider, -1)
-        self.slider.setSize(100, 50)
+        self.slider.onValueChange = self.onSliderValueChanged
+        self.addAndMakeVisible(self.slider)
+        self.setSize(200, 200)
 
-        self.setSize(600, 600
     def onSliderValueChanged(self, value):
-        self.getAudioProcessor().gain = value
+        self.getProcessor().gain = value
 
     def paint(self, graphics):
-        print("paint")
         graphics.fillAll(self.findColour(0x1000000))
 
     def resized(self):
@@ -36,12 +33,13 @@ class PyAudioProcessor(AudioProcessor):
         buffer.applyGain(14)
 
     def createEditor(self):
-        return PyAudioProcessorEditor(self)
+        return None
 
     def hasEditor(self):
-        return True
+        return PyAudioProcessorEditor(self)
 
     def getName(self):
+        print("PyAudioProcessor.getName()")
         return "PyAudioProcessor"
 
     def acceptsMidi(self):
@@ -73,13 +71,3 @@ class PyAudioProcessor(AudioProcessor):
 
     def setStateInformation(self, data, sizeInBytes):
         pass
-
-
-if __name__ == "__main__":
-    processor = PyAudioProcessor()
-    print(processor)
-    editor = PyAudioProcessorEditor(processor)
-    print(editor)
-
-    a = processor.createEditor()
-    print(a)

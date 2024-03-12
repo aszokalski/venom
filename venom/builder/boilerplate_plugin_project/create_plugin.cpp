@@ -4,7 +4,7 @@
 #include <JuceHeader.h>
 #include "PyAudioProcessor.h"
 #include <pybind11/embed.h> // everything needed for embedding
-
+#define PYBIND11_DETAILED_ERROR_MESSAGES
 namespace py = pybind11;
 
 // Global variable to hold the Python interpreter

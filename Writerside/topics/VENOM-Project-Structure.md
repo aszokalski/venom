@@ -1,3 +1,3 @@
 # VENOM project structure
 
-Start typing here...
+Coming soon

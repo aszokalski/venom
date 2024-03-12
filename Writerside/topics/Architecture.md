@@ -72,9 +72,9 @@ flowchart TD
 	subgraph 723442["Pythonic API (venom.wrapper)"]
 	end
 	subgraph 691501["Venom Project"]
-		524020["PyAudioProcessor.py (entry point)"] -.- 895135
+	    895135
 		487898
-		140590
+
 	end
 	subgraph 242985["Build directory"]
 		961549
@@ -99,9 +99,8 @@ flowchart TD
 		253641 --> 747649(["CMake"])
 		988827["JUCE, pybind11 repos\n"] --> 747649
 	end
-	subgraph 691501["Venom Project*"]
-		140590["Python site-packages"]
-	end
+
+	140590["Python site-packages*"]
 
 ```
 

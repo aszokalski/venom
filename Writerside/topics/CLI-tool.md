@@ -1,3 +1,3 @@
 # CLI tool
 
-Start typing here...
+Coming soon

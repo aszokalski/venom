@@ -1,3 +1,3 @@
 # Boilerplate JUCE project
 
-Start typing here...
+Coming soon

@@ -10,14 +10,14 @@
   <p align="center">
     A Pythonic way to build VST3 plugins using JUCE
     <br />
-    <a href=""><strong>Explore the docs »</strong></a>
+    <a href="https://aszokalski.github.io/venom/readme.html"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="">View Demo</a>
     ·
-    <a href="">Report Bug</a>
+    <a href="https://github.com/aszokalski/venom/issues/new">Report Bug</a>
     ·
-    <a href="">Request Feature</a>
+    <a href="https://github.com/aszokalski/venom/issues/new">Request Feature</a>
   </p>
 </div>
 

@@ -13,7 +13,7 @@
     <a href="https://aszokalski.github.io/venom/readme.html"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="">View Demo</a>
+    <a href="https://discord.gg/8ZubDpaH">Join our Discord</a>
     ·
     <a href="https://github.com/aszokalski/venom/issues/new">Report Bug</a>
     ·

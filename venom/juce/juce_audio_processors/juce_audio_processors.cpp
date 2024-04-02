@@ -13,3 +13,8 @@ void init_juce_audio_processors(py::module &super) {
     init_AudioProcessor(m);
     init_AudioProcessorEditor(m);
 }
+
+PYBIND11_MODULE(audio_processor, m)
+{
+    init_juce_audio_processors(m);
+}

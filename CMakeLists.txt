@@ -7,5 +7,10 @@ message(STATUS "Python_EXECUTABLE: ${Python_EXECUTABLE}")
 add_subdirectory(extern/juce)
 add_subdirectory(extern/pybind11)
 
+set(MODULES_DIR "${CMAKE_BINARY_DIR}/bindings_modules" CACHE STRING "Directory for shared modules")
+file(MAKE_DIRECTORY ${MODULES_DIR})
+
 # juce python bindings
 add_subdirectory(venom/juce)
+add_subdirectory(venom/python/AudioProcessor)
+add_subdirectory(tests/cpp)

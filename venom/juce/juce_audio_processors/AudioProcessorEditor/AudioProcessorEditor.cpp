@@ -42,6 +42,7 @@ void init_AudioProcessorEditor(py::module& m) {
     py::class_<juce::AudioProcessorEditor, std::shared_ptr<juce::AudioProcessorEditor>, PyAudioProcessorEditor>(m, "AudioProcessorEditor")
         .def(py::init([](juce::AudioProcessor &p){
             juce::ScopedJuceInitialiser_GUI libraryInitialiser;
+
             auto createEditor = [](void* userData) -> void* {
               auto* processor = static_cast<juce::AudioProcessor*>(userData);
               return new PyAudioProcessorEditor(*processor);

@@ -6,6 +6,9 @@ class PyAudioProcessor : public juce::AudioProcessor
 public:
     /* Inherit the constructors */
     using juce::AudioProcessor::AudioProcessor;
+    ~PyAudioProcessor(){
+      std::cout<<"[DESTROY]"<<std::endl;
+    }
 
     void prepareToPlay(double sampleRate, int samplesPerBlock) override
     {
@@ -183,10 +186,13 @@ public:
 void init_AudioProcessor(py::module& m) {
         py::class_<juce::AudioProcessor, std::shared_ptr<juce::AudioProcessor>, PyAudioProcessor>(m, "AudioProcessor", py::dynamic_attr())
         .def(py::init([]() -> PyAudioProcessor* {
-            juce::ScopedJuceInitialiser_GUI libraryInitialiser;
+
             auto createEditor = [](void* userData) -> void* {
               return new PyAudioProcessor();
             };
+            if(juce::MessageManager::getInstanceWithoutCreating()== nullptr){
+              return static_cast<PyAudioProcessor*>(createEditor(nullptr));
+            }
             if (juce::MessageManager::getInstanceWithoutCreating()->isThisTheMessageThread()) {
               return static_cast<PyAudioProcessor*>(createEditor(nullptr));
             } else {

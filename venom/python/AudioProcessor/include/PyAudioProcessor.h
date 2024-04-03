@@ -8,11 +8,11 @@ namespace py = pybind11;
 class PyAudioProcessor : public juce::AudioProcessor{
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PyAudioProcessor)
-    std::shared_ptr<py::object> instance;
+    std::weak_ptr<py::object> instance;
 
 public:
 
-    explicit PyAudioProcessor(std::shared_ptr<py::object> clsInstance);
+    explicit PyAudioProcessor(std::weak_ptr<py::object> clsInstance);
     ~PyAudioProcessor() override = default;
 
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;

@@ -1,6 +1,6 @@
 from audio_processor.juce_audio_processors import AudioProcessorEditor
 from audio_processor.juce_audio_processors import AudioProcessor
-
+import gc
 class PyAudioProcessorEditor(AudioProcessorEditor):
     def __init__(self, processor):
         super().__init__(processor)
@@ -14,7 +14,7 @@ class PyAudioProcessor(AudioProcessor):
     def __init__(self):
         super().__init__()
     def prepareToPlay(self, sampleRate, samplesPerBlock):
-        pass
+        print(f"DUPA: {sampleRate} {samplesPerBlock}")
 
     def releaseResources(self):
         pass

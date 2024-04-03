@@ -2,6 +2,9 @@ add_library(audio_processor
         SHARED
         AudioProcessor/AudioProcessor.cpp
         AudioProcessorEditor/AudioProcessorEditor.cpp
+        AudioProcessorListener/AudioProcessorListener.cpp
+        AudioProcessorParameter/AudioProcessorParameter.cpp
+        AudioProcessorValueTreeState/AudioProcessorValueTreeState.cpp
         juce_audio_processors.cpp)
 
 target_link_libraries(audio_processor

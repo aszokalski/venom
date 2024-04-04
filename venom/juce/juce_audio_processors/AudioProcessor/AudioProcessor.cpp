@@ -182,7 +182,18 @@ public:
 
 void init_AudioProcessor(py::module& m) {
         py::class_<juce::AudioProcessor, std::shared_ptr<juce::AudioProcessor>, PyAudioProcessor>(m, "AudioProcessor", py::dynamic_attr())
-        .def(py::init<>())
+        .def(py::init([]() -> PyAudioProcessor* {
+            juce::ScopedJuceInitialiser_GUI libraryInitialiser;
+            auto createEditor = [](void* userData) -> void* {
+              return new PyAudioProcessor();
+            };
+            if (juce::MessageManager::getInstanceWithoutCreating()->isThisTheMessageThread()) {
+              return static_cast<PyAudioProcessor*>(createEditor(nullptr));
+            } else {
+              return static_cast<PyAudioProcessor*>(juce::MessageManager::getInstanceWithoutCreating()
+                                                         ->callFunctionOnMessageThread(createEditor, nullptr));
+            }
+        }))
         .def("getName", [](juce::AudioProcessor &self)
              { return self.getName(); })
         .def("prepareToPlay", [](juce::AudioProcessor &self, double sampleRate, int samplesPerBlock)

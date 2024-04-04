@@ -9,8 +9,14 @@
 class PyAudioProcessorEditor : public juce::AudioProcessorEditor
 {
 public:
-    explicit PyAudioProcessorEditor(juce::AudioProcessor &p) : juce::AudioProcessorEditor(p) {}
-    explicit PyAudioProcessorEditor(juce::AudioProcessor *p) : juce::AudioProcessorEditor(p) {}
+    explicit PyAudioProcessorEditor(juce::AudioProcessor &p) : juce::AudioProcessorEditor(p) {
+      // In juce objects that are associated with UI need to be called on main Message thread
+      JUCE_ASSERT_MESSAGE_MANAGER_IS_LOCKED
+    }
+    explicit PyAudioProcessorEditor(juce::AudioProcessor *p) : juce::AudioProcessorEditor(p) {
+      // In juce objects that are associated with UI need to be called on main Message thread
+      JUCE_ASSERT_MESSAGE_MANAGER_IS_LOCKED
+    }
 
     void paint(juce::Graphics &g) override
     {
@@ -34,8 +40,19 @@ public:
 
 void init_AudioProcessorEditor(py::module& m) {
     py::class_<juce::AudioProcessorEditor, std::shared_ptr<juce::AudioProcessorEditor>, PyAudioProcessorEditor>(m, "AudioProcessorEditor")
-    .def(py::init([](juce::AudioProcessor &p)
-                  { return new PyAudioProcessorEditor(p); }))
+        .def(py::init([](juce::AudioProcessor &p){
+            juce::ScopedJuceInitialiser_GUI libraryInitialiser;
+            auto createEditor = [](void* userData) -> void* {
+              auto* processor = static_cast<juce::AudioProcessor*>(userData);
+              return new PyAudioProcessorEditor(*processor);
+            };
+            if (juce::MessageManager::getInstance()->isThisTheMessageThread()) {
+              return static_cast<PyAudioProcessorEditor*>(createEditor(&p));
+            } else {
+              return static_cast<PyAudioProcessorEditor*>(juce::MessageManager::getInstance()
+                                                               ->callFunctionOnMessageThread(createEditor, &p));
+            }
+        }))
     .def(py::init([](juce::AudioProcessor *p)
                   { return new PyAudioProcessorEditor(p); }))
     .def("resized", [](juce::AudioProcessorEditor &self)

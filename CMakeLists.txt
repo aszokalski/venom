@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5...3.26)
 project(.. VERSION 0.1.0)
 
-#find_package(venom/python COMPONENTS Interpreter Development REQUIRED)
+find_package(Python COMPONENTS Interpreter Development REQUIRED)
 message(STATUS "Python_EXECUTABLE: ${Python_EXECUTABLE}")
 
 add_subdirectory(extern/juce)
@@ -12,5 +12,5 @@ file(MAKE_DIRECTORY ${MODULES_DIR})
 
 # juce python bindings
 add_subdirectory(venom/juce)
-#add_subdirectory(venom/python/AudioProcessor)
+add_subdirectory(venom/python/AudioProcessor)
 add_subdirectory(tests/cpp)

@@ -5,7 +5,6 @@
 namespace py = pybind11;
 
 TEST(AUDIO_PROCESSOR, AudioProcessorEditorCreation){
-    EXPECT_EQ(1, 1);
     juce::ScopedJuceInitialiser_GUI libraryInitialiser;
     auto interpreter = std::make_unique<py::scoped_interpreter>();
     auto path = py::module_::import("sys").attr("path");

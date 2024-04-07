@@ -17,4 +17,3 @@ include(GoogleTest)
 set(STUBS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/stubs" CACHE STRING "Dir for stubs ")
 add_subdirectory(juce_audio_processors)
 
-

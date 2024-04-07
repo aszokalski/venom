@@ -1,4 +1,4 @@
-add_library(audio_processor
+pybind11_add_module(audio_processor
         SHARED
         AudioProcessor/AudioProcessor.cpp
         AudioProcessorEditor/AudioProcessorEditor.cpp

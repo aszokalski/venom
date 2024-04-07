@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 #include <pybind11/embed.h>
 #include "juce_audio_devices/juce_audio_devices.h"
-#include "PyAudioProcessor.h"
 
 namespace py = pybind11;
 
@@ -16,5 +15,5 @@ TEST(AUDIO_PROCESSOR, AudioProcessorEditorCreation){
 
     juce::Image image(juce::Image::ARGB, 200, 400, true);
     juce::Graphics g(image);
-    obj.attr("paint")(g);
+    obj.attr("resized")();
 }

@@ -8,7 +8,6 @@ target_link_libraries(audio_processor_tests
         pybind11::embed
         juce::juce_gui_basics
         audio_processor
-        VenomModule
 )
 
 target_compile_definitions(audio_processor_tests

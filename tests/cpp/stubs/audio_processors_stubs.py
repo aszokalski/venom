@@ -1,11 +1,13 @@
 from audio_processor.juce_audio_processors import AudioProcessorEditor
 from audio_processor.juce_audio_processors import AudioProcessor
+from audio_processor.juce_audio_processors import Colour
 
 class PyAudioProcessorEditor(AudioProcessorEditor):
     def __init__(self, processor):
         super().__init__(processor)
         self.setSize(200, 400)
     def paint(self, graphics):
+        graphics.fillAll(Colour(0.6, 0.6, 0.9, 0.5))
         pass
 
     def resized(self):
@@ -23,7 +25,7 @@ class PyAudioProcessor(AudioProcessor):
         pass
 
     def createEditor(self):
-        return None
+        return PyAudioProcessorEditor(self)
 
     def hasEditor(self):
         return True

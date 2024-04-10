@@ -4,6 +4,8 @@ pybind11_add_module(audio_processor
         AudioProcessorEditor/AudioProcessorEditor.cpp
         juce_audio_processors.cpp)
 
+set_property(TARGET audio_processor PROPERTY POSITION_INDEPENDENT_CODE TRUE)
+
 target_link_libraries(audio_processor
         PRIVATE
         pybind11::module

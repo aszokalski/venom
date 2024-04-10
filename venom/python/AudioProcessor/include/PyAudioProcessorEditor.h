@@ -12,22 +12,14 @@ namespace py = pybind11;
 class PyAudioProcessorEditor : public juce::AudioProcessorEditor{
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PyAudioProcessorEditor)
-    std::weak_ptr<py::object> instance;
+    std::unique_ptr<py::object> instance;
 
 public:
 
-    PyAudioProcessorEditor(juce::AudioProcessor *p, std::weak_ptr<py::object> instance) : juce::AudioProcessorEditor(p), instance(std::move(instance)) {
-    }
-    ~PyAudioProcessorEditor() override{
-    };
+  PyAudioProcessorEditor(juce::AudioProcessor *p, std::unique_ptr<py::object> instance);
+  ~PyAudioProcessorEditor();
 
-    void resized() override
-    {
-        this->instance.lock()->attr("resized")();
-    }
+    void resized() override;
 
-    void paint(juce::Graphics &g) override
-    {
-        this->instance.lock()->attr("paint")(g);
-    }
+    void paint(juce::Graphics &g) override;
 };

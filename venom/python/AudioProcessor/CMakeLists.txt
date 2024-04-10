@@ -1,6 +1,8 @@
 add_library(VenomModule
         STATIC
-        PyAudioProcessor.cpp)
+        PyAudioProcessor.cpp
+        PyAudioProcessorEditor.cpp)
+set_property(TARGET VenomModule PROPERTY POSITION_INDEPENDENT_CODE TRUE)
 
 target_link_libraries(VenomModule PRIVATE
         pybind11::embed

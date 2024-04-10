@@ -41,8 +41,9 @@ public:
 void init_AudioProcessorEditor(py::module& m) {
     py::class_<juce::AudioProcessorEditor, std::shared_ptr<juce::AudioProcessorEditor>, PyAudioProcessorEditor>(m, "AudioProcessorEditor")
         .def(py::init([](juce::AudioProcessor &p){
-            juce::ScopedJuceInitialiser_GUI libraryInitialiser;
+          juce::ScopedJuceInitialiser_GUI libraryInitialiser;
             auto createEditor = [](void* userData) -> void* {
+              JUCE_ASSERT_MESSAGE_THREAD
               auto* processor = static_cast<juce::AudioProcessor*>(userData);
               return new PyAudioProcessorEditor(*processor);
             };
@@ -57,12 +58,21 @@ void init_AudioProcessorEditor(py::module& m) {
                   { return new PyAudioProcessorEditor(p); }))
     .def("resized", [](juce::AudioProcessorEditor &self)
          { return self.resized(); })
-    .def("paint", [](juce::AudioProcessorEditor &self, juce::Graphics &g)
-         { return self.paint(g); })
+    .def("paint", [](juce::AudioProcessorEditor &self, juce::Graphics& g)
+         {
+               return self.paint(g); })
     .def("getAudioProcessor", [](juce::AudioProcessorEditor &self)
          { return self.getAudioProcessor(); })
     .def("addAndMakeVisible", [](juce::AudioProcessorEditor &self, juce::Component& child, int zOrder = -1)
          { self.addAndMakeVisible(child, zOrder); })
     .def("setSize", [](juce::AudioProcessorEditor &self, int newWidth, int newHeight)
          { self.setSize(newWidth, newHeight); });
+    py::class_<juce::Graphics>(m, "Graphics")
+        .def (py::init<const juce::Image&>())
+        .def (py::init<juce::LowLevelGraphicsContext&>())
+        .def ("fillAll", py::overload_cast<> (&juce::Graphics::fillAll, py::const_))
+        .def ("fillAll", py::overload_cast<juce::Colour> (&juce::Graphics::fillAll, py::const_))
+        ;
+    py::class_<juce::Colour>(m, "Colour")
+        .def(py::init<float, float , float, float>());
 }

@@ -183,6 +183,7 @@ public:
 void init_AudioProcessor(py::module& m) {
         py::class_<juce::AudioProcessor, std::shared_ptr<juce::AudioProcessor>, PyAudioProcessor>(m, "AudioProcessor", py::dynamic_attr())
         .def(py::init([]() -> PyAudioProcessor* {
+
             juce::ScopedJuceInitialiser_GUI libraryInitialiser;
             auto createEditor = [](void* userData) -> void* {
               return new PyAudioProcessor();
@@ -205,7 +206,8 @@ void init_AudioProcessor(py::module& m) {
         .def("processBlock", [](juce::AudioProcessor &self, juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages)
              { self.processBlock(buffer, midiMessages); })
         .def("createEditor", [](juce::AudioProcessor &self)
-             { return self.createEditor(); })
+             {
+               return self.createEditor(); })
         .def("hasEditor", [](juce::AudioProcessor &self)
              { return self.hasEditor(); })
         .def("acceptsMidi", [](juce::AudioProcessor &self)
@@ -230,4 +232,27 @@ void init_AudioProcessor(py::module& m) {
              { self.getStateInformation(destData); })
         .def("setStateInformation", [](juce::AudioProcessor &self, const void *data, int sizeInBytes)
              { self.setStateInformation(data, sizeInBytes); });
+
+        py::class_<juce::AudioBuffer<float>>(m, "AudioBuffer")
+            .def(py::init<>())
+            .def("applyGain", [](juce::AudioBuffer<float> &self, float gain)
+                 { self.applyGain(gain); });
+
+        py::class_<juce::MidiBuffer>(m, "MidiBuffer")
+            .def(py::init<>());
+
+        py::class_<juce::String>(m, "String")
+            .def(py::init<>())
+            .def(py::init([](const char* text)
+                          { return new juce::String(text); }));
+
+        py::class_<juce::MemoryBlock>(m, "MemoryBlock")
+            .def(py::init<>());
+
+        py::enum_<juce::NotificationType>(m, "NotificationType")
+            .value("dontSendNotification", juce::NotificationType::dontSendNotification)
+            .value("sendNotification", juce::NotificationType::sendNotification)
+            .value("sendNotificationSync", juce::NotificationType::sendNotificationSync)
+            .value("sendNotificationAsync", juce::NotificationType::sendNotificationAsync)
+            .export_values();
 }

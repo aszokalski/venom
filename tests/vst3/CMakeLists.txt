@@ -4,6 +4,11 @@ set(FORMATS VST3)
 set(PLUGIN_NAME "TestPlugin")
 set(PLUGIN_VERSION "2.1.38")
 set(PLUGIN_AUTHOR "Test test")
+set(RELATIVE_BINDINGS_PATH "../../cmake-build-debug/bindings_modules")
+set(RELATIVE_STUBS_PATH "../cpp/stubs")
+
+get_filename_component(ABSOLUTE_BINDINGS_PATH "${RELATIVE_BINDINGS_PATH}" ABSOLUTE BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+get_filename_component(ABSOLUTE_STUBS_PATH "${RELATIVE_STUBS_PATH}" ABSOLUTE BASE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 
 project(${PLUGIN_NAME} VERSION ${PLUGIN_VERSION})
 
@@ -41,6 +46,8 @@ target_compile_definitions(${PLUGIN_NAME}
         JUCE_WEB_BROWSER=0
         JUCE_USE_CURL=0
         JUCE_VST3_CAN_REPLACE_VST2=0
+        ABSOLUTE_BINDINGS_PATH="${ABSOLUTE_BINDINGS_PATH}"
+        ABSOLUTE_STUBS_PATH="${ABSOLUTE_STUBS_PATH}"
 )
 
 foreach(format ${FORMATS})

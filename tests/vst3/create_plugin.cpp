@@ -5,6 +5,7 @@
 #include "PyAudioProcessor.h"
 #define PYBIND11_DETAILED_ERROR_MESSAGES
 #include <pybind11/embed.h> // everything needed for embedding
+
 namespace py = pybind11;
 //
 //// Global variable to hold the Python interpreter
@@ -19,8 +20,9 @@ juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter()
       python = std::make_unique<py::scoped_interpreter>();
     }
     auto path = py::module_::import("sys").attr("path");
-    path.attr("append")("/home/mszawerd/venom/venom/cmake-build-debug/bindings_modules");
-    py::eval_file("/home/mszawerd/venom/venom/tests/cpp/stubs/audio_processors_stubs.py");
+    path.attr("append")(ABSOLUTE_BINDINGS_PATH);
+    py::eval_file(std::string(ABSOLUTE_STUBS_PATH) + "/audio_processors_stubs.py");
+
     auto obj = std::make_unique<py::object>(py::eval("PyAudioProcessor()"));
     return new PyAudioProcessor(std::move(obj));
 }

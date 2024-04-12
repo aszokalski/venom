@@ -209,6 +209,7 @@ _deps
 .idea/
 .vscode/
 cmake-build-debug/
+cmake-build-release/
 dist
 
 webHelpD2-all.zip

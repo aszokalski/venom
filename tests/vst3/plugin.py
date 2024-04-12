@@ -1,47 +1,45 @@
-from audio_processor.juce_audio_processors import AudioProcessorEditor
 from audio_processor.juce_audio_processors import AudioProcessor
-from audio_processor.juce_audio_processors import Colour
+import math
 
-class PyAudioProcessorEditor(AudioProcessorEditor):
-    def __init__(self, processor):
-        super().__init__(processor)
-        self.setSize(200, 400)
-    def paint(self, graphics):
-        graphics.fillAll(Colour(1.0, 1.0, 1.0, 0.8))
-        pass
-
-    def resized(self):
-        pass
 class PyAudioProcessor(AudioProcessor):
     def __init__(self):
         super().__init__()
-
+        self.sample_rate = 44100
+        self.freq = 210
+        .0
+        self.level = 0.06
 
     def prepareToPlay(self, sampleRate, samplesPerBlock):
-        pass
+        self.currentPhase = 0.0
+        self.sample_rate = sampleRate
+        self.phaseDelta =(self.freq/sampleRate)*2.0*math.pi
 
 
     def releaseResources(self):
         pass
 
     def processBlock(self, buffer, midiMessages):
-        pass
-
+        buffer.clear()
+        for channel in range(buffer.getNumChannels()):
+            data = buffer.getWritePointer(channel)
+            for sample in range(buffer.getNumSamples()):
+                data[sample] = math.sin(self.currentPhase)*self.level
+                self.currentPhase += self.phaseDelta
 
     def createEditor(self):
-        return PyAudioProcessorEditor(self)
+        return None
 
     def hasEditor(self):
-        return True
+        return False
 
     def getName(self):
         return "PyAudioProcessor"
 
     def acceptsMidi(self):
-        return True
+        return False
 
     def producesMidi(self):
-        return True
+        return False
 
     def getTailLengthSeconds(self):
         return 0

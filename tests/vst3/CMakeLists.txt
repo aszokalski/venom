@@ -3,20 +3,17 @@ cmake_minimum_required(VERSION 3.5...3.26)
 set(FORMATS VST3)
 set(PLUGIN_NAME "TestPlugin")
 set(PLUGIN_VERSION "2.1.38")
-set(PLUGIN_AUTHOR "Test test")
+set(PLUGIN_AUTHOR "Test_test")
 
 project(${PLUGIN_NAME} VERSION ${PLUGIN_VERSION})
 
-#find_package(Python COMPONENTS Interpreter Development REQUIRED)
-#ex
 
 juce_add_plugin(${PLUGIN_NAME}
         PLUGIN_MANUFACTURER_CODE Veno
+        COMPANY_NAME ${PLUGIN_AUTHOR}
         PLUGIN_CODE Veno
         FORMATS ${FORMATS}
         PRODUCT_NAME ${PROJECT_NAME})
-
-#juce_generate_juce_header(VenomPlugin)
 
 target_link_libraries(${PLUGIN_NAME}
         PRIVATE
@@ -41,6 +38,8 @@ target_compile_definitions(${PLUGIN_NAME}
         JUCE_WEB_BROWSER=0
         JUCE_USE_CURL=0
         JUCE_VST3_CAN_REPLACE_VST2=0
+        MODULES_DIR="${MODULES_DIR}"
+        PYTHON_STUBS_FILE="${CMAKE_CURRENT_SOURCE_DIR}/plugin.py"
 )
 
 foreach(format ${FORMATS})

@@ -4,8 +4,8 @@
 class PyAudioProcessor : public juce::AudioProcessor
 {
 public:
-    /* Inherit the constructors */
     using juce::AudioProcessor::AudioProcessor;
+
 
     void prepareToPlay(double sampleRate, int samplesPerBlock) override
     {
@@ -20,9 +20,9 @@ public:
     void releaseResources() override
     {
         PYBIND11_OVERRIDE_PURE(
-            void,                 /* Return type */
-            juce::AudioProcessor, /* Parent class */
-            releaseResources,      /* Name of function in C++ (must match Python name) */
+            void,
+            juce::AudioProcessor,
+            releaseResources,
             
         );
     }
@@ -30,20 +30,20 @@ public:
     bool isBusesLayoutSupported(const BusesLayout &layouts) const override
     {
         PYBIND11_OVERRIDE(
-            bool,                   /* Return type */
-            juce::AudioProcessor,   /* Parent class */
-            isBusesLayoutSupported, /* Name of function in C++ (must match Python name) */
-            layouts                 /* Argument(s) */
+            bool,
+            juce::AudioProcessor,
+            isBusesLayoutSupported,
+            layouts
         );
     }
 
     void processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages) override
     {
         PYBIND11_OVERRIDE_PURE(
-            void,                 /* Return type */
-            juce::AudioProcessor, /* Parent class */
-            processBlock,         /* Name of function in C++ (must match Python name) */
-            buffer, midiMessages  /* Argument(s) */
+            void,
+            juce::AudioProcessor,
+            processBlock,
+            buffer, midiMessages
         );
     }
 
@@ -70,10 +70,9 @@ public:
     const juce::String getName() const override
     {
         PYBIND11_OVERRIDE_PURE(
-            juce::String,         /* Return type */
-            juce::AudioProcessor, /* Parent class */
-            getName,               /* Name of function in C++ (must match Python name) */
-            
+            juce::String,
+            juce::AudioProcessor,
+            getName,
         );
     }
 
@@ -180,6 +179,37 @@ public:
     }
 };
 
+template <class T> struct PyArrayView
+{
+    PyArrayView() = default;
+
+    PyArrayView (T* values, size_t numValues) noexcept
+        : values (values)
+          , numValues (numValues)
+    {
+    }
+
+    T* data() noexcept
+    {
+        return values;
+    }
+
+    template <class U = T>
+    auto data() const noexcept -> std::enable_if_t<! std::is_const_v<U>, const T*>
+    {
+        return values;
+    }
+
+    size_t size() const noexcept
+    {
+        return numValues;
+    }
+
+  private:
+    T* values = nullptr;
+    size_t numValues = 0;
+};
+
 void init_AudioProcessor(py::module& m) {
         py::class_<juce::AudioProcessor, std::shared_ptr<juce::AudioProcessor>, PyAudioProcessor>(m, "AudioProcessor", py::dynamic_attr())
         .def(py::init([]() -> PyAudioProcessor* {
@@ -233,10 +263,49 @@ void init_AudioProcessor(py::module& m) {
         .def("setStateInformation", [](juce::AudioProcessor &self, const void *data, int sizeInBytes)
              { self.setStateInformation(data, sizeInBytes); });
 
-        py::class_<juce::AudioBuffer<float>>(m, "AudioBuffer")
-            .def(py::init<>())
-            .def("applyGain", [](juce::AudioBuffer<float> &self, float gain)
-                 { self.applyGain(gain); });
+        using namespace py::literals;
+        py::class_<juce::AudioBuffer<float>> (m, "AudioBuffer", py::buffer_protocol())
+            .def (py::init<>())
+            .def (py::init<int, int>(), "numChannels"_a, "numSamples"_a)
+            .def ("getNumChannels", &juce::AudioBuffer<float>::getNumChannels)
+            .def ("getNumSamples", &juce::AudioBuffer<float>::getNumSamples)
+            .def ("getWritePointer", [](juce::AudioBuffer<float>& self, int channelNumber)
+                {
+                  return PyArrayView<float> (self.getWritePointer (channelNumber), static_cast<size_t> (self.getNumSamples()));
+                }, "channelNumber"_a)
+            .def ("clear", py::overload_cast<> (&juce::AudioBuffer<float>::clear))
+            ;
+
+        py::class_<PyArrayView<float>> classFloatArrayView (m, "FloatArrayView", py::buffer_protocol());
+
+        classFloatArrayView
+            .def ("__getitem__", [](PyArrayView<float>& self, size_t index)
+                 {
+                   if (self.data() == nullptr || index >= self.size())
+                     pybind11::pybind11_fail ("Out of bound access of array data");
+
+                   return *(self.data() + index);
+                 })
+            .def ("__setitem__", [](PyArrayView<float>& self, size_t index, float value)
+                 {
+                   if (index >= self.size())
+                     pybind11::pybind11_fail ("Out of bound access of channel data");
+
+                   *(self.data() + index) = value;
+                 })
+            .def ("__len__", &PyArrayView<float>::size)
+            .def ("__iter__", [](PyArrayView<float>& self)
+                 {
+                   if (self.data() == nullptr)
+                     pybind11::pybind11_fail ("Invalid empty array");
+
+                   return py::make_iterator (self.data(), self.data() + self.size());
+                 })
+            .def_buffer ([](PyArrayView<float>& self) -> py::buffer_info
+                        {
+                          return py::buffer_info (self.data(), static_cast<ssize_t> (self.size()), false);
+                        })
+            ;
 
         py::class_<juce::MidiBuffer>(m, "MidiBuffer")
             .def(py::init<>());
@@ -248,11 +317,4 @@ void init_AudioProcessor(py::module& m) {
 
         py::class_<juce::MemoryBlock>(m, "MemoryBlock")
             .def(py::init<>());
-
-        py::enum_<juce::NotificationType>(m, "NotificationType")
-            .value("dontSendNotification", juce::NotificationType::dontSendNotification)
-            .value("sendNotification", juce::NotificationType::sendNotification)
-            .value("sendNotificationSync", juce::NotificationType::sendNotificationSync)
-            .value("sendNotificationAsync", juce::NotificationType::sendNotificationAsync)
-            .export_values();
 }

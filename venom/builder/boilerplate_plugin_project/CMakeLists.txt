@@ -11,27 +11,23 @@ project(${PLUGIN_NAME} VERSION ${PLUGIN_VERSION})
 #find_package(Python COMPONENTS Interpreter Development REQUIRED)
 #ex
 
-add_subdirectory(external/juce)
-add_subdirectory(external/pybind11)
+add_subdirectory(../../extern/juce-build JUCE_Lib)
+add_subdirectory(../../extern/pybind11 pybind11)
 
 juce_add_plugin(VenomPlugin
-        PLUGIN_MANUFACTURER_CODE Veno
-        PLUGIN_CODE Veno
-        FORMATS ${FORMATS}
-        PRODUCT_NAME ${PROJECT_NAME})
+    PLUGIN_MANUFACTURER_CODE Veno
+    PLUGIN_CODE Veno
+    FORMATS ${FORMATS}
+    PRODUCT_NAME ${PROJECT_NAME}
+)
 
 juce_generate_juce_header(VenomPlugin)
 
 target_link_libraries(VenomPlugin
-        PRIVATE
-        pybind11::embed
-        juce::juce_audio_utils
-        juce::juce_dsp
-#        TODO: APPEND LIBRARIES THAT WE PORTED
-        PUBLIC
-        juce::juce_recommended_config_flags
-        juce::juce_recommended_lto_flags
-        juce::juce_recommended_warning_flags
+    PRIVATE
+    pybind11::embed
+    PUBLIC
+    JUCE_Lib
 )
 
 
@@ -49,8 +45,8 @@ target_compile_definitions(VenomPlugin
         JUCE_VST3_CAN_REPLACE_VST2=0
 )
 
-foreach(format ${FORMATS})
-    foreach (dir ${SITE_PACKAGES_DIRS})
-        juce_add_bundle_resources_directory("VenomPlugin_${format}" ${dir})
-    endforeach ()
-endforeach()
+#foreach(format ${FORMATS})
+#    foreach (dir ${SITE_PACKAGES_DIRS})
+#        juce_add_bundle_resources_directory("VenomPlugin_${format}" ${dir})
+#    endforeach ()
+#endforeach()

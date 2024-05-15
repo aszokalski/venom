@@ -43,13 +43,13 @@ def build(source_path):
     p_bar.update(1)
     p_bar.set_description("Creating plugin package")
     p_bar.refresh()
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        tmp_src_dir = os.path.join(tmp_dir, "src")
-        package.create(source_path, "PyAudioProcessor", tmp_src_dir)
-        p_bar.update(1)
-        p_bar.set_description("Installing plugin package")
-        p_bar.refresh()
-        package.install(tmp_src_dir)
+    # with tempfile.TemporaryDirectory() as tmp_dir:
+    #     tmp_src_dir = os.path.join(tmp_dir, "src")
+    #     package.create(source_path, "PyAudioProcessor", tmp_src_dir)
+    #     p_bar.update(1)
+    #     p_bar.set_description("Installing plugin package")
+    #     p_bar.refresh()
+    #     package.install(tmp_src_dir)
 
     project.build(source_path, p_bar)
 

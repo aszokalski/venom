@@ -4,6 +4,7 @@ import subprocess
 import sys
 from venom.builder.tools.utils.Config import Config
 
+
 def create(source_path: str, package_name: str, tmp_path: str):
     with open(os.path.join(source_path, "venom.yaml")) as file_handle:
         config = Config.from_yaml(file_handle)
@@ -29,10 +30,10 @@ setup(
         file_handle.write(setup_content)
 
 
-
 def install(tmp_path: str):
     try:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", tmp_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.check_call([sys.executable, "-m", "pip", "install", tmp_path], stdout=subprocess.DEVNULL,
+                              stderr=subprocess.DEVNULL)
     except subprocess.CalledProcessError as e:
         print(f"PIP: Error installing package from {tmp_path}: {e}")
     finally:

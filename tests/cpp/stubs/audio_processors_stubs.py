@@ -1,3 +1,8 @@
+# import sys
+# sys.path.append('''D:/CLionProjects/venom/cmake-build-debug-mingw/venom/juce/juce_audio_processors''')
+# sys.path.append('''D:/CLionProjects/venom/tests/cpp/stubs''')
+# print(sys.path)
+
 from audio_processor.juce_audio_processors import AudioProcessorEditor
 from audio_processor.juce_audio_processors import AudioProcessor
 from audio_processor.juce_audio_processors import Colour

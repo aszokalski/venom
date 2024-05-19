@@ -1,5 +1,6 @@
 #include "AudioProcessor.h"
 #include <juce_audio_processors/juce_audio_processors.h>
+#include <pybind11/numpy.h>
 
 class PyAudioProcessor : public juce::AudioProcessor
 {
@@ -179,36 +180,36 @@ public:
     }
 };
 
-template <class T> struct PyArrayView
-{
-    PyArrayView() = default;
-
-    PyArrayView (T* values, size_t numValues) noexcept
-        : values (values)
-          , numValues (numValues)
-    {
-    }
-
-    T* data() noexcept
-    {
-        return values;
-    }
-
-    template <class U = T>
-    auto data() const noexcept -> std::enable_if_t<! std::is_const_v<U>, const T*>
-    {
-        return values;
-    }
-
-    size_t size() const noexcept
-    {
-        return numValues;
-    }
-
-  private:
-    T* values = nullptr;
-    size_t numValues = 0;
-};
+//template <class T> struct PyArrayView
+//{
+//    PyArrayView() = default;
+//
+//    PyArrayView (T* values, size_t numValues) noexcept
+//        : values (values)
+//          , numValues (numValues)
+//    {
+//    }
+//
+//    T* data() noexcept
+//    {
+//        return values;
+//    }
+//
+//    template <class U = T>
+//    auto data() const noexcept -> std::enable_if_t<! std::is_const_v<U>, const T*>
+//    {
+//        return values;
+//    }
+//
+//    size_t size() const noexcept
+//    {
+//        return numValues;
+//    }
+//
+//  private:
+//    T* values = nullptr;
+//    size_t numValues = 0;
+//};
 
 void init_AudioProcessor(py::module& m) {
         py::class_<juce::AudioProcessor, std::shared_ptr<juce::AudioProcessor>, PyAudioProcessor>(m, "AudioProcessor", py::dynamic_attr())
@@ -269,43 +270,46 @@ void init_AudioProcessor(py::module& m) {
             .def (py::init<int, int>(), "numChannels"_a, "numSamples"_a)
             .def ("getNumChannels", &juce::AudioBuffer<float>::getNumChannels)
             .def ("getNumSamples", &juce::AudioBuffer<float>::getNumSamples)
-            .def ("getWritePointer", [](juce::AudioBuffer<float>& self, int channelNumber)
-                {
-                  return PyArrayView<float> (self.getWritePointer (channelNumber), static_cast<size_t> (self.getNumSamples()));
-                }, "channelNumber"_a)
-            .def ("clear", py::overload_cast<> (&juce::AudioBuffer<float>::clear))
-            ;
-
-        py::class_<PyArrayView<float>> classFloatArrayView (m, "FloatArrayView", py::buffer_protocol());
-
-        classFloatArrayView
-            .def ("__getitem__", [](PyArrayView<float>& self, size_t index)
-                 {
-                   if (self.data() == nullptr || index >= self.size())
-                     pybind11::pybind11_fail ("Out of bound access of array data");
-
-                   return *(self.data() + index);
-                 })
-            .def ("__setitem__", [](PyArrayView<float>& self, size_t index, float value)
-                 {
-                   if (index >= self.size())
-                     pybind11::pybind11_fail ("Out of bound access of channel data");
-
-                   *(self.data() + index) = value;
-                 })
-            .def ("__len__", &PyArrayView<float>::size)
-            .def ("__iter__", [](PyArrayView<float>& self)
-                 {
-                   if (self.data() == nullptr)
-                     pybind11::pybind11_fail ("Invalid empty array");
-
-                   return py::make_iterator (self.data(), self.data() + self.size());
-                 })
-            .def_buffer ([](PyArrayView<float>& self) -> py::buffer_info
-                        {
-                          return py::buffer_info (self.data(), static_cast<ssize_t> (self.size()), false);
-                        })
-            ;
+            .def("getWritePointer", [](juce::AudioBuffer<float>& self, int channelNumber) {
+                return py::array_t<float>(
+                        {self.getNumSamples()},
+                        {sizeof(float)},
+                        self.getWritePointer(channelNumber),
+                        py::cast(&self)
+                );
+            }, py::arg("channelNumber"))
+            .def("clear", py::overload_cast<>(&juce::AudioBuffer<float>::clear));
+//
+//        py::class_<PyArrayView<float>> classFloatArrayView (m, "FloatArrayView", py::buffer_protocol());
+//
+//        classFloatArrayView
+//            .def ("__getitem__", [](PyArrayView<float>& self, size_t index)
+//                 {
+//                   if (self.data() == nullptr || index >= self.size())
+//                     pybind11::pybind11_fail ("Out of bound access of array data");
+//
+//                   return *(self.data() + index);
+//                 })
+//            .def ("__setitem__", [](PyArrayView<float>& self, size_t index, float value)
+//                 {
+//                   if (index >= self.size())
+//                     pybind11::pybind11_fail ("Out of bound access of channel data");
+//
+//                   *(self.data() + index) = value;
+//                 })
+//            .def ("__len__", &PyArrayView<float>::size)
+//            .def ("__iter__", [](PyArrayView<float>& self)
+//                 {
+//                   if (self.data() == nullptr)
+//                     pybind11::pybind11_fail ("Invalid empty array");
+//
+//                   return py::make_iterator (self.data(), self.data() + self.size());
+//                 })
+//            .def_buffer ([](PyArrayView<float>& self) -> py::buffer_info
+//                        {
+//                          return py::buffer_info (self.data(), static_cast<ssize_t> (self.size()), false);
+//                        })
+//            ;
 
         py::class_<juce::MidiBuffer>(m, "MidiBuffer")
             .def(py::init<>());

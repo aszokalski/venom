@@ -1,8 +1,14 @@
 cmake_minimum_required(VERSION 3.5...3.26)
 project(.. VERSION 0.1.0)
-find_package(Python COMPONENTS Interpreter Development REQUIRED)
-message(STATUS "Python_EXECUTABLE: ${Python_EXECUTABLE}")
+#set(Python3_ROOT_DIR "/home/mszawerd/venom/venom/venv")
+find_package(Python3 REQUIRED COMPONENTS Interpreter Development )
+# Define the path to your virtual environment's activation script
 
+
+
+message(STATUS "Python_EXECUTABLE: ${Python_EXECUTABLE}")
+include_directories(${Python3_INCLUDE_DIRS})
+link_directories(${Python3_LIBRARY_DIRS})
 add_subdirectory(extern/juce)
 add_subdirectory(extern/pybind11)
 

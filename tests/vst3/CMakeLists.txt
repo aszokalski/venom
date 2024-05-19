@@ -73,3 +73,8 @@ target_compile_definitions(${PLUGIN_NAME}
 ## Ensure the custom target is built before your plugin
 #add_dependencies(TestPlugin_VST3 SetPythonEnv)
 
+foreach(format ${FORMATS})
+    foreach (dir ${SITE_PACKAGES_DIRS})
+        juce_add_bundle_resources_directory("VenomPlugin_${format}" ${dir})
+    endforeach ()
+endforeach()

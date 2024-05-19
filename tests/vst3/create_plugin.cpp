@@ -32,7 +32,7 @@ void activate_virtualenv(const std::string& venv_path) {
 }
 
 void preload_shared_libraries() {
-    const char* py_core_lib = "/usr/lib/x86_64-linux-gnu/libpython3.11.so";
+    const char* py_core_lib = "/Users/marcinjarczewski/.pyenv/versions/3.11.3/lib/libpython3.11.dylib";
     void* handle = dlopen(py_core_lib, RTLD_LAZY | RTLD_GLOBAL);
     if (!handle) {
         std::cerr << "Error preloading shared library: " << dlerror() << std::endl;
@@ -44,7 +44,7 @@ void preload_shared_libraries() {
 juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter()
 {
     preload_shared_libraries();
-    activate_virtualenv("/home/mszawerd/venom/venom/venv");
+    activate_virtualenv("/Users/marcinjarczewski/Documents/studia/sem6/venom/venv");
     std::cout<<getenv("PATH")<<std::endl;
     std::cout << "ENTER12" << std::endl;
 
@@ -57,7 +57,8 @@ juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter()
     std::cout << "PY CREATED" << std::endl;
 
     auto path = py::module_::import("sys").attr("path");
-//    path.attr("append")(MODULES_DIR);
+    path.attr("append")("/Users/marcinjarczewski/Documents/studia/sem6/venom/venv/lib/python3.11/site-packages");
+    py::module_::import("sys").attr("executable") = "/Users/marcinjarczewski/Documents/studia/sem6/venom/venv/bin/python";
     py::module os = py::module::import("os");
     py::module sys = py::module::import("sys");
     std::cout << "Current working directory: " << py::module_::import("os").attr("getcwd")().cast<std::string>() << std::endl;
@@ -80,9 +81,11 @@ juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter()
     try {
         auto numpy = py::module_::import("numpy");
         py::eval_file(PLUGIN_FILE);
-        std::cout << "PY" << std::endl;
+        std::cout << "PY PO NUMPY" << std::endl;
 
         auto obj = std::make_unique<py::object>(py::eval("PyAudioProcessor()"));
+        std::cout << "PY PO AUDIOPROCESSOR" << std::endl;
+
         return new PyAudioProcessor(std::move(obj));
     } catch (const py::error_already_set &e) {
         std::cerr << "Python error: " << e.what() << std::endl;

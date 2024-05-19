@@ -1,20 +1,20 @@
 # import pandas
 # import requests
-from pedalboard import *
+# from pedalboard import *
 from scipy.signal import butter, lfilter
-
-from pedalboard.io import AudioStream
+#
+# from pedalboard.io import AudioStream
 import os
 print("PYTHONPATH:", os.environ.get('PYTHONPATH'))
 print("PATH:", os.environ.get('PATH'))
-import traceback
-try:
-    import numpy.core.multiarray
-    # import numpy
-except:
-    traceback.print_exc()
-# import importlib.util
-# print(importlib.util.find_spec('numpy'))
+# import traceback
+# try:
+#     import numpy.core.multiarray
+#     # import numpy
+# except:
+#     traceback.print_exc()
+# # import importlib.util
+# # print(importlib.util.find_spec('numpy'))
 from audio_processor.juce_audio_processors import AudioProcessor
 import math
 import numpy as np
@@ -48,6 +48,18 @@ class PyAudioProcessor(AudioProcessor):
     def releaseResources(self):
         pass
 
+
+    def butter_lowpass(self, cutoff, fs, order=5):
+        nyquist = 0.5 * fs
+        normal_cutoff = cutoff / nyquist
+        b, a = butter(order, normal_cutoff, btype='low', analog=False)
+        return b, a
+
+    def apply_lowpass_filter(self, audio_buffer, cutoff, fs, order=5):
+        b, a = self.butter_lowpass(cutoff, fs, order=order)
+        y = lfilter(b, a, audio_buffer)
+        return y
+
     def apply_chorus(self, samples, channel):
         numSamples = samples.shape[0]
         output = np.zeros_like(samples)
@@ -70,41 +82,44 @@ class PyAudioProcessor(AudioProcessor):
             self.value += 1
 
         return output
-    def processBlock(self, buffer, midiMessages):
-        buffer.clear()
-        numChannels = buffer.getNumChannels()
-        numSamples = buffer.getNumSamples()
-
-        if self.value % 10000 == 0:
-            print(numChannels)
-            print(type(buffer.getWritePointer(0)))
-
-        self.value += 1
-
-        t = np.arange(numSamples)  # Create a time array
-        currentPhaseArray = self.currentPhase + self.phaseDelta * t
-
-        for channel in range(numChannels):
-            data = buffer.getWritePointer(channel)
-            data[:] = np.sin(currentPhaseArray) * self.level  # Generate and fill the sine wave in place
-
-        self.currentPhase = (self.currentPhase + self.phaseDelta * numSamples) % (2 * math.pi)
     # def processBlock(self, buffer, midiMessages):
+    #     buffer.clear()
     #     numChannels = buffer.getNumChannels()
     #     numSamples = buffer.getNumSamples()
     #
     #     if self.value % 10000 == 0:
-    #         print(f"Number of Channels: {numChannels}")
-    #         print(f"Buffer Type: {type(buffer.getWritePointer(0))}")
+    #         print(numChannels)
+    #         print(type(buffer.getWritePointer(0)))
     #
     #     self.value += 1
     #
+    #     t = np.arange(numSamples)  # Create a time array
+    #     currentPhaseArray = self.currentPhase + self.phaseDelta * t
+    #
     #     for channel in range(numChannels):
     #         data = buffer.getWritePointer(channel)
-    #         effected = self.apply_chorus(data, channel)
+    #         data[:] = np.sin(currentPhaseArray) * self.level  # Generate and fill the sine wave in place
     #
-    #         np.copyto(data, effected)
+    #     self.currentPhase = (self.currentPhase + self.phaseDelta * numSamples) % (2 * math.pi)
+    def processBlock(self, buffer, midiMessages):
+        numChannels = buffer.getNumChannels()
+        numSamples = buffer.getNumSamples()
 
+        if self.value % 10000 == 0:
+            print(f"Number of Channels: {numChannels}")
+            print(f"Buffer Type: {type(buffer.getWritePointer(0))}")
+
+        self.value += 1
+
+        for channel in range(numChannels):
+            data = buffer.getWritePointer(channel)
+            # effected = self.apply_chorus(data, channel)
+            # effected = self.apply_gain(data, channel)
+            effected = self.apply_lowpass_filter(data, 1000.0, self.sample_rate)
+            np.copyto(data, effected)
+
+    def apply_gain(self, samples, channel):
+        return samples * self.level
 
     def createEditor(self):
         return None

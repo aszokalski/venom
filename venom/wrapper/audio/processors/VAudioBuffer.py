@@ -7,23 +7,31 @@ parent_path = current_path.parents[4]
 sys.path.append(str(parent_path))
 
 from tests.pytest.mocks.mock_audio_buffer import MockAudioBuffer
+import numpy as np
 
 
-class VAudioBuffer(MockAudioBuffer):
-    def __len__(self):
-        return len(self._buffer)
+class VAudioBuffer(np.ndarray):
+    def __new__(cls, audioBuffer: MockAudioBuffer):
+        obj = np.asarray(audioBuffer._buffer).view(cls)
+        obj._audio_buffer = audioBuffer
+        return obj
 
-    def __iter__(self):
-        self._last_channel = 0
-        return self
+    def __array_finalize__(self, obj):
+        if obj is None: return
+        self._audio_buffer = getattr(obj, '_audio_buffer', None)
 
-    def __next__(self):
-        channel_id = self._last_channel
-        self._last_channel += 1
-        if self._last_channel > len(self):
-            raise StopIteration
-        return self.getWritePointer(channel_id)
+    def __init__(self, audioBuffer: MockAudioBuffer):
+        self._audio_buffer = audioBuffer
+
+    def getNumChannels(self) -> int:
+        return self._audio_buffer.getNumChannels()
+
+    def getNumSamples(self) -> int:
+        return self._audio_buffer.getNumSamples()
+
+    def getWritePointer(self, channelNumber: int):
+        return self._audio_buffer.getWritePointer(channelNumber)
 
     @property
     def buffer(self):
-        return self._buffer
+        return self._audio_buffer._buffer

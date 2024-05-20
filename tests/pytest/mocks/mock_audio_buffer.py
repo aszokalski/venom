@@ -24,4 +24,4 @@ class MockAudioBuffer:
         return self._buffer[channelNumber]
 
     def clear(self):
-        self._buffer = np.zeros(self._numChannels, self._numSamples)
+        self._buffer = np.zeros((self._numChannels, self._numSamples))

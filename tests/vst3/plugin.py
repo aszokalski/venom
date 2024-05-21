@@ -1,6 +1,5 @@
 import gc
 
-import numpy as np
 from audio_processor.juce_audio_processors import AudioProcessor
 
 gc.disable()
@@ -22,7 +21,6 @@ class PyAudioProcessor(AudioProcessor):
 
         for channel in range(numChannels):
             data = buffer.getWritePointer(channel)
-            a = np.fft.fft(np.ones((2000, 2000)))
             data[:] = data * 20.2
 
     def createEditor(self):

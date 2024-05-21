@@ -25,6 +25,7 @@ void activate_virtualenv(const std::string &venv_path) {
 }
 
 #ifdef __linux__
+
 #include <dlfcn.h>
 
 void preload_shared_libraries() {
@@ -35,6 +36,7 @@ void preload_shared_libraries() {
         spdlog::debug("Successfully preloaded shared library: {}", PYTHON_SHARED_LIB);
     }
 }
+
 #else
 void preload_shared_libraries() {
     spdlog::debug("Preloading shared libraries is only supported on Linux.");
@@ -51,7 +53,6 @@ void log_python_environment() {
 }
 
 juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter() {
-    auto console_logger = spdlog::stdout_color_mt("console");
     spdlog::set_level(spdlog::level::debug);
     spdlog::flush_on(spdlog::level::debug);
 

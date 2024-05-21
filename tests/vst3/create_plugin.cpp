@@ -1,96 +1,78 @@
 #include "PyAudioProcessor.h"
+
 #define PYBIND11_DETAILED_ERROR_MESSAGES
+
 #include <pybind11/embed.h>
 #include <iostream>
 #include <cstdlib>
-#include <unistd.h>
-#include <dlfcn.h>
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
+
 namespace py = pybind11;
 static std::unique_ptr<py::scoped_interpreter> interpreter;
 
-void set_python_env() {
-    const char* venv_path = "/home/mszawerd/venom/venom/venv";
-    const char* python_bin_path = "/home/mszawerd/venom/venom/venv/bin";
-    setenv("VIRTUAL_ENV", venv_path, 1);
-    setenv("PATH", (std::string(python_bin_path) + ":" + getenv("PATH")).c_str(), 1);  // Ensure the virtual environment's bin directory is first in the PATH
-//    setenv("PYTHONHOME", venv_path, 1);
-//    setenv("PYTHONPATH", "/home/mszawerd/venom/venom/venv/lib/python3.11/site-packages", 1);
-//    setenv("LD_LIBRARY_PATH", "/home/mszawerd/venom/venom/venv/lib:/usr/lib/x86_64-linux-gnu", 1);  // Include system library path
-}
 
-void activate_virtualenv(const std::string& venv_path) {
-    // Set VIRTUAL_ENV environment variable
+// Simulation of bin/activate
+void activate_virtualenv(const std::string &venv_path) {
     setenv("VIRTUAL_ENV", venv_path.c_str(), 1);
+    setenv("PATH", (venv_path + "/bin:" + getenv("PATH")).c_str(), 1);
+    unsetenv("PYTHONHOME");
+    system("hash -r 2> /dev/null");
 
-    // Modify PATH environment variable to include virtual environment's bin directory
-    std::string path = getenv("PATH");
-    path = venv_path + "/bin:" + path;
-    setenv("PATH", path.c_str(), 1);
-
-    // Optionally, set PYTHONHOME to the virtual environment (needed in some cases)
-    // setenv("PYTHONHOME", venv_path.c_str(), 1);
+    spdlog::debug("[OS ENV] PATH: {}", std::getenv("PATH") ? std::getenv("PATH") : "Not set");
+    spdlog::debug("[OS ENV] VIRTUAL_ENV: {}", std::getenv("VIRTUAL_ENV") ? std::getenv("VIRTUAL_ENV") : "Not set");
+    spdlog::debug("[OS ENV] PYTHON_HOME: {}", std::getenv("PYTHONHOME") ? std::getenv("PYTHONHOME") : "Not set");
 }
+
+#ifdef __linux__
+#include <dlfcn.h>
 
 void preload_shared_libraries() {
-    const char* py_core_lib = "/usr/lib/x86_64-linux-gnu/libpython3.11.so";
-    void* handle = dlopen(py_core_lib, RTLD_LAZY | RTLD_GLOBAL);
+    void *handle = dlopen(PYTHON_SHARED_LIB, RTLD_LAZY | RTLD_GLOBAL);
     if (!handle) {
-        std::cerr << "Error preloading shared library: " << dlerror() << std::endl;
+        spdlog::error("Error preloading shared library: {}", dlerror());
     } else {
-        std::cout << "Successfully preloaded shared library: " << py_core_lib << std::endl;
+        spdlog::debug("Successfully preloaded shared library: {}", PYTHON_SHARED_LIB);
     }
 }
+#else
+void preload_shared_libraries() {
+    spdlog::debug("Preloading shared libraries is only supported on Linux.");
+}
+#endif
 
-juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter()
-{
+void log_python_environment() {
+    py::module os = py::module::import("os");
+    py::module sys = py::module::import("sys");
+    spdlog::debug("[PY ENV] CWD: {}", os.attr("getcwd")().cast<std::string>());
+    spdlog::debug("[PY ENV] PYEXEC: {}", sys.attr("executable").cast<std::string>());
+    spdlog::debug("[PY ENV] PY_VER: {}", sys.attr("version").cast<std::string>());
+    spdlog::debug("[PY ENV] SYS_PATH: {}", py::str(sys.attr("path")).cast<std::string>());
+}
+
+juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter() {
+    auto console_logger = spdlog::stdout_color_mt("console");
+    spdlog::set_level(spdlog::level::debug);
+    spdlog::flush_on(spdlog::level::debug);
+
+    activate_virtualenv(VENV_PATH);
     preload_shared_libraries();
-    activate_virtualenv("/home/mszawerd/venom/venom/venv");
-    std::cout<<getenv("PATH")<<std::endl;
-    std::cout << "ENTER12" << std::endl;
 
     if (!interpreter) {
         interpreter = std::make_unique<py::scoped_interpreter>();
     }
 
-//    set_python_env();
-//    chdir("/tmp");
-    std::cout << "PY CREATED" << std::endl;
-
-    auto path = py::module_::import("sys").attr("path");
-//    path.attr("append")(MODULES_DIR);
-    py::module os = py::module::import("os");
-    py::module sys = py::module::import("sys");
-    std::cout << "Current working directory: " << py::module_::import("os").attr("getcwd")().cast<std::string>() << std::endl;
-    std::cout << "Python executable: " << py::module_::import("sys").attr("executable").cast<std::string>() << std::endl;
-    std::cout << "Python version: " << sys.attr("version").cast<std::string>() << std::endl;
-    std::cout << "LD_LIBRARY_PATH: " << (std::getenv("LD_LIBRARY_PATH") ? std::getenv("LD_LIBRARY_PATH") : "Not set") << std::endl;
-    std::cout << "PYTHONPATH: " << (std::getenv("PYTHONPATH") ? std::getenv("PYTHONPATH") : "Not set") << std::endl;
-//
-//
-//
-//
-    py::list sys_path = sys.attr("path");
-    std::cout << "sys.path:" << std::endl;
-    for (auto item : sys_path) {
-        std::cout << "  " << item.cast<std::string>() << std::endl;
-    }
-//
-//    py::print(os.attr("environ"));
+    log_python_environment();
 
     try {
-        auto numpy = py::module_::import("numpy");
         py::eval_file(PLUGIN_FILE);
-        std::cout << "PY" << std::endl;
-
         auto obj = std::make_unique<py::object>(py::eval("PyAudioProcessor()"));
         return new PyAudioProcessor(std::move(obj));
     } catch (const py::error_already_set &e) {
-        std::cerr << "Python error: " << e.what() << std::endl;
+        spdlog::error("Error when evaluating provided python file: {}", e.what());
         return nullptr;
     } catch (const std::exception &e) {
-        std::cerr << "Standard exception: " << e.what() << std::endl;
+        spdlog::error("Error when executing CPP code {}", e.what());
         return nullptr;
     }
-//    std::cout<<py::module_::import("os").attr("getcwd")().cast<std::string>()<<std::endl;
-//    std::cout<<py::module_::import("sys").attr("executable").cast<std::string>()<<std::endl;
 }

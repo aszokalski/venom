@@ -9,7 +9,7 @@ set_property(TARGET audio_processor PROPERTY POSITION_INDEPENDENT_CODE TRUE)
 target_link_libraries(audio_processor
         PRIVATE
         ${Python_LIBRARIES}
-        Python3::Module
+        Python::Module
         pybind11::embed
         juce::juce_core
         juce::juce_audio_utils

@@ -1,30 +1,27 @@
+import gc
+
 from audio_processor.juce_audio_processors import AudioProcessor
-import math
+
+gc.disable()
+
 
 class PyAudioProcessor(AudioProcessor):
     def __init__(self):
         super().__init__()
         self.sample_rate = 44100
-        self.freq = 210
-        .0
-        self.level = 0.06
 
     def prepareToPlay(self, sampleRate, samplesPerBlock):
-        self.currentPhase = 0.0
         self.sample_rate = sampleRate
-        self.phaseDelta =(self.freq/sampleRate)*2.0*math.pi
-
 
     def releaseResources(self):
         pass
 
     def processBlock(self, buffer, midiMessages):
-        buffer.clear()
-        for channel in range(buffer.getNumChannels()):
+        numChannels = buffer.getNumChannels()
+
+        for channel in range(numChannels):
             data = buffer.getWritePointer(channel)
-            for sample in range(buffer.getNumSamples()):
-                data[sample] = math.sin(self.currentPhase)*self.level
-                self.currentPhase += self.phaseDelta
+            data[:] = data * 20.2
 
     def createEditor(self):
         return None

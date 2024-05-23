@@ -7,16 +7,15 @@ include_directories(${Python_INCLUDE_DIRS})
 link_directories(${Python_LIBRARY_DIRS})
 
 # DEPENDENCIES
-add_subdirectory(extern/juce)
-add_subdirectory(extern/pybind11)
-add_subdirectory(extern/spdlog)
+add_subdirectory(extern)
 
+# Set properties for external libraries
 set_target_properties(spdlog PROPERTIES POSITION_INDEPENDENT_CODE ON)
-
 
 set(MODULES_DIR "${CMAKE_BINARY_DIR}/bindings_modules" CACHE STRING "Directory for shared modules")
 file(MAKE_DIRECTORY ${MODULES_DIR})
 
+# Add subdirectories for other parts of the project
 add_subdirectory(venom/juce)
 add_subdirectory(venom/python/AudioProcessor)
 

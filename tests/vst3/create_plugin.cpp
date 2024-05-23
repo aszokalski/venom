@@ -63,6 +63,12 @@ juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter() {
         interpreter = std::make_unique<py::scoped_interpreter>();
     }
 
+    py::module sys = py::module::import("sys");
+    auto path = py::module_::import("sys").attr("path");
+    sys.attr("executable") = "/Users/marcinjarczewski/Documents/studia/sem6/venom/cmake-build-debug/tests/vst3/venv/bin/python";
+    path.attr("append")("/Users/marcinjarczewski/Documents/studia/sem6/venom/cmake-build-debug/tests/vst3/venv/lib/python3.12/site-packages");
+
+
     log_python_environment();
 
     try {

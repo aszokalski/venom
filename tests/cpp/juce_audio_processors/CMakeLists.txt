@@ -2,6 +2,7 @@ add_executable(
         audio_processor_tests
         test_AudioProcessorEditor.cpp
 )
+
 target_link_libraries(audio_processor_tests
         PRIVATE
         GTest::gtest_main

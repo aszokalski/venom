@@ -3,7 +3,9 @@
 #include <utility>
 
 PyAudioProcessorEditor::PyAudioProcessorEditor(juce::AudioProcessor *p, std::unique_ptr<py::object> instance)
-    : juce::AudioProcessorEditor(p), instance(std::move(instance)) {}
+    : juce::AudioProcessorEditor(p), instance(std::move(instance)) {
+    setSize(400, 300);
+}
 
 PyAudioProcessorEditor::~PyAudioProcessorEditor() {
     py::gil_scoped_acquire acquire;

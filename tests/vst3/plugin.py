@@ -1,5 +1,4 @@
 import gc
-
 from audio_processor.juce_audio_processors import AudioProcessor
 
 gc.disable()
@@ -18,7 +17,6 @@ class PyAudioProcessor(AudioProcessor):
 
     def processBlock(self, buffer, midiMessages):
         numChannels = buffer.getNumChannels()
-
         for channel in range(numChannels):
             data = buffer.getWritePointer(channel)
             data[:] = data * 20.2
@@ -46,7 +44,7 @@ class PyAudioProcessor(AudioProcessor):
 
     def getCurrentProgram(self):
         return 0
-
+    
     def setCurrentProgram(self, index):
         pass
 

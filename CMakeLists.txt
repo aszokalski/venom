@@ -5,9 +5,12 @@ find_package(Python REQUIRED COMPONENTS Interpreter Development)
 message(STATUS "Python_EXECUTABLE: ${Python_EXECUTABLE}")
 include_directories(${Python_INCLUDE_DIRS})
 link_directories(${Python_LIBRARY_DIRS})
+message(STATUS "Python_LIBRARY_DIRS: ${Python_LIBRARY_DIRS}")
+
 
 # DEPENDENCIES
-add_subdirectory(extern)
+add_subdirectory(extern/pybind11)
+add_subdirectory(extern/spdlog)
 
 # Set properties for external libraries
 set_target_properties(spdlog PROPERTIES POSITION_INDEPENDENT_CODE ON)

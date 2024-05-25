@@ -213,3 +213,4 @@ cmake-build-release/
 dist
 my_build/
 webHelpD2-all.zip
+/venom/juce/out/

@@ -8,13 +8,13 @@ set(SITE_PACKAGES_DIRS "../../venv/lib/python3.11/site-packages")
 
 project(${PLUGIN_NAME} VERSION ${PLUGIN_VERSION})
 
+# Set the CMAKE_PREFIX_PATH to include the directory where MyJUCE is installed
+set(CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/../../out")
+
+# Find the MyJUCE package
+find_package(juce REQUIRED)
+
 # Include external libraries
-if(NOT TARGET JUCE)
-    message(STATUS "Building JUCE modules...")
-    add_subdirectory(${CMAKE_SOURCE_DIR}/../../extern/juce JUCE_Lib)
-else()
-    message(STATUS "JUCE modules already built, using cached version.")
-endif()
 add_subdirectory(../../extern/pybind11 pybind11)
 
 # Define the plugin target

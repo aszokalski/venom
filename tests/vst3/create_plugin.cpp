@@ -16,6 +16,9 @@ void activate_virtualenv(const std::string &venv_path) {
     setenv("VIRTUAL_ENV", venv_path.c_str(), 1);
     setenv("PATH", (venv_path + "/bin:" + getenv("PATH")).c_str(), 1);
     unsetenv("PYTHONHOME");
+#if __APPLE__
+    setenv("PYTHONPATH", PYTHON_SIDE_PACKAGES, 1);
+#endif
     system("hash -r 2> /dev/null");
 
     spdlog::debug("[OS ENV] PATH: {}", std::getenv("PATH") ? std::getenv("PATH") : "Not set");

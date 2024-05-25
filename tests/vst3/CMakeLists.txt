@@ -57,6 +57,7 @@ target_compile_definitions(${PLUGIN_NAME}
         VENV_PATH="${VENV_PATH}"
         PLUGIN_FILE="${CMAKE_CURRENT_SOURCE_DIR}/plugin.py"
         PYTHON_SHARED_LIB="${PYTHON_SHARED_LIB}"
+        PYTHON_SIDE_PACKAGES="${VENV_PATH}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages/"
 )
 
 add_definitions(-DSPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_DEBUG)

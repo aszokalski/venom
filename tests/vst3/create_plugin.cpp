@@ -1,22 +1,24 @@
 #include "PyAudioProcessor.h"
-
 #define PYBIND11_DETAILED_ERROR_MESSAGES
 
 #include <pybind11/embed.h>
-#include <iostream>
+
 #include <cstdlib>
-#include "spdlog/spdlog.h"
+#include <iostream>
+
 #include "spdlog/sinks/stdout_color_sinks.h"
+#include "spdlog/spdlog.h"
 
 namespace py = pybind11;
-static std::unique_ptr<py::scoped_interpreter> interpreter;
-
 
 // Simulation of bin/activate
 void activate_virtualenv(const std::string &venv_path) {
     setenv("VIRTUAL_ENV", venv_path.c_str(), 1);
     setenv("PATH", (venv_path + "/bin:" + getenv("PATH")).c_str(), 1);
     unsetenv("PYTHONHOME");
+#if __APPLE__
+    setenv("PYTHONPATH", PYTHON_SIDE_PACKAGES, 1);
+#endif
     system("hash -r 2> /dev/null");
 
     spdlog::debug("[OS ENV] PATH: {}", std::getenv("PATH") ? std::getenv("PATH") : "Not set");
@@ -43,6 +45,27 @@ void preload_shared_libraries() {
 }
 #endif
 
+struct InitialSetupHelper {
+    std::unique_ptr<py::scoped_interpreter> interpreter;
+
+    std::unique_ptr<py::gil_scoped_release> release;
+
+    std::unique_ptr<py::scoped_interpreter> createInterpreter() {
+        spdlog::set_level(spdlog::level::debug);
+        spdlog::flush_on(spdlog::level::debug);
+        activate_virtualenv(VENV_PATH);
+        preload_shared_libraries();
+        spdlog::debug("[START PY]");
+        return std::make_unique<py::scoped_interpreter>();
+    }
+
+    InitialSetupHelper() : interpreter(createInterpreter()), release(std::make_unique<py::gil_scoped_release>()) {}
+
+    ~InitialSetupHelper() { spdlog::debug("[END]"); }
+};
+
+const static InitialSetupHelper setup_helper;
+
 void log_python_environment() {
     py::module os = py::module::import("os");
     py::module sys = py::module::import("sys");
@@ -53,28 +76,13 @@ void log_python_environment() {
 }
 
 juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter() {
-    spdlog::set_level(spdlog::level::debug);
-    spdlog::flush_on(spdlog::level::debug);
-
-    activate_virtualenv(VENV_PATH);
-    preload_shared_libraries();
-
-    if (!interpreter) {
-        interpreter = std::make_unique<py::scoped_interpreter>();
-    }
-
-    py::module sys = py::module::import("sys");
-    auto path = py::module_::import("sys").attr("path");
-    sys.attr("executable") = "/Users/marcinjarczewski/Documents/studia/sem6/venom/cmake-build-debug/tests/vst3/venv/bin/python";
-    path.attr("append")("/Users/marcinjarczewski/Documents/studia/sem6/venom/cmake-build-debug/tests/vst3/venv/lib/python3.12/site-packages");
-
-
-    log_python_environment();
+    spdlog::debug("[LET THE BALL ROLLING]");
 
     try {
+        py::gil_scoped_acquire acquire;
+        log_python_environment();
         py::eval_file(PLUGIN_FILE);
-        auto obj = std::make_unique<py::object>(py::eval("PyAudioProcessor()"));
-        return new PyAudioProcessor(std::move(obj));
+        return new PyAudioProcessor(std::make_unique<py::object>(py::eval("PyAudioProcessor()")));
     } catch (const py::error_already_set &e) {
         spdlog::error("Error when evaluating provided python file: {}", e.what());
         return nullptr;

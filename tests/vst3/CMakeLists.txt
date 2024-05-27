@@ -29,17 +29,7 @@ juce_add_plugin(${PLUGIN_NAME}
         FORMATS ${FORMATS}
         PRODUCT_NAME ${PROJECT_NAME})
 
-if(NOT EXISTS "${VENV_PATH}/bin/activate")
-    add_custom_target(create_venv ALL
-            COMMAND ${Python_EXECUTABLE} -m venv ${VENV_PATH}
-            COMMAND ${VENV_PATH}/bin/pip install -r ${REQUIREMENTS_FILE}
-            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-            COMMENT "Creating virtual environment and installing dependencies..."
-    )
-    add_dependencies(${PLUGIN_NAME} create_venv)
-else()
-    message(STATUS "Virtual environment already exists at ${VENV_PATH}")
-endif()
+
 
 target_link_libraries(${PLUGIN_NAME}
         PRIVATE
@@ -67,6 +57,7 @@ target_compile_definitions(${PLUGIN_NAME}
         VENV_PATH="${VENV_PATH}"
         PLUGIN_FILE="${CMAKE_CURRENT_SOURCE_DIR}/plugin.py"
         PYTHON_SHARED_LIB="${PYTHON_SHARED_LIB}"
+        PYTHON_SIDE_PACKAGES="${VENV_PATH}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages/"
 )
 
 add_definitions(-DSPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_DEBUG)
@@ -79,4 +70,16 @@ add_custom_target(copy_audio_processor ALL
 )
 
 
-add_dependencies(${PLUGIN_NAME} copy_audio_processor)
+if(NOT EXISTS "${VENV_PATH}/bin/activate")
+    add_custom_target(create_venv ALL
+            COMMAND ${Python_EXECUTABLE} -m venv ${VENV_PATH}
+            COMMAND ${VENV_PATH}/bin/pip install -r ${REQUIREMENTS_FILE}
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+            COMMENT "Creating virtual environment and installing dependencies..."
+    )
+    add_dependencies(${PLUGIN_NAME} create_venv copy_audio_processor)
+else()
+    message(STATUS "Virtual environment already exists at ${VENV_PATH}")
+    add_dependencies(${PLUGIN_NAME}  copy_audio_processor)
+
+endif()

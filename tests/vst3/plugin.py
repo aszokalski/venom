@@ -1,9 +1,17 @@
 import gc
-
-from audio_processor.juce_audio_processors import AudioProcessor
+from audio_processor.juce_audio_processors import AudioProcessor, AudioProcessorEditor, Colour
 
 gc.disable()
+class PyAudioProcessorEditor(AudioProcessorEditor):
+    def __init__(self, processor):
+        super().__init__(processor)
+        self.setSize(200, 400)
+    def paint(self, graphics):
+        graphics.fillAll(Colour(1.0, 1.0, 1.0, 0.8))
+        pass
 
+    def resized(self):
+        pass
 
 class PyAudioProcessor(AudioProcessor):
     def __init__(self):
@@ -18,16 +26,15 @@ class PyAudioProcessor(AudioProcessor):
 
     def processBlock(self, buffer, midiMessages):
         numChannels = buffer.getNumChannels()
-
         for channel in range(numChannels):
             data = buffer.getWritePointer(channel)
             data[:] = data * 20.2
 
     def createEditor(self):
-        return None
+        return PyAudioProcessorEditor(self)
 
     def hasEditor(self):
-        return False
+        return True
 
     def getName(self):
         return "PyAudioProcessor"
@@ -46,7 +53,7 @@ class PyAudioProcessor(AudioProcessor):
 
     def getCurrentProgram(self):
         return 0
-
+    
     def setCurrentProgram(self, index):
         pass
 

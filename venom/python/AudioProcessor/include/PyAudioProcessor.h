@@ -1,19 +1,17 @@
-#include "juce_audio_processors/juce_audio_processors.h"
-#include "juce_audio_basics/juce_audio_basics.h" // for juce::AudioBuffer
-#include "juce_audio_devices/juce_audio_devices.h"
 #include "PyAudioProcessorEditor.h"
-
-namespace py = pybind11;
+#include "juce_audio_basics/juce_audio_basics.h"  // for juce::AudioBuffer
+#include "juce_audio_devices/juce_audio_devices.h"
+#include "juce_audio_processors/juce_audio_processors.h"
 
 class PyAudioProcessor : public juce::AudioProcessor {
-private:
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PyAudioProcessor)
+   private:
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PyAudioProcessor)
     std::unique_ptr<py::object> instance;
-public:
 
+   public:
     explicit PyAudioProcessor(std::unique_ptr<py::object> clsInstance);
 
-    ~PyAudioProcessor() override = default;
+    ~PyAudioProcessor() override;
 
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
 

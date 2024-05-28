@@ -14,18 +14,63 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Cache apt packages
+        uses: actions/cache@v2
+        with:
+          path: /var/cache/apt
+          key: ${{ runner.os }}-apt-${{ hashFiles('venom/.gitmodules') }}
+          restore-keys: |
+            ${{ runner.os }}-apt-
+
+      - name: Install Dependencies
+        if: steps.cache-apt.outputs.cache-hit != 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libx11-dev libxrandr-dev
+
+      - name: Cache CMake and Ninja
+        uses: actions/cache@v2
+        with:
+          path: ~/.cmake
+          key: ${{ runner.os }}-cmake-${{ hashFiles('venom/.gitmodules') }}
+          restore-keys: |
+            ${{ runner.os }}-cmake-
+
       - name: Set up CMake
+        if: steps.cache-cmake.outputs.cache-hit != 'true'
         uses: lukka/get-cmake@v3.25.2
         with:
           cmakeVersion: 3.25.2
           ninjaVersion: 1.11.1
 
+      - name: Cache VST3 SDK
+        uses: actions/cache@v2
+        with:
+          path: vst3sdk
+          key: ${{ runner.os }}-vst3sdk-${{ hashFiles('venom/.gitmodules') }}
+          restore-keys: |
+            ${{ runner.os }}-vst3sdk-
+
       - name: Set up VST3 SDK
+        if: steps.cache-vst3sdk.outputs.cache-hit != 'true'
         run: |
           set -x
           git clone https://github.com/steinbergmedia/vst3sdk.git 2>&1 | tee setup_vst3sdk.log
-          export VST3_SDK_PATH=$PWD/vst3sdk
-          echo "VST3 SDK Path: $VST3_SDK_PATH" | tee -a setup_vst3sdk.log
+
+      - name: Cache Submodules
+        uses: actions/cache@v2
+        with:
+          path: |
+            venom/.git/modules
+            venom/.git/modules/*
+          key: ${{ runner.os }}-submodules-${{ hashFiles('venom/.gitmodules') }}
+          restore-keys: |
+            ${{ runner.os }}-submodules-
+
+      - name: Update Submodules
+        run: |
+          set -x
+          git submodule update --init --recursive 2>&1 | tee update_submodules.log
 
       - name: Determine Python Path
         id: determine-python-path
@@ -35,11 +80,6 @@ jobs:
           echo "PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}" | tee determine_python_path.log
           echo "::set-output name=python-executable::${PYTHON_EXECUTABLE}"
 
-      - name: Update Submodules
-        run: |
-          set -x
-          cd venom
-          git submodule update --init --recursive 2>&1 | tee update_submodules.log
 
       - name: Configure CMake
         run: |

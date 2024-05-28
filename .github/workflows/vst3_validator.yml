@@ -116,13 +116,13 @@ jobs:
           set -x
           cd build
           cmake .. 2>&1 | tee build_setup.log
-          cmake --build . --target TestPlugin_VST3 --config Release -- -j 4 2>&1 | tee build_target.log
+          cmake --build . --target TestPlugin_VST3 --config Release -- -j 8 2>&1 | tee build_target.log
 
       - name: Copy Validator to Working Directory
         run: |
           set -x
           pwd
-          cp ../vst3sdk_build/cmake-build/bin/Release/validator vst3_validator
+          cp ../../vst3sdk_build/cmake-build/bin/Release/validator vst3_validator
 
       - name: List Files and Run VST3 Validators
         run: |

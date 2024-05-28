@@ -1,0 +1,73 @@
+name: Run VST3 Validators
+
+on:
+  push:
+    branches: [ main, vst-validator ]
+  pull_request:
+    branches: [ main, vst-validator ]
+
+jobs:
+  validate-vst3:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up CMake
+        uses: lukka/get-cmake@v3.25.2
+        with:
+          cmakeVersion: 3.25.2
+          ninjaVersion: 1.11.1
+
+      - name: Set up VST3 SDK
+        run: |
+          set -x
+          git clone https://github.com/steinbergmedia/vst3sdk.git 2>&1 | tee setup_vst3sdk.log
+          export VST3_SDK_PATH=$PWD/vst3sdk
+          echo "VST3 SDK Path: $VST3_SDK_PATH" | tee -a setup_vst3sdk.log
+
+      - name: Determine Python Path
+        id: determine-python-path
+        run: |
+          set -x
+          PYTHON_EXECUTABLE=$(which python)
+          echo "PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}" | tee determine_python_path.log
+          echo "::set-output name=python-executable::${PYTHON_EXECUTABLE}"
+
+      - name: Configure CMake
+        run: |
+          set -x
+          mkdir build 2>&1 | tee configure_cmake.log
+          cd build
+          cmake -D VST3_SDK_DIR=$VST3_SDK_PATH -D CMAKE_BUILD_TYPE=Release -DPython_EXECUTABLE=${{ steps.determine-python-path.outputs.python-executable }} .. 2>&1 | tee -a ../configure_cmake.log
+
+
+      - name: Build Target
+        run: |
+          set -x
+          cd build
+          cmake .. 2>&1 | tee build_setup.log
+          cmake --build . --target TestPlugin_VST3 --config Release 2>&1 | tee build_target.log
+
+
+      - name: Run VST3 Validators
+        run: |
+          set -x
+          cd build
+          ls -l | tee files.log
+          $VST3_SDK_PATH/tools/vstvalidator/validator --all TestPlugin_VST3.vst3 2>&1 | tee vst3_validation.log
+
+      - name: Upload logs
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: logs
+          path: |
+            setup_vst3sdk.log
+            build_setup.log
+            determine_python_path.log
+            configure_cmake.log
+            build_target.log
+            files.log
+            vst3_validation.log

@@ -53,17 +53,17 @@ jobs:
           cmakeVersion: 3.25.2
           ninjaVersion: 1.11.1
 
-#      - name: Cache VST3 Validator
-#        id: cache-vst3-validator
-#        uses: actions/cache@v2
-#        with:
-#          path: cmake-build/bin/Release/validator
-#          key: ${{ runner.os }}-vst3-validator-${{ hashFiles('venom/.gitmodules') }}
-#          restore-keys: |
-#            ${{ runner.os }}-vst3-validator-
+      - name: Cache VST3 Validator
+        id: cache-vst3-validator
+        uses: actions/cache@v2
+        with:
+          path: cmake-build/bin/Release/validator
+          key: ${{ runner.os }}-vst3-validator-${{ hashFiles('venom/.gitmodules') }}
+          restore-keys: |
+            ${{ runner.os }}-vst3-validator-
 
       - name: Set up VST3 SDK
-#        if: steps.cache-vst3-validator.outputs.cache-hit != 'true'
+        if: steps.cache-vst3-validator.outputs.cache-hit != 'true'
         run: |
           set -x
           mkdir -p ../../vst3sdk_build
@@ -72,7 +72,7 @@ jobs:
           cd vst3sdk
           cmake -B cmake-build -DCMAKE_BUILD_TYPE=Release
           cmake --build cmake-build --target validator
-#          cp cmake-build/bin/Release/validator vst3_validator
+          cp cmake-build/bin/Release/validator vst3_validator
 
       - name: Cache Submodules
         id: cache-submodules
@@ -119,7 +119,6 @@ jobs:
           cmake --build . --target TestPlugin_VST3 --config Release 2>&1 | tee build_target.log
 
       - name: Copy Validator to Working Directory
-        if: steps.cache-vst3-validator.outputs.cache-hit == 'true'
         run: |
           set -x
           pwd
@@ -130,6 +129,7 @@ jobs:
           set -x
           cd build
           tree tests/vst3/TestPlugin_artefacts/Release | tee files.log
+          ../vst3_validator -h
           ../vst3_validator tests/vst3/TestPlugin_artefacts/Release/VST3/TestPlugin.vst3/Contents/x86_64-linux/TestPlugin.so 2>&1 | tee vst3_validation.log
 
       - name: Upload logs

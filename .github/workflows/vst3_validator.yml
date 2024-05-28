@@ -78,8 +78,8 @@ jobs:
         run: |
           set -x
           pwd
-          tree . -L 3
-          cp ../../vst3sdk_build/vst3sdk/cmake-build/bin/Release/validator vst3_validator
+          tree ./.. -L 3
+          cp ../vst3sdk_build/vst3sdk/cmake-build/bin/Release/validator vst3_validator
           echo "========================="
           tree .. -L 3
 

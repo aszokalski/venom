@@ -129,9 +129,8 @@ jobs:
           set -x
           pwd
           cd build
-          tree tests/vst3/TestPlugin_artefacts/Release | tee files.log
-          ../vst3_validator -h
-          ../vst3_validator tests/vst3/TestPlugin_artefacts/Release/VST3/TestPlugin.vst3/Contents/x86_64-linux/TestPlugin.so 2>&1 | tee vst3_validation.log
+          tree tests/vst3/TestPlugin_artefacts | tee files.log
+          ../vst3_validator tests/vst3/TestPlugin_artefacts/Release/VST3 2>&1 | tee vst3_validation.log
 
       - name: Upload logs
         if: failure()

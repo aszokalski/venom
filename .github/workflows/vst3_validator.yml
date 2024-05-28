@@ -35,6 +35,12 @@ jobs:
           echo "PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}" | tee determine_python_path.log
           echo "::set-output name=python-executable::${PYTHON_EXECUTABLE}"
 
+      - name: Update Submodules
+        run: |
+          set -x
+          cd venom
+          git submodule update --init --recursive 2>&1 | tee update_submodules.log
+
       - name: Configure CMake
         run: |
           set -x
@@ -71,3 +77,4 @@ jobs:
             build_target.log
             files.log
             vst3_validation.log
+            update_submodules.log

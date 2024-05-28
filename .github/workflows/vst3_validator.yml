@@ -63,7 +63,7 @@ jobs:
             ${{ runner.os }}-vst3-validator-
 
       - name: Set up VST3 SDK
-        if: steps.cache-vst3-validator.outputs.cache-hit != 'true'
+#        if: steps.cache-vst3-validator.outputs.cache-hit != 'true'
         run: |
           set -x
           mkdir -p ../../vst3sdk_build
@@ -74,19 +74,19 @@ jobs:
           cmake --build cmake-build --target validator
           cp cmake-build/bin/Release/validator vst3_validator
 
-#      - name: Cache Submodules
-#        id: cache-submodules
-#        uses: actions/cache@v2
-#        with:
-#          path: |
-#            venom/.git/modules
-#            venom/.git/modules/*
-#            venom/extern/spdlog
-#            venom/extern/pybind11
-#            venom/extern/juce
-#          key: ${{ runner.os }}-submodules-${{ hashFiles('venom/.gitmodules') }}
-#          restore-keys: |
-#            ${{ runner.os }}-submodules-
+      - name: Cache Submodules
+        id: cache-submodules
+        uses: actions/cache@v2
+        with:
+          path: |
+            venom/.git/modules
+            venom/.git/modules/*
+            venom/extern/spdlog
+            venom/extern/pybind11
+            venom/extern/juce
+          key: ${{ runner.os }}-submodules-${{ hashFiles('venom/.gitmodules') }}
+          restore-keys: |
+            ${{ runner.os }}-submodules-
 
       - name: Update Submodules
         if: steps.cache-submodules.outputs.cache-hit != 'true'
@@ -116,7 +116,7 @@ jobs:
           set -x
           cd build
           cmake .. 2>&1 | tee build_setup.log
-          cmake --build . --target TestPlugin_VST3 --config Release 2>&1 | tee build_target.log
+          cmake --build . --target TestPlugin_VST3 --config Release -- -j 4 2>&1 | tee build_target.log
 
       - name: Copy Validator to Working Directory
         run: |

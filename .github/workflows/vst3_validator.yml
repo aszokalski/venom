@@ -79,7 +79,9 @@ jobs:
           set -x
           pwd
           tree .. -L 3
-          cp ../vst3sdk_build/cmake-build/bin/Release/validator vst3_validator
+          cp ../../vst3sdk_build/cmake-build/bin/Release/validator vst3_validator
+          echo "========================="
+          tree .. -L 3
 
 #      - name: Cache Submodules
 #        id: cache-submodules

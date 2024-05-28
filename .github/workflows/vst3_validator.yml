@@ -74,15 +74,6 @@ jobs:
           cmake --build cmake-build --target validator -- -j 4
           cp cmake-build/bin/Release/validator vst3_validator
 
-      - name: Copy Validator to Working Directory
-        run: |
-          set -x
-          pwd
-          tree ./.. -L 3
-          cp ../vst3sdk_build/vst3sdk/cmake-build/bin/Release/validator vst3_validator
-          echo "========================="
-          tree .. -L 3
-
 #      - name: Cache Submodules
 #        id: cache-submodules
 #        uses: actions/cache@v2
@@ -97,49 +88,50 @@ jobs:
 #          restore-keys: |
 #            ${{ runner.os }}-submodules-
 
-#      - name: Update Submodules
+      - name: Update Submodules
 #        if: steps.cache-submodules.outputs.cache-hit != 'true'
-#        run: |
-#          set -x
-#          git submodule update --init --recursive 2>&1 | tee update_submodules.log
-
-#      - name: Determine Python Path
-#        id: determine-python-path
-#        run: |
-#          set -x
-#          PYTHON_EXECUTABLE=$(which python)
-#          echo "PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}" | tee determine_python_path.log
-#          echo "::set-output name=python-executable::${PYTHON_EXECUTABLE}"
+        run: |
+          set -x
+          git submodule update --init --recursive 2>&1 | tee update_submodules.log
 
 
-#      - name: Configure CMake
-#        run: |
-#          set -x
-#          mkdir build 2>&1 | tee configure_cmake.log
-#          cd build
-#          cmake -D CMAKE_BUILD_TYPE=Release -DPython_EXECUTABLE=${{ steps.determine-python-path.outputs.python-executable }} .. 2>&1 | tee -a ../configure_cmake.log
-#
-#
-#      - name: Build Target
-#        run: |
-#          set -x
-#          cd build
-#          cmake .. 2>&1 | tee build_setup.log
-#          cmake --build . --target TestPlugin_VST3 --config Release -- -j 8 2>&1 | tee build_target.log
+      - name: Determine Python Path
+        id: determine-python-path
+        run: |
+          set -x
+          PYTHON_EXECUTABLE=$(which python)
+          echo "PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}" | tee determine_python_path.log
+          echo "::set-output name=python-executable::${PYTHON_EXECUTABLE}"
 
-#      - name: Copy Validator to Working Directory
-#        run: |
-#          set -x
-#          pwd
-#          cp ../../vst3sdk_build/cmake-build/bin/Release/validator vst3_validator
+      - name: Configure CMake
+        run: |
+          set -x
+          mkdir build 2>&1 | tee configure_cmake.log
+          cd build
+          cmake -D CMAKE_BUILD_TYPE=Release -DPython_EXECUTABLE=${{ steps.determine-python-path.outputs.python-executable }} .. 2>&1 | tee -a ../configure_cmake.log
 
-#      - name: List Files and Run VST3 Validators
-#        run: |
-#          set -x
-#          cd build
-#          tree tests/vst3/TestPlugin_artefacts/Release | tee files.log
-#          ../vst3_validator -h
-#          ../vst3_validator tests/vst3/TestPlugin_artefacts/Release/VST3/TestPlugin.vst3/Contents/x86_64-linux/TestPlugin.so 2>&1 | tee vst3_validation.log
+      - name: Build Target
+        run: |
+          set -x
+          cd build
+          cmake .. 2>&1 | tee build_setup.log
+          cmake --build . --target TestPlugin_VST3 --config Release -- -j 8 2>&1 | tee build_target.log
+
+      - name: Copy Validator to Working Directory
+        run: |
+          set -x
+          pwd
+          tree ./.. -L 3
+          cp ../vst3sdk_build/vst3sdk/cmake-build/bin/Release/validator vst3_validator
+
+      - name: List Files and Run VST3 Validators
+        run: |
+          set -x
+          pwd
+          cd build
+          tree tests/vst3/TestPlugin_artefacts/Release | tee files.log
+          ../vst3_validator -h
+          ../vst3_validator tests/vst3/TestPlugin_artefacts/Release/VST3/TestPlugin.vst3/Contents/x86_64-linux/TestPlugin.so 2>&1 | tee vst3_validation.log
 
       - name: Upload logs
         if: failure()

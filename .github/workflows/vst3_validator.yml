@@ -122,14 +122,15 @@ jobs:
         if: steps.cache-vst3-validator.outputs.cache-hit == 'true'
         run: |
           set -x
-          cp ../../vst3sdk_build/cmake-build/bin/Release/validator vst3_validator
+          pwd
+          cp ../vst3sdk_build/cmake-build/bin/Release/validator vst3_validator
 
       - name: List Files and Run VST3 Validators
         run: |
           set -x
           cd build
           tree tests/vst3/TestPlugin_artefacts/Release | tee files.log
-          ./vst3_validator tests/vst3/TestPlugin_artefacts/Release/VST3/TestPlugin.vst3/Contents/x86_64-linux/TestPlugin.so 2>&1 | tee vst3_validation.log
+          ../vst3_validator tests/vst3/TestPlugin_artefacts/Release/VST3/TestPlugin.vst3/Contents/x86_64-linux/TestPlugin.so 2>&1 | tee vst3_validation.log
 
       - name: Upload logs
         if: failure()

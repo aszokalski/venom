@@ -81,6 +81,9 @@ jobs:
           path: |
             venom/.git/modules
             venom/.git/modules/*
+            venom/extern/spdlog
+            venom/extern/pybind11
+            venom/extern/juce
           key: ${{ runner.os }}-submodules-${{ hashFiles('venom/.gitmodules') }}
           restore-keys: |
             ${{ runner.os }}-submodules-

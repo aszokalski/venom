@@ -74,19 +74,19 @@ jobs:
           cmake --build cmake-build --target validator
           cp cmake-build/bin/Release/validator vst3_validator
 
-      - name: Cache Submodules
-        id: cache-submodules
-        uses: actions/cache@v2
-        with:
-          path: |
-            venom/.git/modules
-            venom/.git/modules/*
-            venom/extern/spdlog
-            venom/extern/pybind11
-            venom/extern/juce
-          key: ${{ runner.os }}-submodules-${{ hashFiles('venom/.gitmodules') }}
-          restore-keys: |
-            ${{ runner.os }}-submodules-
+#      - name: Cache Submodules
+#        id: cache-submodules
+#        uses: actions/cache@v2
+#        with:
+#          path: |
+#            venom/.git/modules
+#            venom/.git/modules/*
+#            venom/extern/spdlog
+#            venom/extern/pybind11
+#            venom/extern/juce
+#          key: ${{ runner.os }}-submodules-${{ hashFiles('venom/.gitmodules') }}
+#          restore-keys: |
+#            ${{ runner.os }}-submodules-
 
       - name: Update Submodules
         if: steps.cache-submodules.outputs.cache-hit != 'true'

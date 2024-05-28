@@ -26,7 +26,7 @@ jobs:
         if: steps.cache-apt.outputs.cache-hit != 'true'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libx11-dev libxrandr-dev libasound2-dev libgl1-mesa-dev libcurl4-openssl-dev libwebkit2gtk-4.0-dev libgtk-3-dev
+          sudo apt-get install -y libx11-dev libxrandr-dev libasound2-dev libgl1-mesa-dev libcurl4-openssl-dev libwebkit2gtk-4.0-dev libgtk-3-dev tree
 
       - name: Cache CMake and Ninja
         uses: actions/cache@v2
@@ -43,21 +43,26 @@ jobs:
           cmakeVersion: 3.25.2
           ninjaVersion: 1.11.1
 
-      - name: Cache VST3 SDK
+      - name: Cache VST3 Validator
+        id: cache-vst3-validator
         uses: actions/cache@v2
         with:
-          path: vst3sdk
-          key: ${{ runner.os }}-vst3sdk-${{ hashFiles('venom/.gitmodules') }}
+          path: cmake-build/bin/Release/validator
+          key: ${{ runner.os }}-vst3-validator-${{ hashFiles('venom/.gitmodules') }}
           restore-keys: |
-            ${{ runner.os }}-vst3sdk-
+            ${{ runner.os }}-vst3-validator-
 
       - name: Set up VST3 SDK
-        if: steps.cache-vst3sdk.outputs.cache-hit != 'true'
+        if: steps.cache-vst3-validator.outputs.cache-hit != 'true'
         run: |
           set -x
-          git clone https://github.com/steinbergmedia/vst3sdk.git 2>&1 | tee setup_vst3sdk.log
+          git clone --recursive https://github.com/steinbergmedia/vst3sdk.git 2>&1 | tee setup_vst3sdk.log
+          cmake -B cmake-build -DCMAKE_BUILD_TYPE=Release
+          cmake --build cmake-build --target validator
+          cp cmake-build/bin/Release/validator vst3_validator
 
       - name: Cache Submodules
+        id: cache-submodules
         uses: actions/cache@v2
         with:
           path: |
@@ -68,6 +73,7 @@ jobs:
             ${{ runner.os }}-submodules-
 
       - name: Update Submodules
+        if: steps.cache-submodules.outputs.cache-hit != 'true'
         run: |
           set -x
           git submodule update --init --recursive 2>&1 | tee update_submodules.log
@@ -86,7 +92,7 @@ jobs:
           set -x
           mkdir build 2>&1 | tee configure_cmake.log
           cd build
-          cmake -D VST3_SDK_DIR=$VST3_SDK_PATH -D CMAKE_BUILD_TYPE=Release -DPython_EXECUTABLE=${{ steps.determine-python-path.outputs.python-executable }} .. 2>&1 | tee -a ../configure_cmake.log
+          cmake -D CMAKE_BUILD_TYPE=Release -DPython_EXECUTABLE=${{ steps.determine-python-path.outputs.python-executable }} .. 2>&1 | tee -a ../configure_cmake.log
 
 
       - name: Build Target
@@ -96,13 +102,18 @@ jobs:
           cmake .. 2>&1 | tee build_setup.log
           cmake --build . --target TestPlugin_VST3 --config Release 2>&1 | tee build_target.log
 
+      - name: Copy Validator to Working Directory
+        if: steps.cache-vst3-validator.outputs.cache-hit == 'true'
+        run: |
+          set -x
+          cp cmake-build/bin/Release/validator vst3_validator
 
-      - name: Run VST3 Validators
+      - name: List Files and Run VST3 Validators
         run: |
           set -x
           cd build
-          ls -l | tee files.log
-          $VST3_SDK_PATH/tools/vstvalidator/validator --all TestPlugin_VST3.vst3 2>&1 | tee vst3_validation.log
+          tree tests/vst3/TestPlugin_artefacts/Release | tee files.log
+          ./vst3_validator tests/vst3/TestPlugin_artefacts/Release/VST3/TestPlugin.vst3/Contents/x86_64-linux/TestPlugin.so 2>&1 | tee vst3_validation.log
 
       - name: Upload logs
         if: failure()

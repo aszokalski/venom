@@ -56,10 +56,12 @@ jobs:
         if: steps.cache-vst3-validator.outputs.cache-hit != 'true'
         run: |
           set -x
+          mkdir -p ../vst3sdk_build
+          cd ../vst3sdk_build
           git clone --recursive https://github.com/steinbergmedia/vst3sdk.git 2>&1 | tee setup_vst3sdk.log
           cmake -B cmake-build -DCMAKE_BUILD_TYPE=Release
           cmake --build cmake-build --target validator
-          cp cmake-build/bin/Release/validator vst3_validator
+          cp cmake-build/bin/Release/validator ../vst3_validator
 
       - name: Cache Submodules
         id: cache-submodules
@@ -106,7 +108,7 @@ jobs:
         if: steps.cache-vst3-validator.outputs.cache-hit == 'true'
         run: |
           set -x
-          cp cmake-build/bin/Release/validator vst3_validator
+          cp ../vst3sdk_build/cmake-build/bin/Release/validator vst3_validator
 
       - name: List Files and Run VST3 Validators
         run: |

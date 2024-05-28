@@ -36,7 +36,7 @@ jobs:
         if: steps.cache-apt-lists.outputs.cache-hit != 'true' || steps.cache-apt-packages.outputs.cache-hit != 'true'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libx11-dev libxrandr-dev libasound2-dev libgl1-mesa-dev libcurl4-openssl-dev libwebkit2gtk-4.0-dev libgtk-3-dev libxcb-cursor-dev libxcb-util-dev tree
+          sudo apt-get install -y libx11-dev libxrandr-dev libasound2-dev libgl1-mesa-dev libcurl4-openssl-dev libwebkit2gtk-4.0-dev libgtk-3-dev libxcb-cursor-dev libxcb-util-dev libxcb-keysyms1-dev tree
 
       - name: Cache CMake and Ninja
         uses: actions/cache@v2

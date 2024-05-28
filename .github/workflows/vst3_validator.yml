@@ -53,17 +53,17 @@ jobs:
           cmakeVersion: 3.25.2
           ninjaVersion: 1.11.1
 
-      - name: Cache VST3 Validator
-        id: cache-vst3-validator
-        uses: actions/cache@v2
-        with:
-          path: cmake-build/bin/Release/validator
-          key: ${{ runner.os }}-vst3-validator-${{ hashFiles('venom/.gitmodules') }}
-          restore-keys: |
-            ${{ runner.os }}-vst3-validator-
+#      - name: Cache VST3 Validator
+#        id: cache-vst3-validator
+#        uses: actions/cache@v2
+#        with:
+#          path: cmake-build/bin/Release/validator
+#          key: ${{ runner.os }}-vst3-validator-${{ hashFiles('venom/.gitmodules') }}
+#          restore-keys: |
+#            ${{ runner.os }}-vst3-validator-
 
       - name: Set up VST3 SDK
-        if: steps.cache-vst3-validator.outputs.cache-hit != 'true'
+#        if: steps.cache-vst3-validator.outputs.cache-hit != 'true'
         run: |
           set -x
           mkdir -p ../../vst3sdk_build

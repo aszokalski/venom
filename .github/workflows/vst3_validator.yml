@@ -70,8 +70,8 @@ jobs:
           cd ../vst3sdk_build
           git clone --recursive https://github.com/steinbergmedia/vst3sdk.git 2>&1 | tee setup_vst3sdk.log
           cd vst3sdk
-          cmake -B cmake-build -DCMAKE_BUILD_TYPE=Release -- -j 4
-          cmake --build cmake-build --target validator
+          cmake -B cmake-build -DCMAKE_BUILD_TYPE=Release
+          cmake --build cmake-build --target validator -- -j 4
           cp cmake-build/bin/Release/validator vst3_validator
 
       - name: Copy Validator to Working Directory

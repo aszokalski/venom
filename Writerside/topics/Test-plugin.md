@@ -4,7 +4,7 @@
 
 * [Introduction](#introduction)
 * [Build instructions](#build-instructions)
-* [Importing to DAW (REAPER)](#importing-to-daw--reaper-)
+* [Importing to DAW (REAPER)](#importing-to-daw-reaper)
 
 <!-- TOC -->
 

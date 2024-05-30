@@ -8,6 +8,7 @@
 
     <toc-element toc-title="Introduction" topic="README.md">
     </toc-element>
+    <toc-element topic="Test-plugin.md"/>
     <toc-element topic="Architecture.md">
         <toc-element topic="Extending.md"/>
         <toc-element topic="Project-structure.md"/>
@@ -17,6 +18,7 @@
             <toc-element topic="VENOM-Project-Structure.md"/>
             <toc-element topic="Boilerplate-JUCE-project.md"/>
         </toc-element>
+        <toc-element topic="Testing.md"/>
     </toc-element>
     <toc-element toc-title="GitHub" href="https://github.com/aszokalski/venom"/>
 </instance-profile>

@@ -1,10 +1,10 @@
 pybind11_add_module(juce
-        juce_audio_processors/AudioProcessor/AudioProcessor.cpp
-        juce_audio_processors/AudioProcessor/AudioProcessor.h
-        juce_audio_processors/AudioProcessorEditor/AudioProcessorEditor.cpp
-        juce_audio_processors/AudioProcessorEditor/AudioProcessorEditor.h
-        juce_audio_processors/juce_audio_processors.cpp
-        juce_audio_processors/juce_audio_processors.h
+#        juce_audio_processors/AudioProcessor/AudioProcessor.cpp
+#        juce_audio_processors/AudioProcessor/AudioProcessor.h
+#        juce_audio_processors/AudioProcessorEditor/AudioProcessorEditor.cpp
+#        juce_audio_processors/AudioProcessorEditor/AudioProcessorEditor.h
+#        juce_audio_processors/juce_audio_processors.cpp
+#        juce_audio_processors/juce_audio_processors.h
 
 
         juce_gui_basics/juce_gui_basics.cpp

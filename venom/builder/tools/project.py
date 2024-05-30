@@ -31,7 +31,6 @@ def build(source_path, p_bar: tqdm):
     p_bar.update(1)
     if os.path.exists(os.path.join(source_path, "build")):
         p_bar.set_description("Cleaning old ./build")
-        shutil.rmtree(os.path.join(source_path, "build"))
     p_bar.refresh()
 
     try:
@@ -52,7 +51,33 @@ def build(source_path, p_bar: tqdm):
 
         # copy boilerplate project from the same directory as this file
         shutil.copytree(os.path.join(os.path.dirname(__file__), "..", "boilerplate_plugin_project"),
-                        os.path.join(source_path, "build"))
+                        os.path.join(source_path, "build"),
+                        ignore=shutil.ignore_patterns('__pycache__', '*.pyc', 'build', 'tests', 'docs', 'examples'))
+
+        source_dir = os.path.join(os.path.dirname(__file__), "..", "boilerplate_plugin_project")
+        destination_dir = os.path.join(source_path, "build")
+        files_to_copy = [
+            'CMakeLists.txt',
+            'create_plugin.cpp',
+            'PyAudioProcessor.h',
+            'PyAudioProcessorEditor.h',
+            'PyAudioProcessor.py',
+        ]
+
+        if not os.path.exists(destination_dir):
+            os.makedirs(destination_dir)
+
+        # Copy each file from the source to the destination
+        for file_name in files_to_copy:
+            source_file = os.path.join(source_dir, file_name)
+            destination_file = os.path.join(destination_dir, file_name)
+
+            if os.path.exists(source_file):
+                shutil.copy2(source_file, destination_file)
+                print(f"Copied {file_name} to {destination_dir}")
+            else:
+                print(f"Warning: {file_name} not found in {source_dir}")
+
 
         # setup CMakeLists.txt with config
         modify_cmake_lists(source_path, config)

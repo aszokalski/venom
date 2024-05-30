@@ -3,8 +3,8 @@
 <!-- TOC -->
 
 * [Introduction](#introduction)
-* [Testing flow](#testing-flow)
-* [Tests directory structure](#tests-directory-structure)
+* [Build instructions](#build-instructions)
+* [Importing to DAW (REAPER)](#importing-to-daw--reaper-)
 
 <!-- TOC -->
 
@@ -36,13 +36,14 @@ cmake —build . —target TestPlugin_VST3
    TODO: validate this path
 
 ## Importing to DAW (REAPER)
+
 1. Open Reaper and go to settings `Preferences -> Plug-ins -> VST`.
-   1. Add the path to the directory where the plugin is located using `Edit path list` button.
-   2. Click `Re-scan` to scan the directory for the plugin.
-   ![import vst to reaper](../images/reaper-import-vst.png)
+    1. Add the path to the directory where the plugin is located using `Edit path list` button.
+    2. Click `Re-scan` to scan the directory for the plugin.
+       ![import vst to reaper](../images/reaper-import-vst.png)
 2. Now add plugin to the track.
-   1. Right-click on the track and select `Insert virtual instrument on new track`.
-   2. Select the plugin from the list.
-   ![add plugin to track](../images/reaper-add-plugin-to-track.png)
+    1. Right-click on the track and select `Insert virtual instrument on new track`.
+    2. Select the plugin from the list.
+       ![add plugin to track](../images/reaper-add-plugin-to-track.png)
 3. Plugin is added to the track and you should see the plugin window.
    ![plugin added to track](../images/reaper-plugin-image.png)

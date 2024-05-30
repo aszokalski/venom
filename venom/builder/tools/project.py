@@ -31,7 +31,6 @@ def build(source_path, p_bar: tqdm):
     p_bar.update(1)
     if os.path.exists(os.path.join(source_path, "build")):
         p_bar.set_description("Cleaning old ./build")
-        # shutil.rmtree(os.path.join(source_path, "build"))
     p_bar.refresh()
 
     try:
@@ -51,9 +50,9 @@ def build(source_path, p_bar: tqdm):
                    os.path.join(source_path, "dist"))
 
         # copy boilerplate project from the same directory as this file
-        # shutil.copytree(os.path.join(os.path.dirname(__file__), "..", "boilerplate_plugin_project"),
-        #                 os.path.join(source_path, "build"),
-        #                 ignore=shutil.ignore_patterns('__pycache__', '*.pyc', 'build', 'tests', 'docs', 'examples'))
+        shutil.copytree(os.path.join(os.path.dirname(__file__), "..", "boilerplate_plugin_project"),
+                        os.path.join(source_path, "build"),
+                        ignore=shutil.ignore_patterns('__pycache__', '*.pyc', 'build', 'tests', 'docs', 'examples'))
 
         source_dir = os.path.join(os.path.dirname(__file__), "..", "boilerplate_plugin_project")
         destination_dir = os.path.join(source_path, "build")
@@ -61,7 +60,8 @@ def build(source_path, p_bar: tqdm):
             'CMakeLists.txt',
             'create_plugin.cpp',
             'PyAudioProcessor.h',
-            'PyAudioProcessorEditor.h'
+            'PyAudioProcessorEditor.h',
+            'PyAudioProcessor.py',
         ]
 
         if not os.path.exists(destination_dir):

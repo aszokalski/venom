@@ -29,11 +29,29 @@ cmake -DPython_EXECUTABLE=$(which python) ..
 2. Build the plugin.
 
 ```shell
-cmake —build . —target TestPlugin_VST3
+cmake --build . --target TestPlugin_VST3 -j 6
+```
+If you see at the end this log message, the plugin is built successfully.
+```shell
+[100%] Built target TestPlugin_VST3
 ```
 
-3. Plugin is created in `build/vst3/TestPlugin.vst3`. `cmake-build-debug/tests/vst3/TestPlugin_artefacts/Debug/VST3`
-   TODO: validate this path
+3. Plugin is created in `build/tests/vst3/TestPlugin_artefacts/Release/VST3` directory.
+This is how the directory structure looks like.
+```
+├── VST3
+│   └── TestPlugin.vst3
+│       └── Contents
+│           ├── Info.plist
+│           ├── MacOS
+│           │   └── TestPlugin
+│           ├── PkgInfo
+│           ├── Resources
+│           │   └── moduleinfo.json
+│           └── _CodeSignature
+│               └── CodeResources
+└── libTestPlugin_SharedCode.a
+```
 
 ## Importing to DAW (REAPER)
 

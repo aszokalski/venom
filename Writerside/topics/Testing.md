@@ -19,14 +19,14 @@ Main testing framework and `Gtest` for C++.
 tests
 ├── __init__.py
 ├── cpp
-│   ├── CMakeLists.txt
-│   ├── juce_audio_processors
-│   │   ├── CMakeLists.txt
-│   │   └── test_AudioProcessorEditor.cpp
-│   └── stubs
-│       ├── __init__.py
-│       └── audio_processors_stubs.py
-└── vst3                                            [see Test-plugin]
+│   ├── CMakeLists.txt
+│   ├── juce_audio_processors
+│   │   ├── CMakeLists.txt
+│   │   └── test_AudioProcessorEditor.cpp
+│   └── stubs
+│       ├── __init__.py
+│       └── audio_processors_stubs.py
+└── vst3                                 [see Test-plugin]
     ├── CMakeLists.txt
     ├── create_plugin.cpp
     ├── plugin.py

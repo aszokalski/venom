@@ -40,16 +40,16 @@ If you see at the end this log message, the plugin is built successfully.
 This is how the directory structure looks like.
 ```
 ├── VST3
-│   └── TestPlugin.vst3
-│       └── Contents
-│           ├── Info.plist
-│           ├── MacOS
-│           │   └── TestPlugin
-│           ├── PkgInfo
-│           ├── Resources
-│           │   └── moduleinfo.json
-│           └── _CodeSignature
-│               └── CodeResources
+│   └── TestPlugin.vst3
+│       └── Contents
+│           ├── Info.plist
+│           ├── MacOS
+│           │   └── TestPlugin
+│           ├── PkgInfo
+│           ├── Resources
+│           │   └── moduleinfo.json
+│           └── CodeSignature
+│               └── CodeResources
 └── libTestPlugin_SharedCode.a
 ```
 

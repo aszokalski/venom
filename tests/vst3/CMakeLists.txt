@@ -34,10 +34,13 @@ juce_add_plugin(${PLUGIN_NAME}
 target_link_libraries(${PLUGIN_NAME}
         PRIVATE
         pybind11::embed
-        juce::juce_gui_basics
+        juce_shared
+        juceinit
         VenomModule
         audio_processor
+        ui_basics
         spdlog::spdlog
+        creation_manager
         PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags
@@ -65,7 +68,9 @@ add_definitions(-DSPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_DEBUG)
 
 add_custom_target(copy_audio_processor ALL
         COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:audio_processor> ${VENV_PATH}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages/
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:ui_basics> ${VENV_PATH}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages/
         DEPENDS audio_processor
+        DEPENDS ui_basics
         COMMENT "Copying audio_processor library to virtual environment site-packages..."
 )
 

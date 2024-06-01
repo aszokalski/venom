@@ -7,8 +7,7 @@ set_property(TARGET VenomModule PROPERTY POSITION_INDEPENDENT_CODE TRUE)
 target_link_libraries(VenomModule
         PRIVATE
         pybind11::embed
-        juce::juce_audio_utils
-        juce::juce_dsp
+        juce_shared
         spdlog::spdlog
         PUBLIC
         juce::juce_recommended_config_flags

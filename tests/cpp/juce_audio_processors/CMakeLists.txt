@@ -6,9 +6,12 @@ target_link_libraries(audio_processor_tests
         PRIVATE
         GTest::gtest_main
         pybind11::embed
-        juce::juce_gui_basics
+        juce_shared
         audio_processor
+        ui_basics
+        juceinit
         VenomModule
+        spdlog::spdlog
 )
 
 target_compile_definitions(audio_processor_tests
@@ -18,5 +21,9 @@ target_compile_definitions(audio_processor_tests
         MODULES_DIR="${MODULES_DIR}"
         STUBS_DIR="${STUBS_DIR}"
         PYTHON_STUBS_FILE="${STUBS_DIR}/audio_processors_stubs.py"
+)
+target_include_directories(audio_processor_tests
+        PUBLIC
+        "/home/mszawerd/venom/venom/cmake-build-debug/juce_shared_artefacts/JuceLibraryCode"
 )
 gtest_discover_tests(audio_processor_tests)

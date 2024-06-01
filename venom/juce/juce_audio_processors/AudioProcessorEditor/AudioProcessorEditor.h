@@ -7,7 +7,12 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/cast.h>
+#include "MessageManagerHelper.h"
+#include "juce_audio_processors/juce_audio_processors.h"
+
 
 namespace py = pybind11;
+
 void init_AudioProcessorEditor(py::module &m);
+
 #endif //AUDIOPROCESSOREDITOR_H

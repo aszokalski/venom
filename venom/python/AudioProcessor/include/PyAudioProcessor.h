@@ -1,14 +1,13 @@
 #include "PyAudioProcessorEditor.h"
-#include "juce_audio_basics/juce_audio_basics.h"  // for juce::AudioBuffer
-#include "juce_audio_devices/juce_audio_devices.h"
-#include "juce_audio_processors/juce_audio_processors.h"
+#include "JuceHeader.h"
+
 
 class PyAudioProcessor : public juce::AudioProcessor {
-   private:
+private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PyAudioProcessor)
     std::unique_ptr<py::object> instance;
 
-   public:
+public:
     explicit PyAudioProcessor(std::unique_ptr<py::object> clsInstance);
 
     ~PyAudioProcessor() override;

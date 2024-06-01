@@ -21,4 +21,5 @@ target_compile_definitions(audio_processor_tests
         STUBS_DIR="${STUBS_DIR}"
         PYTHON_STUBS_FILE="${STUBS_DIR}/audio_processors_stubs.py"
 )
+
 gtest_discover_tests(audio_processor_tests)

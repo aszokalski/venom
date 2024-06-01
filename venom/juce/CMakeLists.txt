@@ -58,4 +58,5 @@ target_link_libraries(juce
 )
 
 add_subdirectory(juce_audio_processors)
+add_subdirectory(juce_gui_basics)
 add_subdirectory(helpers)

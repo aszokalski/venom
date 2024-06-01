@@ -51,6 +51,9 @@ void init_AudioProcessorEditor(py::module &m) {
             .def("addAndMakeVisible", [](juce::AudioProcessorEditor &self, juce::Component &child, int zOrder = -1) {
                 self.addAndMakeVisible(child, zOrder);
             })
+            .def("introduce", [](juce::AudioProcessorEditor &self, juce::AudioProcessorEditor &parent) {
+                parent.addAndMakeVisible(self);
+            })
             .def("setSize", [](juce::AudioProcessorEditor &self, int newWidth, int newHeight) {
                 self.setSize(newWidth, newHeight);
             });

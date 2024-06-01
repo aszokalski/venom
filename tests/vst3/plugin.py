@@ -1,17 +1,15 @@
 import gc
 from audio_processor.juce_audio_processors import AudioProcessor, AudioProcessorEditor, Colour
+from ui_basics.ui_basics import Slider
 
 gc.disable()
 class PyAudioProcessorEditor(AudioProcessorEditor):
     def __init__(self, processor):
         super().__init__(processor)
-        self.setSize(200, 400)
-    def paint(self, graphics):
-        graphics.fillAll(Colour(100, 100, 100, 255))
-        pass
-
-    def resized(self):
-        pass
+        self.setSize(400, 400)
+        self.slider = Slider()
+        self.slider.setBounds(20, 20, 200, 20)
+        self.addAndMakeVisible(self.slider, 1)
 
 class PyAudioProcessor(AudioProcessor):
     def __init__(self):

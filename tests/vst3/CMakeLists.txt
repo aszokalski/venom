@@ -38,6 +38,7 @@ target_link_libraries(${PLUGIN_NAME}
         juceinit
         VenomModule
         audio_processor
+        ui_basics
         spdlog::spdlog
         creation_manager
         PUBLIC

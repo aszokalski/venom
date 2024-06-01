@@ -35,9 +35,11 @@ target_link_libraries(${PLUGIN_NAME}
         PRIVATE
         pybind11::embed
         juce_shared
+        juceinit
         VenomModule
         audio_processor
         spdlog::spdlog
+        creation_manager
         PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags

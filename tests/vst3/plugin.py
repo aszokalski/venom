@@ -7,7 +7,7 @@ class PyAudioProcessorEditor(AudioProcessorEditor):
         super().__init__(processor)
         self.setSize(200, 400)
     def paint(self, graphics):
-        graphics.fillAll(Colour(1.0, 1.0, 1.0, 0.8))
+        graphics.fillAll(Colour(100, 100, 100, 255))
         pass
 
     def resized(self):

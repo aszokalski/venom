@@ -1,4 +1,5 @@
 #include "PyAudioProcessor.h"
+
 #define PYBIND11_DETAILED_ERROR_MESSAGES
 
 #include <pybind11/embed.h>
@@ -8,6 +9,7 @@
 
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
+#include "../../venom/juce/helpers/include/initializer/Initializer.h"
 
 namespace py = pybind11;
 
@@ -47,7 +49,6 @@ void preload_shared_libraries() {
 
 struct InitialSetupHelper {
     std::unique_ptr<py::scoped_interpreter> interpreter;
-
     std::unique_ptr<py::gil_scoped_release> release;
 
     std::unique_ptr<py::scoped_interpreter> createInterpreter() {
@@ -59,12 +60,15 @@ struct InitialSetupHelper {
         return std::make_unique<py::scoped_interpreter>();
     }
 
-    InitialSetupHelper() : interpreter(createInterpreter()), release(std::make_unique<py::gil_scoped_release>()) {}
+    InitialSetupHelper() : interpreter(createInterpreter()), release(std::make_unique<py::gil_scoped_release>()) {
+    }
 
-    ~InitialSetupHelper() { spdlog::debug("[END]"); }
+    ~InitialSetupHelper() {
+        spdlog::debug("[END]");
+    }
 };
 
-const static InitialSetupHelper setup_helper;
+static InitialSetupHelper setup_helper;
 
 void log_python_environment() {
     py::module os = py::module::import("os");
@@ -76,13 +80,18 @@ void log_python_environment() {
 }
 
 juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter() {
+    initializeJuce();
     spdlog::debug("[LET THE BALL ROLLING]");
 
     try {
-        py::gil_scoped_acquire acquire;
-        log_python_environment();
-        py::eval_file(PLUGIN_FILE);
-        return new PyAudioProcessor(std::make_unique<py::object>(py::eval("PyAudioProcessor()")));
+        std::unique_ptr<py::object> pyProcessor;
+        {
+            py::gil_scoped_acquire acquire;
+            log_python_environment();
+            py::eval_file(PLUGIN_FILE);
+            pyProcessor = std::make_unique<py::object>(py::eval("PyAudioProcessor()"));
+        }
+        return new PyAudioProcessor(std::move(pyProcessor));
     } catch (const py::error_already_set &e) {
         spdlog::error("Error when evaluating provided python file: {}", e.what());
         return nullptr;

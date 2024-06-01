@@ -9,6 +9,9 @@ target_link_libraries(VenomModule
         pybind11::embed
         juce_shared
         spdlog::spdlog
+        PUBLIC
+        juce::juce_recommended_config_flags
+        juce::juce_recommended_lto_flags
 )
 
 target_include_directories(VenomModule

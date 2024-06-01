@@ -1,36 +1,38 @@
-from audio_processor.juce_audio_processors import AudioProcessor
-import math
+import gc
+from audio_processor.juce_audio_processors import AudioProcessor, AudioProcessorEditor, Colour
+from ui_basics.ui_basics import Slider
+
+gc.disable()
+class PyAudioProcessorEditor(AudioProcessorEditor):
+    def __init__(self, processor):
+        super().__init__(processor)
+        self.setSize(400, 400)
+        self.slider = Slider()
+        self.slider.setBounds(20, 20, 200, 20)
+        self.addAndMakeVisible(self.slider, 1)
 
 class PyAudioProcessor(AudioProcessor):
     def __init__(self):
         super().__init__()
         self.sample_rate = 44100
-        self.freq = 210
-        .0
-        self.level = 0.06
 
     def prepareToPlay(self, sampleRate, samplesPerBlock):
-        self.currentPhase = 0.0
         self.sample_rate = sampleRate
-        self.phaseDelta =(self.freq/sampleRate)*2.0*math.pi
-
 
     def releaseResources(self):
         pass
 
     def processBlock(self, buffer, midiMessages):
-        buffer.clear()
-        for channel in range(buffer.getNumChannels()):
+        numChannels = buffer.getNumChannels()
+        for channel in range(numChannels):
             data = buffer.getWritePointer(channel)
-            for sample in range(buffer.getNumSamples()):
-                data[sample] = math.sin(self.currentPhase)*self.level
-                self.currentPhase += self.phaseDelta
+            data[:] = data * 20.2
 
     def createEditor(self):
-        return None
+        return PyAudioProcessorEditor(self)
 
     def hasEditor(self):
-        return False
+        return True
 
     def getName(self):
         return "PyAudioProcessor"
@@ -49,7 +51,7 @@ class PyAudioProcessor(AudioProcessor):
 
     def getCurrentProgram(self):
         return 0
-
+    
     def setCurrentProgram(self, index):
         pass
 

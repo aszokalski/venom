@@ -2,11 +2,13 @@ add_executable(
         audio_processor_tests
         test_AudioProcessorEditor.cpp
 )
+
 target_link_libraries(audio_processor_tests
         PRIVATE
         GTest::gtest_main
         pybind11::embed
-        juce::juce_gui_basics
+        juce_shared
+        juceinit
         audio_processor
         VenomModule
 )

@@ -11,6 +11,7 @@
 #include "ImageButton/ImageButton.h"
 #include "ProgressBar/ProgressBar.h"
 #include <pybind11/pybind11.h>
+
 namespace py = pybind11;
 
 
@@ -26,4 +27,15 @@ void init_juce_gui_basics(py::module &super) {
     init_Viewport(m);
     init_ImageButton(m);
     init_ProgressBar(m);
+}
+
+void init_ui_basics(py::module &super) {
+    auto m = super.def_submodule("ui_basics");
+    init_Component(m);
+    init_Slider(m);
+}
+
+PYBIND11_MODULE(ui_basics, m) {
+    initializeJuce();
+    init_ui_basics(m);
 }

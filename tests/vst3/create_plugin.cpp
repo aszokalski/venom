@@ -82,7 +82,6 @@ void log_python_environment() {
 juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter() {
     initializeJuce();
     spdlog::debug("[LET THE BALL ROLLING]");
-
     try {
         std::unique_ptr<py::object> pyProcessor;
         {

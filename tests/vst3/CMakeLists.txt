@@ -34,7 +34,7 @@ juce_add_plugin(${PLUGIN_NAME}
 target_link_libraries(${PLUGIN_NAME}
         PRIVATE
         pybind11::embed
-        juce::juce_gui_basics
+        juce_shared
         VenomModule
         audio_processor
         spdlog::spdlog

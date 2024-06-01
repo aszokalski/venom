@@ -11,9 +11,7 @@ target_link_libraries(audio_processor
         ${Python_LIBRARIES}
         Python::Module
         pybind11::embed
-        juce::juce_core
-        juce::juce_audio_utils
-
+        juce_shared
 )
 
 set_target_properties(audio_processor

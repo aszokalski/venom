@@ -1,10 +1,10 @@
-pybind11_add_module(juce
-#        juce_audio_processors/AudioProcessor/AudioProcessor.cpp
-#        juce_audio_processors/AudioProcessor/AudioProcessor.h
-#        juce_audio_processors/AudioProcessorEditor/AudioProcessorEditor.cpp
-#        juce_audio_processors/AudioProcessorEditor/AudioProcessorEditor.h
-#        juce_audio_processors/juce_audio_processors.cpp
-#        juce_audio_processors/juce_audio_processors.h
+pybind11_add_module(juce_bindings
+        juce_audio_processors/AudioProcessor/AudioProcessor.cpp
+        juce_audio_processors/AudioProcessor/AudioProcessor.h
+        juce_audio_processors/AudioProcessorEditor/AudioProcessorEditor.cpp
+        juce_audio_processors/AudioProcessorEditor/AudioProcessorEditor.h
+        juce_audio_processors/juce_audio_processors.cpp
+        juce_audio_processors/juce_audio_processors.h
 
 
         juce_gui_basics/juce_gui_basics.cpp
@@ -38,7 +38,7 @@ pybind11_add_module(juce
         juce.cpp
 )
 
-target_compile_definitions(juce
+target_compile_definitions(juce_bindings
         PRIVATE VERSION_INFO=${EXAMPLE_VERSION_INFO}
         PUBLIC
         JUCE_WEB_BROWSER=0
@@ -46,11 +46,13 @@ target_compile_definitions(juce
         JUCE_VST3_CAN_REPLACE_VST2=0
 )
 
-target_link_libraries(juce
+target_link_libraries(juce_bindings
         PRIVATE
         juce_shared
         ${Python_LIBRARIES}
         pybind11::embed
+        juceinit
+        creation_manager
         PUBLIC
         juce::juce_recommended_config_flags
         juce::juce_recommended_lto_flags

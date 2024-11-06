@@ -17,7 +17,7 @@ set_property(TARGET ui_basics PROPERTY POSITION_INDEPENDENT_CODE TRUE)
 target_link_libraries(ui_basics
         PRIVATE
         ${Python_LIBRARIES}
-        Python::Module
+        Python3::Module
         pybind11::embed
         juce_shared
         creation_manager

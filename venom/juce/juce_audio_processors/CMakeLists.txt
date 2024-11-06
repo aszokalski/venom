@@ -11,7 +11,7 @@ target_link_libraries(audio_processor
         ${Python_LIBRARIES}
         juceinit
         creation_manager
-        Python::Module
+        Python3::Module
         pybind11::embed
         juce_shared
 

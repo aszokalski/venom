@@ -49,7 +49,7 @@ target_compile_definitions(juce_bindings
 target_link_libraries(juce_bindings
         PRIVATE
         juce_shared
-        ${Python_LIBRARIES}
+        ${Python3_LIBRARIES}
         pybind11::embed
         juceinit
         creation_manager

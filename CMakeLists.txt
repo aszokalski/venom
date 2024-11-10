@@ -2,11 +2,12 @@ cmake_minimum_required(VERSION 3.5...3.26)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 project(venom VERSION 0.1.0)
-find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
 
-message(STATUS "Python_EXECUTABLE: ${Python3_EXECUTABLE}")
-include_directories(${Python3_INCLUDE_DIRS})
-link_directories(${Python3_LIBRARY_DIRS})
+find_package(Python REQUIRED COMPONENTS Interpreter Development)
+
+message(STATUS "Python_EXECUTABLE: ${Python_EXECUTABLE}")
+include_directories(${Python_INCLUDE_DIRS})
+link_directories(${Python_LIBRARY_DIRS})
 set(MODULES_DIR "${CMAKE_BINARY_DIR}/bindings_modules" CACHE STRING "Directory for shared modules")
 
 

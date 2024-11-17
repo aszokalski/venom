@@ -6,7 +6,9 @@
 #include "spdlog/spdlog.h"
 
 PyAudioProcessor::PyAudioProcessor(std::unique_ptr<py::object> clsInstance)
-        : juce::AudioProcessor(),
+        : juce::AudioProcessor(BusesProperties()
+                                .withInput("Input", juce::AudioChannelSet::stereo(), true)
+                                .withOutput("Output", juce::AudioChannelSet::stereo(), true)),
           instance(std::move(clsInstance)) {
 }
 
@@ -27,7 +29,7 @@ void PyAudioProcessor::releaseResources() {
 // TODO port BusesLayout
 bool PyAudioProcessor::isBusesLayoutSupported(const BusesLayout &layouts) const {
     spdlog::debug("[BUS SUPPORT]");
-    return false;
+    return true;
 }
 
 void PyAudioProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages) {

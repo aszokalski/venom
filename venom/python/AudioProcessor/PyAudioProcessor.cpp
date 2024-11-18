@@ -5,12 +5,23 @@
 
 #include "spdlog/spdlog.h"
 
+// Platform-specific implementation
+#ifdef __APPLE__  // For macOS
 PyAudioProcessor::PyAudioProcessor(std::unique_ptr<py::object> clsInstance)
-        : juce::AudioProcessor(BusesProperties()
-                                .withInput("Input", juce::AudioChannelSet::stereo(), true)
-                                .withOutput("Output", juce::AudioChannelSet::stereo(), true)),
-          instance(std::move(clsInstance)) {
-}
+    : juce::AudioProcessor(), instance(std::move(clsInstance)) {}
+#elif defined(__linux__)  // For Linux
+PyAudioProcessor::PyAudioProcessor(std::unique_ptr<py::object> clsInstance)
+    : juce::AudioProcessor(BusesProperties()
+                               .withInput("Input", juce::AudioChannelSet::stereo(), true)
+                               .withOutput("Output", juce::AudioChannelSet::stereo(), true)),
+      instance(std::move(clsInstance)) {}
+#else
+PyAudioProcessor::PyAudioProcessor(std::unique_ptr<py::object> clsInstance)
+    : juce::AudioProcessor(BusesProperties()
+                               .withInput("Input", juce::AudioChannelSet::stereo(), true)
+                               .withOutput("Output", juce::AudioChannelSet::stereo(), true)),
+      instance(std::move(clsInstance)) {}
+#endif
 
 void PyAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock) {
     spdlog::debug("[Prepare To Play]");

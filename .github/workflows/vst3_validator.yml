@@ -2,9 +2,9 @@ name: Run VST3 Validators
 
 on:
   push:
-    branches: [ main, vst-validator ]
+    branches: [main, vst-validator]
   pull_request:
-    branches: [ main, vst-validator ]
+    branches: [main, vst-validator]
 
 jobs:
   validate-vst3:
@@ -36,7 +36,11 @@ jobs:
         if: steps.cache-apt-lists.outputs.cache-hit != 'true' || steps.cache-apt-packages.outputs.cache-hit != 'true'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libx11-dev libxrandr-dev libasound2-dev libgl1-mesa-dev libcurl4-openssl-dev libwebkit2gtk-4.0-dev libgtk-3-dev libxcb-cursor-dev libgtkmm-3.0-dev libxkbcommon-x11-dev libxcb-util-dev libxcb-xkb-dev libxcb-keysyms1-dev tree
+          sudo apt-get install -y libx11-dev libxrandr-dev libasound2-dev libgl1-mesa-dev \
+                                  libcurl4-openssl-dev libwebkit2gtk-4.0-dev libgtk-3-dev \
+                                  libxcb-cursor-dev libgtkmm-3.0-dev libxkbcommon-x11-dev \
+                                  libxcb-util-dev libxcb-xkb-dev libxcb-keysyms1-dev \
+                                  tree
 
       - name: Cache CMake and Ninja
         uses: actions/cache@v2
@@ -77,7 +81,6 @@ jobs:
         run: |
           set -x
           git submodule update --init --recursive 2>&1 | tee update_submodules.log
-
 
       - name: Determine Python Path
         id: determine-python-path

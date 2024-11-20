@@ -7,9 +7,9 @@
 #include <cstdlib>
 #include <iostream>
 
+#include "../../venom/juce/helpers/include/initializer/Initializer.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
-#include "../../venom/juce/helpers/include/initializer/Initializer.h"
 
 namespace py = pybind11;
 
@@ -52,20 +52,17 @@ struct InitialSetupHelper {
     std::unique_ptr<py::gil_scoped_release> release;
 
     std::unique_ptr<py::scoped_interpreter> createInterpreter() {
-        spdlog::set_level(spdlog::level::debug);
-        spdlog::flush_on(spdlog::level::debug);
+        spdlog::set_level(static_cast<spdlog::level::level_enum>(LOG_LEVEL));
+        spdlog::flush_on(static_cast<spdlog::level::level_enum>(LOG_LEVEL));
         activate_virtualenv(VENV_PATH);
         preload_shared_libraries();
         spdlog::debug("[START PY]");
         return std::make_unique<py::scoped_interpreter>();
     }
 
-    InitialSetupHelper() : interpreter(createInterpreter()), release(std::make_unique<py::gil_scoped_release>()) {
-    }
+    InitialSetupHelper() : interpreter(createInterpreter()), release(std::make_unique<py::gil_scoped_release>()) {}
 
-    ~InitialSetupHelper() {
-        spdlog::debug("[END]");
-    }
+    ~InitialSetupHelper() { spdlog::debug("[END]"); }
 };
 
 static InitialSetupHelper setup_helper;

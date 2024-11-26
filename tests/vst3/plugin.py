@@ -1,8 +1,15 @@
 import gc
-from audio_processor.juce_audio_processors import AudioProcessor, AudioProcessorEditor, Colour
+
+from audio_processor.juce_audio_processors import (
+    AudioProcessor,
+    AudioProcessorEditor,
+    Colour,
+)
 from ui_basics.ui_basics import Slider
 
 gc.disable()
+
+
 class PyAudioProcessorEditor(AudioProcessorEditor):
     def __init__(self, processor):
         super().__init__(processor)
@@ -11,7 +18,8 @@ class PyAudioProcessorEditor(AudioProcessorEditor):
         self.slider.setBounds(20, 20, 200, 20)
         self.addAndMakeVisible(self.slider, 1)
 
-class PyAudioProcessor(AudioProcessor):
+
+class TestPlugin(AudioProcessor):
     def __init__(self):
         super().__init__()
         self.sample_rate = 44100
@@ -51,7 +59,7 @@ class PyAudioProcessor(AudioProcessor):
 
     def getCurrentProgram(self):
         return 0
-    
+
     def setCurrentProgram(self, index):
         pass
 

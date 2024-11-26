@@ -85,7 +85,7 @@ juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter() {
             py::gil_scoped_acquire acquire;
             log_python_environment();
             py::eval_file(PLUGIN_FILE);
-            pyProcessor = std::make_unique<py::object>(py::eval("PyAudioProcessor()"));
+            pyProcessor = std::make_unique<py::object>(py::eval(fmt::format("{}()", PLUGIN_CLASS_NAME)));
         }
         return new PyAudioProcessor(std::move(pyProcessor));
     } catch (const py::error_already_set &e) {

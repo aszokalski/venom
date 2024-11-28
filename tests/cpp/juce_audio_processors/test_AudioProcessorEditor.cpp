@@ -46,26 +46,26 @@ TEST(AUDIO_PROCESSOR, AudioProcessorMultiThreadRun) {
     }};
     t.join();
 }
-//
-//TEST(AUDIO_PROCESSOR_EDITOR, AudioProcessorEditorPainting) {
-//    initializeJuce();
-//    auto interpreter = std::make_unique<py::scoped_interpreter>();
-//    auto path = py::module_::import("sys").attr("path");
-//    path.attr("append")(MODULES_DIR);
-//    path.attr("append")(STUBS_DIR);
-//    py::eval_file(PYTHON_STUBS_FILE);
-//    auto obj = py::eval("PyAudioProcessorEditor(PyAudioProcessor())");
-//
-//    juce::Image image(juce::Image::ARGB, 200, 400, true);
-//    juce::Graphics g(image);
-//    obj.attr("paint")(&g);
-//    //
-//    //    juce::File file("PUT_ABSOLUTE_PATH");
-//    //    std::unique_ptr<juce::FileOutputStream> fileStream(file.createOutputStream());
-//    //    juce::PNGImageFormat().writeImageToStream(image, *fileStream);
-//    shutdownJuce();
-//}
-//
+
+TEST(AUDIO_PROCESSOR_EDITOR, AudioProcessorEditorPainting) {
+   initializeJuce();
+   auto interpreter = std::make_unique<py::scoped_interpreter>();
+   auto path = py::module_::import("sys").attr("path");
+   path.attr("append")(MODULES_DIR);
+   path.attr("append")(STUBS_DIR);
+   py::eval_file(PYTHON_STUBS_FILE);
+   auto obj = py::eval("PyAudioProcessorEditor(PyAudioProcessor())");
+
+   juce::Image image(juce::Image::ARGB, 200, 400, true);
+   juce::Graphics g(image);
+   obj.attr("paint")(&g);
+   
+   juce::File file("PUT_ABSOLUTE_PATH");
+   std::unique_ptr<juce::FileOutputStream> fileStream(file.createOutputStream());
+   juce::PNGImageFormat().writeImageToStream(image, *fileStream);
+   shutdownJuce();
+}
+
 //TEST(AUDIO_PROCESSOR_EDITOR, AudioProcessorEditorCreation) {
 //    initializeJuce();
 //    auto interpreter = std::make_unique<py::scoped_interpreter>();

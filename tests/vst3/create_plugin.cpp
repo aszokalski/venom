@@ -52,8 +52,14 @@ struct InitialSetupHelper {
     std::unique_ptr<py::gil_scoped_release> release;
 
     std::unique_ptr<py::scoped_interpreter> createInterpreter() {
-        spdlog::set_level(static_cast<spdlog::level::level_enum>(LOG_LEVEL));
-        spdlog::flush_on(static_cast<spdlog::level::level_enum>(LOG_LEVEL));
+        #ifdef ENABLE_DEBUG_LOGGING
+            spdlog::set_level(spdlog::level::debug);
+            spdlog::flush_on(spdlog::level::debug);
+        #else
+            spdlog::set_level(spdlog::level::info);
+            spdlog::flush_on(spdlog::level::info);
+        #endif
+        
         activate_virtualenv(VENV_PATH);
         preload_shared_libraries();
         spdlog::debug("[START PY]");

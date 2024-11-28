@@ -1,1 +1,2 @@
 recursive-include venom/builder/boilerplate_plugin_project *
+recursive-include venom/builder/create_plugin *

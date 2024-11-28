@@ -1,6 +1,8 @@
-from typing import TextIO, List, Literal
-import yaml
 from dataclasses import dataclass
+from typing import List, Literal, TextIO
+
+import yaml
+
 
 @dataclass(frozen=True)
 class Config:
@@ -26,5 +28,5 @@ class Config:
             version=config["version"],
             author=config["author"],
             entrypoint=config["entrypoint"],
-            targets=config["targets"]
+            targets=config["targets"],
         )

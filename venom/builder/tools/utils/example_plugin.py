@@ -1,8 +1,10 @@
-from venom.juce.juce_audio_processors import AudioProcessor, AudioProcessorEditor
-from venom.juce.utils import AudioBuffer
 from venom.juce.juce_gui_basics import Slider
-class PyAudioProcessorEditor(AudioProcessorEditor):
-    def __init__(self, processor):
+from venom.wrapper.audio.processors.VAudioProcessor import VAudioProcessor
+from venom.wrapper.audio.processors.VAudioProcessorEditor import VAudioProcessorEditor
+
+
+class BaseAudioProcessorEditor(VAudioProcessorEditor):
+    def __init__(self, processor: VAudioProcessor):
         super().__init__(processor)
         self.slider = Slider("Gain")
         self.slider.setRange(-48, 48)
@@ -21,53 +23,6 @@ class PyAudioProcessorEditor(AudioProcessorEditor):
     def resized(self):
         self.slider.setBounds(40, 40, 20, 80)
 
-class PyAudioProcessor(AudioProcessor):
-    # Todo: implement a simple plugin
-    def prepareToPlay(self, sampleRate, samplesPerBlock):
-        pass
 
-    def releaseResources(self):
-        pass
-
-    def processBlock(self, buffer: AudioBuffer, midiMessages):
-        buffer.applyGain(14)
-
-    def createEditor(self):
-        return None
-
-    def hasEditor(self):
-        return PyAudioProcessorEditor(self)
-
-    def getName(self):
-        print("PyAudioProcessor.getName()")
-        return "PyAudioProcessor"
-
-    def acceptsMidi(self):
-        return True
-
-    def producesMidi(self):
-        return True
-
-    def getTailLengthSeconds(self):
-        return 0
-
-    def getNumPrograms(self):
-        return 0
-
-    def getCurrentProgram(self):
-        return 0
-
-    def setCurrentProgram(self, index):
-        pass
-
-    def getProgramName(self, index):
-        return ""
-
-    def changeProgramName(self, index, newName):
-        pass
-
-    def getStateInformation(self, memoryBlock):
-        pass
-
-    def setStateInformation(self, data, sizeInBytes):
-        pass
+class BaseAudioProcessor(VAudioProcessor):
+    pass

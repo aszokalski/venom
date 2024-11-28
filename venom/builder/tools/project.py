@@ -1,9 +1,11 @@
-import shutil
 import os
+import shutil
 import sys
-from venom.builder.tools.utils.Config import Config
-from venom.builder.tools import cmake
+
 from tqdm import tqdm
+
+from venom.builder.tools import cmake
+from venom.builder.tools.utils.Config import Config
 
 
 def modify_cmake_lists(source_path: str, config: Config):
@@ -19,14 +21,18 @@ def modify_cmake_lists(source_path: str, config: Config):
             if "set(FORMATS" in line:
                 lines[index] = "set(FORMATS " + " ".join(config.targets) + ")\n"
             if "set(SITE_PACKAGES_DIRS" in line:
-                site_packages_dirs = [f'"{path}"' for path in sys.path if "site-packages" in path]
-                lines[index] = "set(SITE_PACKAGES_DIRS " + " ".join(site_packages_dirs) + ")\n"
+                site_packages_dirs = [
+                    f'"{path}"' for path in sys.path if "site-packages" in path
+                ]
+                lines[index] = (
+                    "set(SITE_PACKAGES_DIRS " + " ".join(site_packages_dirs) + ")\n"
+                )
 
     with open(os.path.join(source_path, "build", "CMakeLists.txt"), "w") as file_handle:
         file_handle.writelines(lines)
 
 
-def build(source_path, p_bar: tqdm):
+def build(source_path, p_bar: tqdm, cmake_args: list = [], build_args: list = []):
     # Clean previous build
     p_bar.update(1)
     if os.path.exists(os.path.join(source_path, "build")):
@@ -35,8 +41,9 @@ def build(source_path, p_bar: tqdm):
 
     try:
         os.remove(os.path.join(source_path, "dist"))
-    except:
-        pass
+    except FileNotFoundError:
+        p_bar.write("No old dist directory found")
+        p_bar.set_description("Creating ./dist")
     finally:
         p_bar.set_description("Creating ./dist")
     p_bar.refresh()
@@ -46,22 +53,25 @@ def build(source_path, p_bar: tqdm):
         p_bar.refresh()
         config = Config.from_yaml(file_handle)
         # Create dist directory as a symbolic link to source_pats/build/build/VenomPlugin_artefacts
-        os.symlink(os.path.join(source_path, "build", "VenomPlugin_artefacts"),
-                   os.path.join(source_path, "dist"))
+        os.symlink(
+            os.path.join(source_path, "build", "VenomPlugin_artefacts"),
+            os.path.join(source_path, "dist"),
+        )
 
         # copy boilerplate project from the same directory as this file
-        shutil.copytree(os.path.join(os.path.dirname(__file__), "..", "boilerplate_plugin_project"),
-                        os.path.join(source_path, "build"),
-                        ignore=shutil.ignore_patterns('__pycache__', '*.pyc', 'build', 'tests', 'docs', 'examples'))
+        shutil.copytree(
+            os.path.join(os.path.dirname(__file__), "..", "create_plugin"),
+            os.path.join(source_path, "build"),
+            ignore=shutil.ignore_patterns(
+                "__pycache__", "*.pyc", "build", "tests", "docs", "examples"
+            ),
+        )
 
-        source_dir = os.path.join(os.path.dirname(__file__), "..", "boilerplate_plugin_project")
+        source_dir = os.path.join(os.path.dirname(__file__), "..", "create_plugin")
         destination_dir = os.path.join(source_path, "build")
         files_to_copy = [
-            'CMakeLists.txt',
-            'create_plugin.cpp',
-            'PyAudioProcessor.h',
-            'PyAudioProcessorEditor.h',
-            'PyAudioProcessor.py',
+            "CMakeLists.txt",
+            "create_plugin.cpp",
         ]
 
         if not os.path.exists(destination_dir):
@@ -78,18 +88,35 @@ def build(source_path, p_bar: tqdm):
             else:
                 print(f"Warning: {file_name} not found in {source_dir}")
 
-
-        # setup CMakeLists.txt with config
+        # Setup CMakeLists.txt with config
         modify_cmake_lists(source_path, config)
         p_bar.update(2)
         p_bar.set_description("Initializing CMake")
         p_bar.refresh()
-        cmake.init(os.path.join(source_path, "build"), p_bar)
+
+        # Initialize CMake with the given arguments
+        cmake_args = [
+            f"-DPLUGIN_NAME={config.name}",
+            f"-DPLUGIN_VERSION={config.version}",
+            f"-DPLUGIN_AUTHOR={config.author}",
+            f"-DENTRYPOINT={config.entrypoint}",
+            f"-DFORMATS={' '.join(config.targets)}",
+            f"-DPROJECT_SOURCE_DIR={source_path}",
+            *cmake_args,
+        ]
+        cmake.init(os.path.join(source_path, "build"), p_bar, cmake_args)
 
     p_bar.update(1)
     p_bar.set_description("Building CMake")
     p_bar.refresh()
-    cmake.build_target(os.path.join(source_path, "build"), p_bar)
+
+    # Build the target
+    build_args = [
+        "--target",
+        f"{config.name}",
+        *build_args,
+    ]
+    cmake.build_target(os.path.join(source_path, "build"), p_bar, build_args)
     p_bar.update(4)
     p_bar.set_description("Done")
     p_bar.refresh()

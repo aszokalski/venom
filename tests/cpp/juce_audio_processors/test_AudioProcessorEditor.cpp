@@ -66,27 +66,27 @@ TEST(AUDIO_PROCESSOR_EDITOR, AudioProcessorEditorPainting) {
    shutdownJuce();
 }
 
-//TEST(AUDIO_PROCESSOR_EDITOR, AudioProcessorEditorCreation) {
-//    initializeJuce();
-//    auto interpreter = std::make_unique<py::scoped_interpreter>();
-//    std::unique_ptr<py::object> pyProcessor;
-//    py::gil_scoped_release nogil;
-//    {
-//        py::gil_scoped_acquire acq;
-//        auto path = py::module_::import("sys").attr("path");
-//        path.attr("append")(MODULES_DIR);
-//        path.attr("append")(STUBS_DIR);
-//        py::eval_file(PYTHON_STUBS_FILE);
-//        pyProcessor = std::make_unique<py::object>(py::eval("PyAudioProcessor()"));
-//    }
-//
-//    PyAudioProcessor processor(std::move(pyProcessor));
-//    std::thread t{[&processor] {
-//        auto editor = std::unique_ptr<juce::AudioProcessorEditor>(processor.createEditor());
-//        juce::Image image(juce::Image::ARGB, 200, 400, true);
-//        juce::Graphics g(image);
-//        editor->paint(g);
-//    }};
-//    t.join();
-//    shutdownJuce();
-//}
+TEST(AUDIO_PROCESSOR_EDITOR, AudioProcessorEditorCreation) {
+   initializeJuce();
+   auto interpreter = std::make_unique<py::scoped_interpreter>();
+   std::unique_ptr<py::object> pyProcessor;
+   py::gil_scoped_release nogil;
+   {
+       py::gil_scoped_acquire acq;
+       auto path = py::module_::import("sys").attr("path");
+       path.attr("append")(MODULES_DIR);
+       path.attr("append")(STUBS_DIR);
+       py::eval_file(PYTHON_STUBS_FILE);
+       pyProcessor = std::make_unique<py::object>(py::eval("PyAudioProcessor()"));
+   }
+
+   PyAudioProcessor processor(std::move(pyProcessor));
+   auto editor = std::unique_ptr<juce::AudioProcessorEditor>(processor.createEditor());
+   std::thread t{[&editor] {
+       juce::Image image(juce::Image::ARGB, 200, 400, true);
+       juce::Graphics g(image);
+       editor->paint(g);
+   }};
+   t.join();
+   shutdownJuce();
+}

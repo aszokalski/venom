@@ -44,8 +44,6 @@ def init(source_path, plugin_name, author_name, targets):
 
 @click.command()
 @click.option("--source-path", default=".", help="Path to the source directory")
-# @click.option("--cmake-args", default=[], help="Arguments to pass to cmake")
-# @click.option("--build-args", default=[], help="Arguments to pass to target build")
 def build(source_path):
     verify_source_path(source_path)
     p_bar = tqdm(total=100, unit="%", dynamic_ncols=True)
@@ -53,7 +51,6 @@ def build(source_path):
     p_bar.set_description("Creating plugin package")
     p_bar.refresh()
 
-    # project.build(source_path, p_bar, cmake_args, build_args)
     project.build(source_path, p_bar)
 
 

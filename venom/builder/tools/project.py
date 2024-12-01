@@ -54,7 +54,7 @@ def build(source_path, p_bar: tqdm, cmake_args: list = [], build_args: list = []
         config = Config.from_yaml(file_handle)
         # Create dist directory as a symbolic link to source_pats/build/build/VenomPlugin_artefacts
         os.symlink(
-            os.path.join(source_path, "build", "VenomPlugin_artefacts"),
+            os.path.join(source_path, "build", f"{config.name}_artefacts"),
             os.path.join(source_path, "dist"),
         )
 
@@ -74,8 +74,7 @@ def build(source_path, p_bar: tqdm, cmake_args: list = [], build_args: list = []
             "create_plugin.cpp",
         ]
 
-        if not os.path.exists(destination_dir):
-            os.makedirs(destination_dir)
+        os.makedirs(destination_dir, exist_ok=True)
 
         # Copy each file from the source to the destination
         for file_name in files_to_copy:
@@ -104,6 +103,10 @@ def build(source_path, p_bar: tqdm, cmake_args: list = [], build_args: list = []
             f"-DPROJECT_SOURCE_DIR={source_path}",
             *cmake_args,
         ]
+
+        if "CMAKE_ARGS" in os.environ:
+            cmake_args += [item for item in os.environ["CMAKE_ARGS"].split(" ") if item]
+
         cmake.init(os.path.join(source_path, "build"), p_bar, cmake_args)
 
     p_bar.update(1)

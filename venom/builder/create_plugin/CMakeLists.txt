@@ -38,12 +38,25 @@ message(STATUS "Python Shared Library: ${PYTHON_SHARED_LIB}")
 set(REQUIREMENTS_FILE "${PROJECT_SOURCE_DIR}/requirements.txt")
 set(EXT_LIB_DIR "${PYTHON_SITE_PACKAGES}/venom_extern/extern" CACHE STRING "Directory for external libraries")
 set(MODULES_DIR "${PYTHON_SITE_PACKAGES}/venom_modules" CACHE STRING "Directory for shared modules")
+set(SOURCE_DIR "${PYTHON_SITE_PACKAGES}/venom_source")
+set(VENOM_SOURCE_JUCE_BUILD "${PYTHON_SITE_PACKAGES}/venom_source/juce_build")
+set(VENOM_SOURCE_PYTHON_BUILD "${PYTHON_SITE_PACKAGES}/venom_source/python_build")
 option(DEFAULT_LOG_LEVEL "Set default log level for spdlog (0: trace, 1: debug, 2: info, etc.)" 1)
 
 
 add_subdirectory(
   ${EXT_LIB_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}/extern
+)
+
+add_subdirectory(
+  ${SOURCE_DIR}/venom/juce
+  ${VENOM_SOURCE_JUCE_BUILD}
+)
+
+add_subdirectory(
+  ${SOURCE_DIR}/venom/python/AudioProcessor
+  ${VENOM_SOURCE_PYTHON_BUILD}
 )
 
 
@@ -88,15 +101,4 @@ target_compile_definitions(${PLUGIN_NAME}
         PYTHON_SIDE_PACKAGES="${PYTHON_SITE_PACKAGES}"
         LOG_LEVEL=${DEFAULT_LOG_LEVEL}
 )
-
-
-add_custom_target(copy_audio_processor ALL
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:audio_processor> ${PYTHON_SITE_PACKAGES}/
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:ui_basics> ${PYTHON_SITE_PACKAGES}/
-        DEPENDS audio_processor
-        DEPENDS ui_basics
-        COMMENT "Copying audio_processor library to virtual environment site-packages..."
-)
-
-add_dependencies(${PLUGIN_NAME} copy_audio_processor)
 

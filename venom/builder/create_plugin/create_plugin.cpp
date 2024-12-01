@@ -1,5 +1,3 @@
-#include "PyAudioProcessor.h"
-
 #define PYBIND11_DETAILED_ERROR_MESSAGES
 
 #include <pybind11/embed.h>
@@ -7,7 +5,8 @@
 #include <cstdlib>
 #include <iostream>
 
-#include "../../venom/juce/helpers/include/initializer/Initializer.h"
+#include "Initializer.h"
+#include "PyAudioProcessor.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 #include "spdlog/spdlog.h"
 
@@ -84,7 +83,7 @@ juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter() {
         {
             py::gil_scoped_acquire acquire;
             log_python_environment();
-            py::eval_file(PLUGIN_FILE);
+            py::eval_file(PLUGIN_FILE_PATH);
             pyProcessor = std::make_unique<py::object>(py::eval(fmt::format("{}()", PLUGIN_CLASS_NAME)));
         }
         return new PyAudioProcessor(std::move(pyProcessor));

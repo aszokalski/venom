@@ -22,8 +22,20 @@ message(STATUS "Modules Directory: ${MODULES_DIR}")
 set(EXT_LIB_DIR "${PYTHON_SITE_PACKAGES}/venom_extern" CACHE STRING "Directory for external libraries")
 file(MAKE_DIRECTORY ${EXT_LIB_DIR})
 
+set(SOURCE_DIR "${PYTHON_SITE_PACKAGES}/venom_source")
+file(MAKE_DIRECTORY ${SOURCE_DIR})
+
+set(VENOM_SOURCE_JUCE_BUILD "${PYTHON_SITE_PACKAGES}/venom_source/juce_build")
+file(MAKE_DIRECTORY ${VENOM_SOURCE_JUCE_BUILD})
+
+set(VENOM_SOURCE_PYTHON_BUILD "${PYTHON_SITE_PACKAGES}/venom_source/python_build")
+file(MAKE_DIRECTORY ${VENOM_SOURCE_PYTHON_BUILD})
+
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/extern DESTINATION ${EXT_LIB_DIR})
 message(STATUS "External Libraries Directory: ${EXT_LIB_DIR}")
+
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/venom DESTINATION ${SOURCE_DIR})
+message(STATUS "Source Directory: ${SOURCE_DIR}")
 
 # DEPENDENCIES
 add_subdirectory(
@@ -37,8 +49,11 @@ set_target_properties(spdlog PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 
 # Add subdirectories for other parts of the project
-add_subdirectory(venom/juce)
-add_subdirectory(venom/python/AudioProcessor)
+# add_subdirectory(venom/juce)
+# add_subdirectory(venom/python/AudioProcessor)
+
+add_subdirectory(${SOURCE_DIR}/venom/juce ${VENOM_SOURCE_JUCE_BUILD})
+add_subdirectory(${SOURCE_DIR}/venom/python/AudioProcessor ${VENOM_SOURCE_PYTHON_BUILD})
 
 add_subdirectory(tests/cpp)
 add_subdirectory(tests/vst3)

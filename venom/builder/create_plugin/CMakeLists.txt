@@ -38,9 +38,7 @@ message(STATUS "Python Shared Library: ${PYTHON_SHARED_LIB}")
 set(REQUIREMENTS_FILE "${PROJECT_SOURCE_DIR}/requirements.txt")
 set(EXT_LIB_DIR "${PYTHON_SITE_PACKAGES}/venom_extern/extern" CACHE STRING "Directory for external libraries")
 set(MODULES_DIR "${PYTHON_SITE_PACKAGES}/venom_modules" CACHE STRING "Directory for shared modules")
-set(SOURCE_DIR "${PYTHON_SITE_PACKAGES}/venom_source")
-set(VENOM_SOURCE_JUCE_BUILD "${PYTHON_SITE_PACKAGES}/venom_source/juce_build")
-set(VENOM_SOURCE_PYTHON_BUILD "${PYTHON_SITE_PACKAGES}/venom_source/python_build")
+set(SOURCE_DIR "${PYTHON_SITE_PACKAGES}/venom_source/venom")
 option(DEFAULT_LOG_LEVEL "Set default log level for spdlog (0: trace, 1: debug, 2: info, etc.)" 1)
 
 
@@ -50,13 +48,13 @@ add_subdirectory(
 )
 
 add_subdirectory(
-  ${SOURCE_DIR}/venom/juce
-  ${VENOM_SOURCE_JUCE_BUILD}
+  ${SOURCE_DIR}/juce
+  ${CMAKE_CURRENT_BINARY_DIR}/venom/juce
 )
 
 add_subdirectory(
-  ${SOURCE_DIR}/venom/python/AudioProcessor
-  ${VENOM_SOURCE_PYTHON_BUILD}
+  ${SOURCE_DIR}/python/AudioProcessor
+  ${CMAKE_CURRENT_BINARY_DIR}/venom/python/AudioProcessor
 )
 
 

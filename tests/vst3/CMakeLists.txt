@@ -7,7 +7,6 @@ project(${PLUGIN_NAME} VERSION ${PLUGIN_VERSION})
 
 set(VENV_PATH "${CMAKE_BINARY_DIR}/tests/vst3/venv")
 set(REQUIREMENTS_FILE "${PROJECT_SOURCE_DIR}/requirements.txt")
-option(DEFAULT_LOG_LEVEL "Set default log level for spdlog (0: trace, 1: debug, 2: info, etc.)" 1)
 
 execute_process(
         COMMAND ${Python_EXECUTABLE} -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))"
@@ -60,11 +59,11 @@ target_compile_definitions(${PLUGIN_NAME}
         JUCE_VST3_CAN_REPLACE_VST2=0
         VENV_PATH="${VENV_PATH}"
         PLUGIN_FILE="${CMAKE_CURRENT_SOURCE_DIR}/plugin.py"
-        PLUGIN_CLASS_NAME="${PLUGIN_NAME}"
         PYTHON_SHARED_LIB="${PYTHON_SHARED_LIB}"
         PYTHON_SIDE_PACKAGES="${VENV_PATH}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages/"
-        LOG_LEVEL=${DEFAULT_LOG_LEVEL}
 )
+
+add_definitions(-DSPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_DEBUG)
 
 
 add_custom_target(copy_audio_processor ALL

@@ -59,13 +59,14 @@ def build(source_path, p_bar: tqdm, cmake_args: list = [], build_args: list = []
         )
 
         # copy boilerplate project from the same directory as this file
-        shutil.copytree(
-            os.path.join(os.path.dirname(__file__), "..", "create_plugin"),
-            os.path.join(source_path, "build"),
-            ignore=shutil.ignore_patterns(
-                "__pycache__", "*.pyc", "build", "tests", "docs", "examples"
-            ),
-        )
+        if not os.path.exists(os.path.join(source_path, "build")):
+            shutil.copytree(
+                os.path.join(os.path.dirname(__file__), "..", "create_plugin"),
+                os.path.join(source_path, "build"),
+                ignore=shutil.ignore_patterns(
+                    "__pycache__", "*.pyc", "build", "tests", "docs", "examples"
+                ),
+            )
 
         source_dir = os.path.join(os.path.dirname(__file__), "..", "create_plugin")
         destination_dir = os.path.join(source_path, "build")
@@ -99,8 +100,9 @@ def build(source_path, p_bar: tqdm, cmake_args: list = [], build_args: list = []
             f"-DPLUGIN_VERSION={config.version}",
             f"-DPLUGIN_AUTHOR={config.author}",
             f"-DENTRYPOINT={config.entrypoint}",
-            f"-DFORMATS={' '.join(config.targets)}",
+            f"-DFORMATS=VST3",
             f"-DPROJECT_SOURCE_DIR={source_path}",
+            "-DDEFAULT_LOG_LEVEL=0",
             *cmake_args,
         ]
 

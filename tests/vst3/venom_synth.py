@@ -1,65 +1,9 @@
 import numpy as np
-from audio_basics.juce_audio_basics import (
-    MidiMessage,
-    AudioSource,
-    Synthesiser,
-    SynthesiserVoice,
-    SynthesiserSound,
-)
+from audio_basics.juce_audio_basics import MidiMessage
 
 
-class SineWaveVoice(SynthesiserVoice):
-    def __init__(self):
-        super().__init__()
-        self.frequency = 440.0
-        self.amplitude = 0.5
-        self.phase = 0.0
-
-    def startNote(self, midiNoteNumber, velocity, sound, pitch):
-        pass
-
-    def stopNote(self, velocity, allowTailOff):
-        pass
-
-    def pitchWheelMoved(self, newValue):
-        pass
-
-    def controllerMoved(self, controllerNumber, newValue):
-        pass
-
-    def renderNextBlock(self, buffer, start_sample, num_samples):
-        t = (np.arange(num_samples) + self.phase) / self.get_sample_rate()
-        self.phase = (self.phase + num_samples) % self.get_sample_rate()
-        waveform = np.sin(2 * np.pi * self.frequency * t) * self.amplitude
-
-        for channel in range(buffer.getNum_channels()):
-            data = buffer.get_write_pointer(channel)
-            data[start_sample : start_sample + num_samples] += waveform
-
-
-class SineWaveSound(SynthesiserSound):
-    def __init__(self):
-        super().__init__()
-
-    def appliesToNote(self, midiNoteNumber):
-        return True
-
-    def appliesToChannel(self, midiChannel):
-        return True
-
-    def get_name(self):
-        return "SineWaveSound"
-
-
-class PySynth(AudioSource):
-    def __init__(
-        self,
-        sample_rate: int = 44100,
-        waveform: str = "sine",
-        voices: int = 4,
-        sound: SynthesiserSound = SineWaveSound(),
-    ):
-        super().__init__()
+class synth:
+    def __init__(self, sample_rate: int = 44100, waveform: str = "sine"):
         self.sample_rate = sample_rate
         self.waveform = waveform
         self.frequency = 440.0
@@ -67,11 +11,6 @@ class PySynth(AudioSource):
         self.phase = 0.0
         self.note_on = False
         self.current_note = None
-        self.synth = Synthesiser()
-
-        for _ in range(voices):
-            self.synth.addVoice(SineWaveVoice())
-        self.synth.addSound(sound)
 
     def note_to_freq(self, note: int) -> float:
         return 440.0 * (2.0 ** ((note - 69) / 12.0))
@@ -126,4 +65,3 @@ class PySynth(AudioSource):
         for message in midiMessages:
             self.synth.handle_midi_message(message)
         self.synth.process(buffer)
-

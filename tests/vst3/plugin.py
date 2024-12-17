@@ -24,8 +24,8 @@ class PyAudioProcessor(AudioProcessor):
         self.clipper = venom_effects.soft_clipper(30)
 
         self.synth = venom_synth.synth(sample_rate=44100, waveform='sine')
-        self.synth.set_frequency(440.0)
-        self.synth.set_amplitude(0.5)
+        self.synth.frequency = 440.0
+        self.synth.amplitude = 0.5
 
     def prepareToPlay(self, sampleRate, samplesPerBlock):
         self.sample_rate = sampleRate
@@ -34,7 +34,7 @@ class PyAudioProcessor(AudioProcessor):
         pass
 
     def processBlock(self, buffer, midiMessages):
-        self.synth.process(buffer)
+        self.synth.processBlock(buffer, midiMessages)
         # buffer = self.delay.process(buffer)
         # buffer = self.clipper.process(buffer)
 

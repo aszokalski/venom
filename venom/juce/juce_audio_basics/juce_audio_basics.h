@@ -1,0 +1,12 @@
+#ifndef JUCE_AUDIO_BASICS_H
+#define JUCE_AUDIO_BASICS_H
+#define PYBIND11_DETAILED_ERROR_MESSAGES
+
+#include <pybind11/pybind11.h>
+#include "Initializer.h"
+
+namespace py = pybind11;
+
+void init_juce_audio_basics(py::module &super);
+
+#endif //JUCE_AUDIO_BASICS_H

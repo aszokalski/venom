@@ -18,6 +18,7 @@ namespace py = pybind11;
 PYBIND11_MODULE(juce, m)
 {
     initializeJuce();
+    init_juce_audio_basics(m);
     init_juce_audio_processors(m);
     init_juce_gui_basics(m);
     init_utils(m);

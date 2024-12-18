@@ -48,6 +48,9 @@ class PyAudioProcessor(AudioProcessor):
         return "PyAudioProcessor"
 
     def acceptsMidi(self):
+        return True
+
+    def isMidiEffect(self):
         return False
 
     def producesMidi(self):

@@ -1,5 +1,6 @@
 import numpy as np
 from audio_basics.juce_audio_basics import MidiMessage
+from audio_processor.juce_audio_processors import MidiBuffer
 
 
 class synth:
@@ -58,6 +59,18 @@ class synth:
     
     # tak sobie wobrazam ze powinno tak dzialac, aczkolwiek tak sie nie dzieje
     def processBlock(self, buffer, midiMessages):
-        for message in midiMessages:
-            self.synth.handle_midi_message(message)
-        self.synth.process(buffer)
+        print(midiMessages.getNumEvents())
+        iterator = midiMessages.begin()
+        end = midiMessages.end()
+        print("iterator:", iterator)
+        print("end:", end)
+
+        while iterator != end:
+            event = next(iterator)
+            message = event.getMessage()
+            sample_pos = event.samplePosition
+            print(f"MIDI event at sample {sample_pos}")
+
+        # for message in midiMessages:
+        #     self.synth.handle_midi_message(message)
+        self.process(buffer)

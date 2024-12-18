@@ -4,7 +4,7 @@ from audio_processor.juce_audio_processors import MidiBuffer
 
 
 class synth:
-    def __init__(self, sample_rate: int = 44100, waveform: str = 'sine'):
+    def __init__(self, sample_rate: int = 44100, waveform: str = "sine"):
         self.sample_rate = sample_rate
         self.waveform = waveform
         self.frequency = 440.0
@@ -21,7 +21,7 @@ class synth:
             self.note_on = True
             self.current_note = message.getNoteNumber()
             self.frequency = self.note_to_freq(self.current_note)
-            
+
         elif message.isNoteOff() and message.getNoteNumber() == self.current_note:
             self.note_on = False
 
@@ -29,20 +29,24 @@ class synth:
         t = (np.arange(num_samples) + self.phase) / self.sample_rate
         self.phase = (self.phase + num_samples) % self.sample_rate
 
-        if self.waveform == 'sine':
+        if self.waveform == "sine":
             return np.sin(2 * np.pi * self.frequency * t)
-        elif self.waveform == 'square':
+        elif self.waveform == "square":
             return np.sign(np.sin(2 * np.pi * self.frequency * t))
-        elif self.waveform == 'sawtooth':
+        elif self.waveform == "sawtooth":
             return 2 * (t * self.frequency - np.floor(0.5 + t * self.frequency))
-        elif self.waveform == 'triangle':
-            return 2 * np.abs(2 * (t * self.frequency - np.floor(t * self.frequency + 0.5))) - 1
+        elif self.waveform == "triangle":
+            return (
+                2
+                * np.abs(2 * (t * self.frequency - np.floor(t * self.frequency + 0.5)))
+                - 1
+            )
         else:
             raise ValueError(f"Unsupported waveform: {self.waveform}")
 
     def process(self, buffer):
         num_samples = buffer.getNumSamples()
-        
+
         if not self.note_on:
             for channel in range(buffer.getNumChannels()):
                 data = buffer.getWritePointer(channel)
@@ -56,7 +60,7 @@ class synth:
             data[:] = waveform
 
         return buffer
-    
+
     # tak sobie wobrazam ze powinno tak dzialac, aczkolwiek tak sie nie dzieje
     def processBlock(self, buffer, midiMessages):
         print(midiMessages.getNumEvents())

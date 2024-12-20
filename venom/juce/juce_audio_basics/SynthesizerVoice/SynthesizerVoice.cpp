@@ -53,6 +53,7 @@ void init_SynthesizerVoice(py::module &m) {
         .def("getNumChannels", &juce::AudioSampleBuffer::getNumChannels)
         .def("getNumSamples", &juce::AudioSampleBuffer::getNumSamples)
         .def("getSampleData", &juce::AudioSampleBuffer::getSampleData)
+        .def("getWritePointer", &juce::AudioSampleBuffer::getWritePointer)
         .def("clear", &juce::AudioSampleBuffer::clear)
         .def("addFrom", &juce::AudioSampleBuffer::addFrom)
         .def("addFromWithRamp", &juce::AudioSampleBuffer::addFromWithRamp)

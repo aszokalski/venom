@@ -92,24 +92,30 @@ gc.disable()
 class SineWaveVoice(SynthesiserVoice):
     def __init__(self):
         super().__init__()
+        self.sample_rate = 44100
         self.frequency = 440.0
         self.amplitude = 0.5
         self.phase = 0.0
 
+    def generate_waveform(self, num_samples: int):
+        t = (np.arange(num_samples) + self.phase) / self.sample_rate
+        self.phase = (self.phase + num_samples) % self.sample_rate
+        return np.sin(2 * np.pi * self.frequency * t)
+
     def startNote(self, midiNoteNumber, velocity, sound, pitch):
-        pass
+        self.frequency = MidiMessage.getMidiNoteInHertz(midiNoteNumber)
+        print(f"Note: {midiNoteNumber}, Frequency: {self.frequency}")
 
     def stopNote(self, velocity, allowTailOff):
         pass
 
-    def pitchWheelMoved(self, newValue):
-        pass
-
-    def controllerMoved(self, controllerNumber, newValue):
-        pass
-
     def renderNextBlock(self, buffer, start_sample, num_samples):
-        pass
+        waveform = self.generate_waveform(num_samples) * self.amplitude
+        print(f"Generated waveform: {waveform}")
+
+        for channel in range(buffer.getNumChannels()):
+            data = buffer.getWritePointer(channel)
+            data[:] = waveform
 
 
 class SineWaveSound(SynthesiserSound):
@@ -135,23 +141,18 @@ class PyAudioProcessorEditor(AudioProcessorEditor):
 class PySynth(AudioProcessor):
     def __init__(
         self,
-        sample_rate: int = 44100,
-        waveform: str = "sine",
         voices: int = 4,
         sound: SynthesiserSound = SineWaveSound(),
+        voice: SynthesiserVoice = SineWaveVoice(),
     ):
         super().__init__()
-        self.sample_rate = sample_rate
-        self.waveform = waveform
-        self.frequency = 440.0
-        self.amplitude = 0.5
-        self.phase = 0.0
-        self.note_on = False
-        self.current_note = None
         self.synth = Synthesiser()
 
+        self.synth.clearVoices()
+        self.synth.clearSounds()
+
         for _ in range(voices):
-            self.synth.addVoice(SineWaveVoice())
+            self.synth.addVoice(voice)
         self.synth.addSound(sound)
 
     def processBlock(self, buffer, midiMessages):

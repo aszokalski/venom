@@ -1,7 +1,6 @@
 #include "juce_audio_basics.h"
 
 #include "../helpers/include/initializer/Initializer.h"
-#include "AudioSource/AudioSource.h"
 #include "MidiMessage/MidiMessage.h"
 
 void init_juce_audio_basics(py::module &super) {

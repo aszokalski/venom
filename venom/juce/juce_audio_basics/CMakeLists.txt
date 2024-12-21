@@ -3,6 +3,7 @@ pybind11_add_module(audio_basics
         MidiMessage/MidiMessage.cpp
         Synthesiser/Synthesiser.cpp
         SynthesiserVoice/SynthesiserVoice.cpp
+        SynthesiserSound/SynthesiserSound.cpp
         juce_audio_basics.cpp)
 
 set_property(TARGET audio_basics PROPERTY POSITION_INDEPENDENT_CODE TRUE)

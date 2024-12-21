@@ -3,6 +3,7 @@
 #include "../helpers/include/initializer/Initializer.h"
 #include "MidiMessage/MidiMessage.h"
 #include "Synthesiser/Synthesiser.h"
+#include "SynthesiserSound/SynthesiserSound.h"
 #include "SynthesiserVoice/SynthesiserVoice.h"
 
 void init_juce_audio_basics(py::module &super) {
@@ -10,6 +11,7 @@ void init_juce_audio_basics(py::module &super) {
     init_MidiMessage(m);
     init_Synthesiser(m);
     init_SynthesiserVoice(m);
+    init_SynthesiserSound(m);
 }
 
 PYBIND11_MODULE(audio_basics, m) {

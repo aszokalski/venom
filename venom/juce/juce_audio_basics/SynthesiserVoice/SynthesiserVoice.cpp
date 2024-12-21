@@ -37,26 +37,11 @@ void init_SynthesiserVoice(py::module &m) {
         .def("canPlaySound", &juce::SynthesiserVoice::canPlaySound)
         .def("isVoiceActive", &juce::SynthesiserVoice::isVoiceActive)
         .def("startNote", &juce::SynthesiserVoice::startNote)
-        .def("stopNote", &jujson::SynthesiserVoice::stopNote)
+        .def("stopNote", &juce::SynthesiserVoice::stopNote)
         .def("pitchWheelMoved", &juce::SynthesiserVoice::pitchWheelMoved)
         .def("controllerMoved", &juce::SynthesiserVoice::controllerMoved)
-        .def("renderNextBlock", &juce::SynthesiserVoice::renderNextBlock);
-
-    py::class_<juce::SynthesiserSound>(m, "SynthesiserSound")
-        .def(py::init<>())
-        .def("appliesToNote", &juce::SynthesiserSound::appliesToNote)
-        .def("appliesToChannel", &juce::SynthesiserSound::appliesToChannel);
-
-    py::class_<juce::AudioSampleBuffer>(m, "AudioSampleBuffer")
-        .def(py::init<>())
-        .def("setSize", &juce::AudioSampleBuffer::setSize)
-        .def("getNumChannels", &juce::AudioSampleBuffer::getNumChannels)
-        .def("getNumSamples", &juce::AudioSampleBuffer::getNumSamples)
-        .def("getSampleData", &juce::AudioSampleBuffer::getSampleData)
-        .def("getWritePointer", &juce::AudioSampleBuffer::getWritePointer)
-        .def("clear", &juce::AudioSampleBuffer::clear)
-        .def("addFrom", &juce::AudioSampleBuffer::addFrom)
-        .def("addFromWithRamp", &juce::AudioSampleBuffer::addFromWithRamp)
-        .def("copyFrom", &juce::AudioSampleBuffer::copyFrom)
-        .def("copyFromWithRamp", &juce::AudioSampleBuffer::copyFromWithRamp);
+        .def("renderNextBlock",
+             [](juce::SynthesiserVoice &self, juce::AudioBuffer<float> &outputBuffer, int startSample, int numSamples) {
+                 self.renderNextBlock(outputBuffer, startSample, numSamples);
+             });
 }

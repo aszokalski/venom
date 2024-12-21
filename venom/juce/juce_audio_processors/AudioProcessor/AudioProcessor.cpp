@@ -72,7 +72,7 @@ class PyAudioProcessor : public juce::AudioProcessor {
         PYBIND11_OVERRIDE_PURE(void, juce::AudioProcessor, setStateInformation, data, sizeInBytes);
     }
 
-    juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout() override {
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout() {
         PYBIND11_OVERRIDE_PURE(juce::AudioProcessorValueTreeState::ParameterLayout, juce::AudioProcessor,
                                createParameterLayout, );
     }
@@ -108,9 +108,9 @@ void init_AudioProcessor(py::module &m) {
                                      const juce::String &newName) { self.changeProgramName(index, newName); })
         .def("getStateInformation",
              [](juce::AudioProcessor &self, juce::MemoryBlock &destData) { self.getStateInformation(destData); })
-        .def("setStateInformation", [](juce::AudioProcessor &self, const void *data,
-                                       int sizeInBytes) { self.setStateInformation(data, sizeInBytes); })
-        .def("createParameterLayout", [](juce::AudioProcessor &self) { return self.createParameterLayout(); });
+        .def("setStateInformation", [](juce::AudioProcessor &self, const void *data, int sizeInBytes) {
+            self.setStateInformation(data, sizeInBytes);
+        });
 
     using namespace py::literals;
     py::class_<juce::AudioBuffer<float>>(m, "AudioBuffer", py::buffer_protocol())

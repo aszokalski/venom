@@ -1,6 +1,6 @@
-#include "SynthesizerVoice.h"
+#include "SynthesiserVoice.h"
 
-class PySynthesizerVoice : public juce::SynthesiserVoice {
+class PySynthesiserVoice : public juce::SynthesiserVoice {
    public:
     using juce::SynthesiserVoice::SynthesiserVoice;
 
@@ -31,8 +31,8 @@ class PySynthesizerVoice : public juce::SynthesiserVoice {
     }
 };
 
-void init_SynthesizerVoice(py::module &m) {
-    py::class_<juce::SynthesiserVoice, PySynthesizerVoice>(m, "SynthesizerVoice")
+void init_SynthesiserVoice(py::module &m) {
+    py::class_<juce::SynthesiserVoice, PySynthesiserVoice>(m, "SynthesiserVoice")
         .def(py::init<>())
         .def("canPlaySound", &juce::SynthesiserVoice::canPlaySound)
         .def("isVoiceActive", &juce::SynthesiserVoice::isVoiceActive)
@@ -42,10 +42,10 @@ void init_SynthesizerVoice(py::module &m) {
         .def("controllerMoved", &juce::SynthesiserVoice::controllerMoved)
         .def("renderNextBlock", &juce::SynthesiserVoice::renderNextBlock);
 
-    py::class_<juce::SynthesiserSound>(m, "SynthesizerSound")
+    py::class_<juce::SynthesiserSound>(m, "SynthesiserSound")
         .def(py::init<>())
-        .def("appliesToNote", &juce::SynthesizerSound::appliesToNote)
-        .def("appliesToChannel", &juce::SynthesizerSound::appliesToChannel);
+        .def("appliesToNote", &juce::SynthesiserSound::appliesToNote)
+        .def("appliesToChannel", &juce::SynthesiserSound::appliesToChannel);
 
     py::class_<juce::AudioSampleBuffer>(m, "AudioSampleBuffer")
         .def(py::init<>())

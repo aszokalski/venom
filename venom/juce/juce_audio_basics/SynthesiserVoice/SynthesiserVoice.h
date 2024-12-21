@@ -1,5 +1,5 @@
-#ifndef SYNTHESIZER_H
-#define SYNTHESIZER_H
+#ifndef SYNTHESISERVOICE_H
+#define SYNTHESISERVOICE_H
 #define PYBIND11_DETAILED_ERROR_MESSAGES
 
 #include <juce_audio_basics/juce_audio_basics.h>
@@ -10,6 +10,6 @@
 
 namespace py = pybind11;
 
-void init_Synthesizer(py::module &m);
+void init_SynthesiserVoice(py::module &m);
 
-#endif  // SYNTHESIZER_H
+#endif  // SYNTHESISERVOICE_H

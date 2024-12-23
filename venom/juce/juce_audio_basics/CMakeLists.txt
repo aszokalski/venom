@@ -1,6 +1,7 @@
 pybind11_add_module(audio_basics
         SHARED
         MidiMessage/MidiMessage.cpp
+        MidiBuffer/MidiBuffer.cpp
         Synthesiser/Synthesiser.cpp
         SynthesiserVoice/SynthesiserVoice.cpp
         SynthesiserSound/SynthesiserSound.cpp

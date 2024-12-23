@@ -2,7 +2,7 @@ import gc
 
 import numpy as np
 from audio_basics.juce_audio_basics import MidiMessage
-from audio_processor.juce_audio_processors import MidiBuffer
+from audio_basics.juce_audio_basics import MidiBuffer
 from audio_basics.juce_audio_basics import (Synthesiser,
                                             SynthesiserSound, SynthesiserVoice)
 from audio_processor.juce_audio_processors import (AudioProcessor,

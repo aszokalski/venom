@@ -33,6 +33,8 @@ pybind11_add_module(juce_bindings
 
         juce_audio_basics/MidiMessage/MidiMessage.cpp
         juce_audio_basics/MidiMessage/MidiMessage.h
+        juce_audio_basics/MidiBuffer/MidiBuffer.cpp
+        juce_audio_basics/MidiBuffer/MidiBuffer.h
         juce_audio_basics/Synthesiser/Synthesiser.cpp
         juce_audio_basics/Synthesiser/Synthesiser.h
         juce_audio_basics/SynthesiserVoice/SynthesiserVoice.cpp

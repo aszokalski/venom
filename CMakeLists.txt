@@ -51,3 +51,24 @@ add_subdirectory(${SOURCE_DIR}/venom/python/AudioProcessor ${MODULES_DIR}/python
 
 add_subdirectory(tests/cpp)
 add_subdirectory(tests/vst3)
+
+# Logging configuration
+option(ENABLE_DEBUG_LOGGING "Enable debug logging" OFF)
+
+if(ENABLE_DEBUG_LOGGING)
+    add_compile_definitions(ENABLE_DEBUG_LOGGING=1)
+endif()
+
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+get_directory_property(hasParent PARENT_DIRECTORY)
+if(hasParent)
+    set(CMAKE_POSITION_INDEPENDENT_CODE ON PARENT_SCOPE)
+endif()
+
+if(Python_FOUND)
+    add_compile_definitions(
+        PYTHON_SHARED_LIB="${Python_LIBRARIES}"
+        PYTHON_SIDE_PACKAGES="${Python_SITELIB}"
+    )
+endif()

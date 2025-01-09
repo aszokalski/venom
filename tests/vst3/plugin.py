@@ -1,3 +1,5 @@
+import sys
+import os
 import gc
 
 from audio_processor.juce_audio_processors import (
@@ -6,6 +8,9 @@ from audio_processor.juce_audio_processors import (
     Colour,
 )
 from ui_basics.ui_basics import Slider
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+import venom_effects
+import venom_synth
 
 gc.disable()
 
@@ -23,6 +28,12 @@ class TestPlugin(AudioProcessor):
     def __init__(self):
         super().__init__()
         self.sample_rate = 44100
+        self.delay = venom_effects.simple_delay(self.sample_rate, 2, 0.25, 0.5, 0.5)
+        self.clipper = venom_effects.soft_clipper(30)
+
+        self.synth = venom_synth.synth(sample_rate=44100, waveform='sine')
+        self.synth.frequency = 440.0
+        self.synth.amplitude = 0.5
 
     def prepareToPlay(self, sampleRate, samplesPerBlock):
         self.sample_rate = sampleRate
@@ -31,10 +42,9 @@ class TestPlugin(AudioProcessor):
         pass
 
     def processBlock(self, buffer, midiMessages):
-        numChannels = buffer.getNumChannels()
-        for channel in range(numChannels):
-            data = buffer.getWritePointer(channel)
-            data[:] = data * 20.2
+        self.synth.processBlock(buffer, midiMessages)
+        # buffer = self.delay.process(buffer)
+        # buffer = self.clipper.process(buffer)
 
     def createEditor(self):
         return PyAudioProcessorEditor(self)
@@ -46,6 +56,9 @@ class TestPlugin(AudioProcessor):
         return "PyAudioProcessor"
 
     def acceptsMidi(self):
+        return True
+
+    def isMidiEffect(self):
         return False
 
     def producesMidi(self):

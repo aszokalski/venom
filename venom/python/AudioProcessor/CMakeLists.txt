@@ -1,7 +1,12 @@
 add_library(VenomModule
         STATIC
         PyAudioProcessor.cpp
-        PyAudioProcessorEditor.cpp)
+        PyAudioProcessorEditor.cpp
+        PySynthesiser.cpp
+        PySynthesiserVoice.cpp
+        PySynthesiserSound.cpp
+)
+
 set_property(TARGET VenomModule PROPERTY POSITION_INDEPENDENT_CODE TRUE)
 
 target_link_libraries(VenomModule

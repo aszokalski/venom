@@ -68,8 +68,8 @@ class PyAudioProcessor(AudioProcessor):
         self.delay = venom_effects.simple_delay(self.sample_rate, 2, 0.25, 0.5, 0.5)
         self.clipper = venom_effects.soft_clipper(30)
 
-        sound: SynthesiserSound = SineWaveSound(),
-        voice: SynthesiserVoice = SineWaveVoice(),
+        sound: SynthesiserSound = SineWaveSound()
+        voice: SynthesiserVoice = SineWaveVoice()
 
         self.synth = Synthesiser()
 

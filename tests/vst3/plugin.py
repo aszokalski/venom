@@ -53,6 +53,7 @@ class SineWaveSound(SynthesiserSound):
 
     def appliesToChannel(self, midiChannel):
         return True
+
 class PyAudioProcessorEditor(AudioProcessorEditor):
     def __init__(self, processor):
         super().__init__(processor)

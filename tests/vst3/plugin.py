@@ -12,7 +12,6 @@ from audio_basics.juce_audio_basics import MidiMessage
 from ui_basics.ui_basics import Slider
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import venom_effects
-import venom_synth
 
 gc.disable()
 class SineWaveVoice(SynthesiserVoice):

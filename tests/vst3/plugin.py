@@ -6,7 +6,7 @@ from venom.wrapper.audio.processors.VAudioProcessorEditor import VAudioProcessor
 from pytest.mocks.mock_audio_buffer import MockAudioBuffer
 from ui_basics.ui_basics import Slider
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from venom_effects import simple_delay, soft_clipper
+from venom_effects import simple_delay#, soft_clipper
 
 gc.disable()
 class PyAudioProcessorEditor(VAudioProcessorEditor):

@@ -28,50 +28,8 @@ class PyAudioProcessor(VAudioProcessor):
     def prepareToPlay(self, sampleRate, samplesPerBlock):
         self.sample_rate = sampleRate
 
-    def releaseResources(self):
-        pass
-
     def processBlock(self, buffer, midiMessages):
         buffer = self.delay.process(buffer)
 
     def createEditor(self):
         return PyAudioProcessorEditor(self)
-
-    def hasEditor(self):
-        return True
-
-    def getName(self):
-        return "PyAudioProcessor"
-
-    def acceptsMidi(self):
-        return True
-
-    def isMidiEffect(self):
-        return False
-
-    def producesMidi(self):
-        return False
-
-    def getTailLengthSeconds(self):
-        return 0
-
-    def getNumPrograms(self):
-        return 0
-
-    def getCurrentProgram(self):
-        return 0
-    
-    def setCurrentProgram(self, index):
-        pass
-
-    def getProgramName(self, index):
-        return ""
-
-    def changeProgramName(self, index, newName):
-        pass
-
-    def getStateInformation(self, memoryBlock):
-        pass
-
-    def setStateInformation(self, data, sizeInBytes):
-        pass

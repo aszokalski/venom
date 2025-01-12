@@ -4,7 +4,14 @@ import numpy
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from pytest.mocks.mock_audio_buffer import MockAudioBuffer
 
-class simple_delay:
+class Module:
+    def __init__(self):
+        pass
+
+    def process(self, buffer):
+        raise NotImplementedError
+
+class simple_delay(Module):
     def __init__(self, sample_rate : int, channel_num : int, time : float, feedback : float, wet : float):
         self.sample_rate = sample_rate
         self.time = time

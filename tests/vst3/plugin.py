@@ -8,8 +8,8 @@ from juce.juce_audio_processors import AudioProcessor
 from pytest.mocks.mock_audio_buffer import MockAudioBuffer
 from ui_basics.ui_basics import Slider
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-import venom_effects
 
+gc.disable()
 class Module:
     def __init__(self):
         pass
@@ -39,7 +39,6 @@ class simple_delay(Module):
                 self.delay_buffer_index[channel] = (self.delay_buffer_index[channel] + 1) % self.delay_buffer.getNumSamples()
         return buffer
 
-gc.disable()
 class PyAudioProcessorEditor(AudioProcessorEditor):
     def __init__(self, processor):
         super().__init__(processor)

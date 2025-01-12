@@ -38,7 +38,7 @@ class simple_delay(Module):
         return buffer
 
 gc.disable()
-class CustomAudioProcessorEditor(VAudioProcessorEditor):
+class PyAudioProcessorEditor(VAudioProcessorEditor):
     def __init__(self, processor):
         super().__init__(processor)
         self.setSize(400, 400)
@@ -59,4 +59,4 @@ class PyAudioProcessor(VAudioProcessor):
         buffer = self.delay.process(buffer)
 
     def createEditor(self):
-        return CustomAudioProcessorEditor(self)
+        return PyAudioProcessorEditor(self)

@@ -1,17 +1,17 @@
 import sys
 import os
 import gc
-# from venom.wrapper.audio.processors.VAudioProcessor import VAudioProcessor
-# from venom.wrapper.audio.processors.VAudioProcessorEditor import VAudioProcessorEditor
-from juce.juce_audio_processors import AudioProcessorEditor
-from juce.juce_audio_processors import AudioProcessor
+from venom.wrapper.audio.processors.VAudioProcessor import VAudioProcessor
+from venom.wrapper.audio.processors.VAudioProcessorEditor import VAudioProcessorEditor
+# from juce.juce_audio_processors import AudioProcessorEditor
+# from juce.juce_audio_processors import AudioProcessor
 from pytest.mocks.mock_audio_buffer import MockAudioBuffer
 from ui_basics.ui_basics import Slider
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from venom_effects import simple_delay
 
 gc.disable()
-class PyAudioProcessorEditor(AudioProcessorEditor):
+class PyAudioProcessorEditor(VAudioProcessorEditor):
     def __init__(self, processor):
         super().__init__(processor)
         self.setSize(400, 400)
@@ -19,7 +19,7 @@ class PyAudioProcessorEditor(AudioProcessorEditor):
         self.slider.setBounds(20, 20, 200, 20)
         self.addAndMakeVisible(self.slider, 1)
 
-class PyAudioProcessor(AudioProcessor):
+class PyAudioProcessor(VAudioProcessor):
     def __init__(self):
         super().__init__()
         self.sample_rate = 44100

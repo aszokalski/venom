@@ -10,7 +10,7 @@ class VAudioProcessor(AudioProcessor):
         pass
 
     def processBlock(self, buffer: AudioBuffer, midiMessages):
-        buffer.applyGain(14)
+        pass
 
     def createEditor(self):
         return None

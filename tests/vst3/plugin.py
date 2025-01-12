@@ -22,11 +22,11 @@ class PyAudioProcessor(VAudioProcessor):
         super().__init__()
         self.sample_rate = 44100
         self.delay = simple_delay(self.sample_rate, 2, 0.25, 0.5, 0.5)
-        self.clipper1 = soft_clipper(0.5)
+        # self.clipper1 = soft_clipper(0.5)
 
     def process_block(self, buffer, midiMessages):
         buffer = self.delay.process(buffer)  
-        buffer = self.clipper1.process(buffer)
+        # buffer = self.clipper1.process(buffer)
         return buffer
 
     def create_editor(self):

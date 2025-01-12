@@ -25,11 +25,8 @@ class PyAudioProcessor(VAudioProcessor):
         self.sample_rate = 44100
         self.delay = simple_delay(self.sample_rate, 2, 0.25, 0.5, 0.5)
 
-    def prepareToPlay(self, sampleRate, samplesPerBlock):
-        self.sample_rate = sampleRate
-
-    def processBlock(self, buffer, midiMessages):
+    def process_block(self, buffer, midiMessages):
         buffer = self.delay.process(buffer)
 
-    def createEditor(self):
+    def create_editor(self):
         return PyAudioProcessorEditor(self)

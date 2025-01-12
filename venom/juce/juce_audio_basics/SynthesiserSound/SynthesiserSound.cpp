@@ -16,7 +16,8 @@ class PySynthesiserSound : public juce::SynthesiserSound {
 void init_SynthesiserSound(py::module &m) {
     py::class_<juce::SynthesiserSound, PySynthesiserSound>(m, "SynthesiserSound")
         .def(py::init<>(
-            []() { return createOnMessageThread<juce::SynthesiserSound>([] { return new PySynthesiserSound(); }); }))
+            []() { return new PySynthesiserSound(); }
+        ))
         .def("appliesToNote", &juce::SynthesiserSound::appliesToNote)
         .def("appliesToChannel", &juce::SynthesiserSound::appliesToChannel);
 }

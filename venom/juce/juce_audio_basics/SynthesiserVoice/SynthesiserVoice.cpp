@@ -34,7 +34,7 @@ class PySynthesiserVoice : public juce::SynthesiserVoice {
 void init_SynthesiserVoice(py::module &m) {
     py::class_<juce::SynthesiserVoice, PySynthesiserVoice>(m, "SynthesiserVoice")
         .def(py::init<>(
-            []() { return createOnMessageThread<juce::SynthesiserVoice>([] { return new PySynthesiserVoice(); }); }
+            []() { return new PySynthesiserVoice(); }
         ))
         .def("canPlaySound", &juce::SynthesiserVoice::canPlaySound)
         .def("isVoiceActive", &juce::SynthesiserVoice::isVoiceActive)

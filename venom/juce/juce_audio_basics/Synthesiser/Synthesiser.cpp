@@ -6,7 +6,7 @@ void init_Synthesiser(py::module &m) {
 
     py::class_<juce::Synthesiser>(m, "Synthesiser")
         .def(py::init<>(
-            []() { return createOnMessageThread<juce::Synthesiser>([] { return new juce::Synthesiser(); }); }
+            []() { return new juce::Synthesiser(); }
         ))
         .def("noteOn", &juce::Synthesiser::noteOn)
         .def("noteOff", &juce::Synthesiser::noteOff)

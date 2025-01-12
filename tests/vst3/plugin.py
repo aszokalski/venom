@@ -5,7 +5,6 @@ from audio_processor.juce_audio_processors import AudioProcessor, AudioProcessor
 from ui_basics.ui_basics import Slider
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import venom_effects
-import venom_synth
 
 gc.disable()
 class PyAudioProcessorEditor(AudioProcessorEditor):
@@ -23,10 +22,6 @@ class PyAudioProcessor(AudioProcessor):
         self.delay = venom_effects.simple_delay(self.sample_rate, 2, 0.25, 0.5, 0.5)
         self.clipper = venom_effects.soft_clipper(30)
 
-        self.synth = venom_synth.synth(sample_rate=44100, waveform='sine')
-        self.synth.frequency = 440.0
-        self.synth.amplitude = 0.5
-
     def prepareToPlay(self, sampleRate, samplesPerBlock):
         self.sample_rate = sampleRate
 
@@ -34,9 +29,8 @@ class PyAudioProcessor(AudioProcessor):
         pass
 
     def processBlock(self, buffer, midiMessages):
-        self.synth.processBlock(buffer, midiMessages)
-        # buffer = self.delay.process(buffer)
-        # buffer = self.clipper.process(buffer)
+        buffer = self.delay.process(buffer)
+        buffer = self.clipper.process(buffer)
 
     def createEditor(self):
         return PyAudioProcessorEditor(self)

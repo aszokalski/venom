@@ -5,7 +5,7 @@ from venom.wrapper.audio.processors.VAudioProcessor import VAudioProcessor
 from venom.wrapper.audio.processors.VAudioProcessorEditor import VAudioProcessorEditor
 from ui_basics.ui_basics import Slider
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-import venom_effects
+from venom_effects import simple_delay, soft_clipper
 
 gc.disable()
 class PyAudioProcessorEditor(VAudioProcessorEditor):
@@ -20,14 +20,13 @@ class PyAudioProcessor(VAudioProcessor):
     def __init__(self):
         super().__init__()
         self.sample_rate = 44100
-        self.delay = venom_effects.simple_delay(self.sample_rate, 2, 0.25, 0.5, 0.5)
-        self.clipper = venom_effects.soft_clipper(30)
+        self.delay = simple_delay(self.sample_rate, 2, 0.25, 0.5, 0.5)
+        self.clipper1 = soft_clipper(0.5)
 
-    def prepareToPlay(self, sampleRate, samplesPerBlock):
-        self.sample_rate = sampleRate
+    def process_block(self, buffer, midiMessages):
+        buffer = (self.delay >> self.clipper1).process(buffer)
+        buffer = (self.delay >> [self.clipper2, self.clipper2]).process(buffer)
+        return buffer
 
-    def processBlock(self, buffer, midiMessages):
-        self.synth.processBlock(buffer, midiMessages)
-
-    def createEditor(self):
+    def create_editor(self):
         return PyAudioProcessorEditor(self)

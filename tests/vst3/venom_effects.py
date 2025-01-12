@@ -11,6 +11,36 @@ class Module:
     def process(self, buffer):
         raise NotImplementedError
 
+    def __rshift__(self, other):
+        if isinstance(other, list):
+            def chain_process(buffer):
+                result = self.process(buffer)
+                for module in other:
+                    result = module.process(result)
+                return result
+        else:
+            def chain_process(buffer):
+                return other.process(self.process(buffer))
+                
+        return_module = Module()
+        return_module.process = chain_process
+        return return_module
+
+    def __lshift__(self, other):
+        if isinstance(other, list):
+            def chain_process(buffer):
+                result = buffer
+                for module in reversed(other):
+                    result = module.process(result)
+                return self.process(result)
+        else:
+            def chain_process(buffer):
+                return self.process(other.process(buffer))
+                
+        return_module = Module()
+        return_module.process = chain_process
+        return return_module
+
 class simple_delay(Module):
     def __init__(self, sample_rate : int, channel_num : int, time : float, feedback : float, wet : float):
         self.sample_rate = sample_rate
@@ -34,7 +64,7 @@ class simple_delay(Module):
         return buffer
 
 
-class soft_clipper:
+class soft_clipper(Module):
     def __init__(self, gain : float):
         self.gain = gain
 

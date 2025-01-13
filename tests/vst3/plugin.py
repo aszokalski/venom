@@ -5,7 +5,6 @@ from audio_processor.juce_audio_processors import AudioProcessor, AudioProcessor
 from ui_basics.ui_basics import Slider
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import venom_effects
-import venom_synth
 
 gc.disable()
 class PyAudioProcessorEditor(AudioProcessorEditor):

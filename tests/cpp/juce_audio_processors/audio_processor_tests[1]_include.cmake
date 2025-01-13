@@ -1,5 +1,0 @@
-if(EXISTS "/home/bruno/projects/venom/tests/cpp/juce_audio_processors/audio_processor_tests[1]_tests.cmake")
-  include("/home/bruno/projects/venom/tests/cpp/juce_audio_processors/audio_processor_tests[1]_tests.cmake")
-else()
-  add_test(audio_processor_tests_NOT_BUILT audio_processor_tests_NOT_BUILT)
-endif()

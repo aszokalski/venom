@@ -28,11 +28,6 @@ class CMakeExtension(Extension):
 
 
 class CMakeBuild(build_ext):
-    def __init__(self, dist):
-        super().__init__(dist)
-        site_packages = Path(sysconfig.get_paths()["purelib"])
-        self.build_temp = site_packages / "venom_source" 
-
     def build_extension(self, ext: CMakeExtension) -> None:
         # Must be in this form due to bug in .resolve() only fixed in Python 3.10+
         site_packages = Path(sysconfig.get_paths()["purelib"])

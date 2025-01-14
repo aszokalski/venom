@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 3.5...3.26)
+set(FORMATS VST3)
+set(PLUGIN_NAME "TestPlugin")
+set(PLUGIN_VERSION "2.1.38")
+set(PLUGIN_AUTHOR "Test_test")
 project(${PLUGIN_NAME} VERSION ${PLUGIN_VERSION})
 
-find_package(Python REQUIRED COMPONENTS Interpreter Development)
-
-message(STATUS "Python_EXECUTABLE: ${Python_EXECUTABLE}")
-
+set(REQUIREMENTS_FILE "${PROJECT_SOURCE_DIR}/requirements.txt")
+option(DEFAULT_LOG_LEVEL "Set default log level for spdlog (0: trace, 1: debug, 2: info, etc.)" 1)
 
 execute_process(
         COMMAND ${Python_EXECUTABLE} -c "import sysconfig; print(sysconfig.get_config_var('LIBDIR'))"
@@ -17,46 +19,14 @@ execute_process(
         OUTPUT_VARIABLE PYTHON_LIB_NAME
         OUTPUT_STRIP_TRAILING_WHITESPACE
 )
+
+execute_process(
+        COMMAND ${Python_EXECUTABLE} -c "import sys; print(sys.prefix)"
+        OUTPUT_VARIABLE VENV_PATH
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
 set(PYTHON_SHARED_LIB "${PYTHON_LIB_DIR}/${PYTHON_LIB_NAME}")
-
-execute_process(
-    COMMAND ${Python_EXECUTABLE} -c "import sys; print(sys.prefix)"
-    OUTPUT_VARIABLE VENV_PATH
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-
-execute_process(
-    COMMAND ${Python_EXECUTABLE} -c "import sysconfig; print(sysconfig.get_path('purelib'))"
-    OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
-
-message(STATUS "Virtual Environment Path: ${VENV_PATH}")
-message(STATUS "Python Site Packages: ${PYTHON_SITE_PACKAGES}")
-message(STATUS "Python Shared Library: ${PYTHON_SHARED_LIB}")
-
-set(REQUIREMENTS_FILE "${PROJECT_SOURCE_DIR}/requirements.txt")
-set(EXT_LIB_DIR "${PYTHON_SITE_PACKAGES}/venom_extern/extern" CACHE STRING "Directory for external libraries")
-set(MODULES_DIR "${PYTHON_SITE_PACKAGES}/venom_modules" CACHE STRING "Directory for shared modules")
-set(SOURCE_DIR "${PYTHON_SITE_PACKAGES}/venom_source/venom")
-option(DEFAULT_LOG_LEVEL "Set default log level for spdlog (0: trace, 1: debug, 2: info, etc.)" 1)
-
-
-add_subdirectory(
-  ${EXT_LIB_DIR}
-  ${CMAKE_CURRENT_BINARY_DIR}/extern
-)
-
-add_subdirectory(
-  ${SOURCE_DIR}/juce
-  ${CMAKE_CURRENT_BINARY_DIR}/venom/juce
-)
-
-add_subdirectory(
-  ${SOURCE_DIR}/python/AudioProcessor
-  ${CMAKE_CURRENT_BINARY_DIR}/venom/python/AudioProcessor
-)
-
 
 juce_add_plugin(${PLUGIN_NAME}
         PLUGIN_MANUFACTURER_CODE Veno
@@ -64,6 +34,7 @@ juce_add_plugin(${PLUGIN_NAME}
         PLUGIN_CODE Veno
         FORMATS ${FORMATS}
         PRODUCT_NAME ${PROJECT_NAME})
+
 
 
 target_link_libraries(${PLUGIN_NAME}
@@ -85,7 +56,7 @@ target_link_libraries(${PLUGIN_NAME}
 
 target_sources(${PLUGIN_NAME}
         PRIVATE
-        create_plugin.cpp
+        ${PROJECT_SOURCE_DIR}/create_plugin.cpp
 )
 target_compile_definitions(${PLUGIN_NAME}
         PUBLIC
@@ -93,10 +64,32 @@ target_compile_definitions(${PLUGIN_NAME}
         JUCE_USE_CURL=0
         JUCE_VST3_CAN_REPLACE_VST2=0
         VENV_PATH="${VENV_PATH}"
-        PLUGIN_FILE_PATH="${PROJECT_SOURCE_DIR}/${ENTRYPOINT}"
-        PLUGIN_CLASS_NAME="${PLUGIN_NAME}"
+        PLUGIN_FILE="${PROJECT_SOURCE_DIR}/plugin.py"
         PYTHON_SHARED_LIB="${PYTHON_SHARED_LIB}"
-        PYTHON_SIDE_PACKAGES="${PYTHON_SITE_PACKAGES}"
+        PYTHON_SIDE_PACKAGES="${VENV_PATH}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages/"
         LOG_LEVEL=${DEFAULT_LOG_LEVEL}
 )
 
+
+add_custom_target(copy_audio_processor ALL
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:audio_processor> ${VENV_PATH}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages/
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:ui_basics> ${VENV_PATH}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages/
+        DEPENDS audio_processor
+        DEPENDS ui_basics
+        COMMENT "Copying audio_processor library to virtual environment site-packages..."
+)
+
+
+if(NOT EXISTS "${VENV_PATH}/bin/activate")
+    add_custom_target(create_venv ALL
+            COMMAND ${Python_EXECUTABLE} -m venv ${VENV_PATH}
+            COMMAND ${VENV_PATH}/bin/pip install -r ${REQUIREMENTS_FILE}
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+            COMMENT "Creating virtual environment and installing dependencies..."
+    )
+    add_dependencies(${PLUGIN_NAME} create_venv copy_audio_processor)
+else()
+    message(STATUS "Virtual environment already exists at ${VENV_PATH}")
+    add_dependencies(${PLUGIN_NAME}  copy_audio_processor)
+
+endif()

@@ -62,6 +62,8 @@ def build_project(source_path: str, p_bar: tqdm, cmake_args: list = []) -> None:
         files_to_copy = [
             "CMakeLists.txt",
             "create_plugin.cpp",
+            "plugin.py",
+            "requirements.txt",
         ]
 
         destination_dir.mkdir(exist_ok=True)

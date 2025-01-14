@@ -30,24 +30,17 @@ class CMakeExtension(Extension):
 class CMakeBuild(build_ext):
     def build_extension(self, ext: CMakeExtension) -> None:
         # Must be in this form due to bug in .resolve() only fixed in Python 3.10+
-        # ext_fullpath = Path.cwd() / self.get_ext_fullpath(ext.name)
-        # extdir = ext_fullpath.parent.resolve()
-
-        # Copy project to site-packages
-
-        # Get site-packages path
         site_packages = Path(sysconfig.get_paths()["purelib"])
-        extdir = site_packages / "venom_source"
+        extdir = (site_packages / "venom_source").resolve()
 
-        if extdir.exists():
-            shutil.rmtree(extdir)
         shutil.copytree(ext.sourcedir, extdir, ignore=shutil.ignore_patterns(
             "build", "dist", # Ignore build and dist directories
             "venv", ".venv", # Ignore virtual environment directories
             ".git", ".github", ".gitignore", # Ignore git directories and files   
             "tests", "docs", "Writerside", "example" # Ignore tests and docs directories
-            "CMakeFiles", "CMakeCache.txt", "*.cmake", # Ignore CMake files 
-        ))
+            "CMakeFiles", "CMakeCache.txt", "*.cmake"), # Ignore CMake files 
+            dirs_exist_ok=True
+        )
 
         # Change to source directory
         os.chdir(extdir)

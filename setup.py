@@ -45,6 +45,7 @@ class CMakeBuild(build_ext):
             "build", "dist", # Ignore build and dist directories
             "venv", ".venv", # Ignore virtual environment directories
             ".git", ".github", ".gitignore", # Ignore git directories and files   
+            "tests", "docs", "Writerside", "example" # Ignore tests and docs directories
             "CMakeFiles", "CMakeCache.txt", "*.cmake", # Ignore CMake files 
         ))
 

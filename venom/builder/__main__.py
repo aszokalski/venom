@@ -44,7 +44,7 @@ def build(source_path):
     p_bar.set_description("Creating plugin package")
     p_bar.refresh()
 
-    project.build(source_path, p_bar)
+    project.build_project(source_path, p_bar)
 
 
 @click.command(help="Allows faster building (for dev testing) on macOS. It only replaces the juce bindings.")

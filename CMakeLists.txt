@@ -15,7 +15,8 @@ execute_process(
 )
 message(STATUS "Python Site Packages: ${PYTHON_SITE_PACKAGES}")
 
-set(MODULES_DIR "${PYTHON_SITE_PACKAGES}/venom_modules" CACHE STRING "Directory for shared modules")
+set(MODULES_DIR "${CMAKE_BINARY_DIR}/bindings_modules" CACHE STRING "Directory for shared modules")
+# set(MODULES_DIR "${PYTHON_SITE_PACKAGES}/venom_modules" CACHE STRING "Directory for shared modules")
 file(MAKE_DIRECTORY ${MODULES_DIR})
 
 # DEPENDENCIES

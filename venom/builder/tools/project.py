@@ -1,5 +1,6 @@
 import os
 import shutil
+import site
 
 from tqdm import tqdm
 from pathlib import Path
@@ -50,7 +51,8 @@ def build_project(source_path: str, p_bar: tqdm, cmake_args: list = []) -> None:
     if "CMAKE_ARGS" in os.environ:
         cmake_args += [item for item in os.environ["CMAKE_ARGS"].split(" ") if item]
 
-    cmake.init(source_path, p_bar, cmake_args)
+    venom_source = site.getsitepackages()[0] + "/venom_source"
+    cmake.init(venom_source, p_bar, cmake_args)
 
     p_bar.update(1)
     p_bar.set_description("Building CMake")
@@ -62,7 +64,7 @@ def build_project(source_path: str, p_bar: tqdm, cmake_args: list = []) -> None:
         f"{config.name}",
     ]
 
-    cmake.build_target(source_path, p_bar, build_args)
+    cmake.build_target(venom_source, p_bar, build_args)
     p_bar.update(4)
     p_bar.set_description("Done")
     p_bar.refresh()

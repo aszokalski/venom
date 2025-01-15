@@ -61,7 +61,7 @@ def build_project(source_path: str, p_bar: tqdm, cmake_args: list = []) -> None:
     # Build the target
     build_args = [
         "--target",
-        f"{config.name}",
+        "BoilerplatePlugin",
     ]
 
     cmake.build_target(venom_source.as_posix(), p_bar, build_args)

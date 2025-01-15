@@ -25,8 +25,8 @@ def build_project(source_path: str, p_bar: tqdm, cmake_args: list = []) -> None:
 
     if (_source_path / "build").exists():
         p_bar.set_description("Cleaning previous build directory")
+        (_source_path / "dist").unlink()
         shutil.rmtree(_source_path / "build")
-        shutil.rmtree(_source_path / "dist")
     p_bar.set_description("Creating build directory")
     (_source_path / "dist").symlink_to(
         _source_path / "build" / f"{config.name}_artefacts",
@@ -41,7 +41,7 @@ def build_project(source_path: str, p_bar: tqdm, cmake_args: list = []) -> None:
         f"-DPLUGIN_NAME={config.name}",
         f"-DPLUGIN_VERSION={config.version}",
         f"-DPLUGIN_AUTHOR={config.author}",
-        f"-DENTRYPOINT={config.entrypoint}",
+        f"-DPLUGIN_FILE={(_source_path / config.entrypoint).resolve()}",
         f"-DPROJECT_SOURCE_DIR={_source_path.resolve()}",
         "-DFORMATS=VST3", #TODO: Add support for other formats
         "-DDEFAULT_LOG_LEVEL=0", #TODO: Add other log levels
@@ -51,8 +51,8 @@ def build_project(source_path: str, p_bar: tqdm, cmake_args: list = []) -> None:
     if "CMAKE_ARGS" in os.environ:
         cmake_args += [item for item in os.environ["CMAKE_ARGS"].split(" ") if item]
 
-    venom_source = site.getsitepackages()[0] + "/venom_source"
-    cmake.init(venom_source, p_bar, cmake_args)
+    venom_source = Path(site.getsitepackages()[0]) / "venom_source"
+    cmake.init(venom_source.as_posix(), p_bar, cmake_args)
 
     p_bar.update(1)
     p_bar.set_description("Building CMake")
@@ -64,7 +64,7 @@ def build_project(source_path: str, p_bar: tqdm, cmake_args: list = []) -> None:
         f"{config.name}",
     ]
 
-    cmake.build_target(venom_source, p_bar, build_args)
+    cmake.build_target(venom_source.as_posix(), p_bar, build_args)
     p_bar.update(4)
     p_bar.set_description("Done")
     p_bar.refresh()

@@ -27,6 +27,7 @@ set_target_properties(spdlog PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 # Add subdirectories for other parts of the project
 add_subdirectory(venom/juce)
+add_subdirectory(venom/builder/boilerplate_plugin_project)
 add_subdirectory(venom/python/AudioProcessor)
 
 set(ADD_TESTS ON CACHE BOOL "Add tests to the project")

@@ -36,11 +36,11 @@ class CMakeBuild(build_ext):
         source_dir = (site_packages / "venom_source").resolve()
 
         shutil.copytree(ext.sourcedir, source_dir, ignore=shutil.ignore_patterns(
-            #"build", "dist", # Ignore build and dist directories
+            "build", "dist", # Ignore build and dist directories
             "venv", ".venv", # Ignore virtual environment directories
             ".git", ".github", ".gitignore", # Ignore git directories and files   
             "tests", "docs", "Writerside", "example" # Ignore tests and docs directories
-            "CMakeFiles", "CMakeCache.txt", "*.cmake"), # Ignore CMake files 
+            "CMakeFiles", "CMakeCache.txt"), # Ignore CMake files 
             dirs_exist_ok=True
         )
 
@@ -136,6 +136,14 @@ class CMakeBuild(build_ext):
         )
         subprocess.run(
             ["cmake", "--build", ".", *build_args], cwd=build_temp, check=True
+        )
+
+        cmake_args = [
+            *cmake_args,
+            "-DADD_TESTS=OFF",
+        ]
+        subprocess.run(
+            ["cmake", source_dir.as_posix(), *cmake_args], cwd=source_dir, check=True
         )
 
 

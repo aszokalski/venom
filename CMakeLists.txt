@@ -29,8 +29,11 @@ set_target_properties(spdlog PROPERTIES POSITION_INDEPENDENT_CODE ON)
 add_subdirectory(venom/juce)
 add_subdirectory(venom/python/AudioProcessor)
 
-add_subdirectory(tests/cpp)
-add_subdirectory(tests/vst3)
+set(ADD_TESTS ON CACHE BOOL "Add tests to the project")
+if(ADD_TESTS)
+  add_subdirectory(tests/cpp)
+  add_subdirectory(tests/vst3)
+endif()
 
 # Logging configuration
 option(ENABLE_DEBUG_LOGGING "Enable debug logging" OFF)

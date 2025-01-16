@@ -61,6 +61,7 @@ target_compile_definitions(${PLUGIN_NAME}
         JUCE_VST3_CAN_REPLACE_VST2=0
         VENV_PATH="${VENV_PATH}"
         PLUGIN_FILE="${CMAKE_CURRENT_SOURCE_DIR}/plugin.py"
+        PLUGIN_SCRIPT_FILE="${CMAKE_CURRENT_SOURCE_DIR}/venom_script.py"
         PYTHON_SHARED_LIB="${PYTHON_SHARED_LIB}"
         PYTHON_SIDE_PACKAGES="${VENV_PATH}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages/"
         LOG_LEVEL=${DEFAULT_LOG_LEVEL}

@@ -25,12 +25,8 @@ def build_project(source_path: str, p_bar: tqdm, cmake_args: list = []) -> None:
 
     if (_source_path / "build").exists():
         p_bar.set_description("Cleaning previous build directory")
-        (_source_path / "dist").unlink()
         shutil.rmtree(_source_path / "build")
     p_bar.set_description("Creating build directory")
-    (_source_path / "dist").symlink_to(
-        _source_path / "build" / f"{config.name}_artefacts",
-    )
 
     p_bar.update(2)
     p_bar.set_description("Initializing CMake")
@@ -63,6 +59,14 @@ def build_project(source_path: str, p_bar: tqdm, cmake_args: list = []) -> None:
         "--target",
         "BoilerplatePlugin",
     ]
+
+    # Set CMAKE_BUILD_PARALLEL_LEVEL to control the parallel build level
+    # across all generators.
+    if "CMAKE_BUILD_PARALLEL_LEVEL" not in os.environ:
+        # self.parallel is a Python 3 only way to set parallel jobs by hand
+        # using -j in the build_ext call, not supported by pip or PyPA-build.
+        # CMake 3.12+ only.
+        build_args += [f"-j{os.cpu_count()//2}"]
 
     cmake.build_target(venom_source.as_posix(), p_bar, build_args)
     p_bar.update(4)

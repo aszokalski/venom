@@ -34,8 +34,8 @@ class PyAudioProcessor(AudioProcessor):
         pass
 
     def processBlock(self, buffer, midiMessages):
-        self.synth.processBlock(buffer, midiMessages)
-        # buffer = self.delay.process(buffer)
+        # self.synth.processBlock(buffer, midiMessages)
+        buffer = self.delay.process(buffer)
         # buffer = self.clipper.process(buffer)
 
     def createEditor(self):

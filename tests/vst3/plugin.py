@@ -4,7 +4,7 @@ import gc
 from audio_processor.juce_audio_processors import AudioProcessor, AudioProcessorEditor, Colour
 from ui_basics.ui_basics import Slider
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from venom_script import venom_plugin
+from script import venom_plugin
 
 gc.disable()
 class PyAudioProcessorEditor(AudioProcessorEditor):

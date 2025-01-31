@@ -41,7 +41,9 @@ It can be done only once per project, because it compiles nessessary C++ librari
 
 Project tree after using the command:
 ```
-
+example                            [example project]
+├── plugin.py
+└── venom.yaml
 ```
 Variables used for building the plugin can be found inside `venom.yml` file.
 Inside `plugin.py` is defined logic for the plugin.
@@ -50,7 +52,23 @@ Inside `plugin.py` is defined logic for the plugin.
 
 After using the command project tree should look like this:
 ```
-
+example                            [example project]
+├── plugin.py
+├── venom.yaml
+├── dist/
+│   ├── VST3
+│   │   └── TestPlugin.vst3
+│   │       └── Contents
+│   │           ├── Info.plist
+│   │           ├── MacOS
+│   │           │   └── TestPlugin
+│   │           ├── PkgInfo
+│   │           ├── Resources
+│   │           │   └── moduleinfo.json
+│   │           └── CodeSignature
+│   │               └── CodeResources
+│   └── libTestPlugin_SharedCode.a
+└── build/                        [other build artifacts]
 ```
 Inside `dist` folder is plugin binary.
 Inside `build` are all files built by using this command.

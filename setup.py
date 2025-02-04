@@ -3,6 +3,8 @@ import os
 import re
 import subprocess
 import sys
+import sysconfig
+import shutil
 from pathlib import Path
 from setuptools.command.build_ext import build_ext
 from setuptools import Extension
@@ -30,6 +32,17 @@ class CMakeBuild(build_ext):
         # Must be in this form due to bug in .resolve() only fixed in Python 3.10+
         ext_fullpath = Path.cwd() / self.get_ext_fullpath(ext.name)
         extdir = ext_fullpath.parent.resolve()
+        site_packages = Path(sysconfig.get_paths()["purelib"])
+        source_dir = (site_packages / "venom_source").resolve()
+
+        shutil.copytree(ext.sourcedir, source_dir, ignore=shutil.ignore_patterns(
+            "build", "dist", # Ignore build and dist directories
+            "venv", ".venv", # Ignore virtual environment directories
+            ".git", ".github", ".gitignore", # Ignore git directories and files   
+            "tests", "docs", "Writerside", "example" # Ignore tests and docs directories
+            "CMakeFiles", "CMakeCache.txt"), # Ignore CMake files 
+            dirs_exist_ok=True
+        )
 
         # Using this requires trailing slash for auto-detection & inclusion of
         # auxiliary "native" libs
@@ -123,6 +136,14 @@ class CMakeBuild(build_ext):
         )
         subprocess.run(
             ["cmake", "--build", ".", *build_args], cwd=build_temp, check=True
+        )
+
+        cmake_args = [
+            *cmake_args,
+            "-DADD_TESTS=OFF",
+        ]
+        subprocess.run(
+            ["cmake", source_dir.as_posix(), *cmake_args], cwd=source_dir, check=True
         )
 
 

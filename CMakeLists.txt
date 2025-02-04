@@ -8,8 +8,16 @@ find_package(Python REQUIRED COMPONENTS Interpreter Development)
 message(STATUS "Python_EXECUTABLE: ${Python_EXECUTABLE}")
 include_directories(${Python_INCLUDE_DIRS})
 link_directories(${Python_LIBRARY_DIRS})
-set(MODULES_DIR "${CMAKE_BINARY_DIR}/bindings_modules" CACHE STRING "Directory for shared modules")
+execute_process(
+    COMMAND ${Python_EXECUTABLE} -c "import sysconfig; print(sysconfig.get_path('purelib'))"
+    OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+message(STATUS "Python Site Packages: ${PYTHON_SITE_PACKAGES}")
 
+set(MODULES_DIR "${CMAKE_BINARY_DIR}/bindings_modules" CACHE STRING "Directory for shared modules")
+# set(MODULES_DIR "${PYTHON_SITE_PACKAGES}/venom_modules" CACHE STRING "Directory for shared modules")
+file(MAKE_DIRECTORY ${MODULES_DIR})
 
 # DEPENDENCIES
 add_subdirectory(extern)
@@ -17,15 +25,16 @@ add_subdirectory(extern)
 # Set properties for external libraries
 set_target_properties(spdlog PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
-set(MODULES_DIR "${CMAKE_BINARY_DIR}/bindings_modules" CACHE STRING "Directory for shared modules")
-file(MAKE_DIRECTORY ${MODULES_DIR})
-
 # Add subdirectories for other parts of the project
 add_subdirectory(venom/juce)
+add_subdirectory(venom/builder/boilerplate_plugin_project)
 add_subdirectory(venom/python/AudioProcessor)
 
-add_subdirectory(tests/cpp)
-add_subdirectory(tests/vst3)
+set(ADD_TESTS ON CACHE BOOL "Add tests to the project")
+if(ADD_TESTS)
+  add_subdirectory(tests/cpp)
+  add_subdirectory(tests/vst3)
+endif()
 
 # Logging configuration
 option(ENABLE_DEBUG_LOGGING "Enable debug logging" OFF)

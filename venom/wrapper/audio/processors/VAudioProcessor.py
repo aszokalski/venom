@@ -2,18 +2,24 @@ from juce.juce_audio_processors import AudioProcessor
 from juce.utils import AudioBuffer
 
 class VAudioProcessor(AudioProcessor):
-    # Todo: implement a simple plugin
+    def process_block(self, buffer: AudioBuffer, midiMessages):
+        raise NotImplementedError
+    
+    def create_editor(self):
+        return None
+
+    def processBlock(self, buffer: AudioBuffer, midiMessages):
+        self.process_block(buffer, midiMessages)
+
+    def createEditor(self):
+        return self.create_editor()
+
+    # Methods below dont need to be implemented in inheriting classes
     def prepareToPlay(self, sampleRate, samplesPerBlock):
         pass
 
     def releaseResources(self):
         pass
-
-    def processBlock(self, buffer: AudioBuffer, midiMessages):
-        buffer.applyGain(14)
-
-    def createEditor(self):
-        return None
 
     def hasEditor(self):
         return False

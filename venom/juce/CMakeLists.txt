@@ -31,6 +31,20 @@ pybind11_add_module(juce_bindings
         juce_gui_basics/Slider/Slider.cpp
         juce_gui_basics/Slider/Slider.h
 
+        juce_audio_basics/MidiMessage/MidiMessage.cpp
+        juce_audio_basics/MidiMessage/MidiMessage.h
+        juce_audio_basics/MidiBuffer/MidiBuffer.cpp
+        juce_audio_basics/MidiBuffer/MidiBuffer.h
+        juce_audio_basics/Synthesiser/Synthesiser.cpp
+        juce_audio_basics/Synthesiser/Synthesiser.h
+        juce_audio_basics/SynthesiserVoice/SynthesiserVoice.cpp
+        juce_audio_basics/SynthesiserVoice/SynthesiserVoice.h
+        juce_audio_basics/SynthesiserSound/SynthesiserSound.cpp
+        juce_audio_basics/SynthesiserSound/SynthesiserSound.h
+
+        juce_audio_basics/juce_audio_basics.cpp
+        juce_audio_basics/juce_audio_basics.h
+
 
         utils/utils.cpp
         utils/utils.h
@@ -61,4 +75,5 @@ target_link_libraries(juce_bindings
 
 add_subdirectory(juce_audio_processors)
 add_subdirectory(juce_gui_basics)
+add_subdirectory(juce_audio_basics)
 add_subdirectory(helpers)

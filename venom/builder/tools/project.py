@@ -1,95 +1,74 @@
-import shutil
 import os
-import sys
-from venom.builder.tools.utils.Config import Config
-from venom.builder.tools import cmake
+import shutil
+import site
+
 from tqdm import tqdm
+from pathlib import Path
+
+from venom.builder.tools import cmake
+from venom.builder.tools.template import is_present, new_project
+from venom.builder.tools.utils.Config import Config
 
 
-def modify_cmake_lists(source_path: str, config: Config):
-    with open(os.path.join(source_path, "build", "CMakeLists.txt"), "r") as file_handle:
-        lines = file_handle.readlines()
-        for index, line in enumerate(lines):
-            if "set(PLUGIN_NAME" in line:
-                lines[index] = "set(PLUGIN_NAME " + config.name + ")\n"
-            if "set(PLUGIN_VERSION" in line:
-                lines[index] = "set(PLUGIN_VERSION " + config.version + ")\n"
-            if "set(PLUGIN_AUTHOR" in line:
-                lines[index] = "set(PLUGIN_AUTHOR " + config.author + ")\n"
-            if "set(FORMATS" in line:
-                lines[index] = "set(FORMATS " + " ".join(config.targets) + ")\n"
-            if "set(SITE_PACKAGES_DIRS" in line:
-                site_packages_dirs = [f'"{path}"' for path in sys.path if "site-packages" in path]
-                lines[index] = "set(SITE_PACKAGES_DIRS " + " ".join(site_packages_dirs) + ")\n"
-
-    with open(os.path.join(source_path, "build", "CMakeLists.txt"), "w") as file_handle:
-        file_handle.writelines(lines)
-
-
-def build(source_path, p_bar: tqdm):
-    # Clean previous build
-    p_bar.update(1)
-    if os.path.exists(os.path.join(source_path, "build")):
-        p_bar.set_description("Cleaning old ./build")
+def build_project(source_path: str, p_bar: tqdm, cmake_args: list = []) -> None:
+    cmake_args = cmake_args or []
+    _source_path = Path(source_path)
     p_bar.refresh()
 
-    try:
-        os.remove(os.path.join(source_path, "dist"))
-    except:
-        pass
-    finally:
-        p_bar.set_description("Creating ./dist")
-    p_bar.refresh()
-
-    with open(os.path.join(source_path, "venom.yaml")) as file_handle:
+    if not is_present(source_path):
         p_bar.set_description("Copying boilerplate project")
         p_bar.refresh()
+        new_project(source_path, "VenomPlugin", "VenomAuthor", ["Standalone", "VST3"])
+
+    with (_source_path / "venom.yaml").open() as file_handle:
         config = Config.from_yaml(file_handle)
-        # Create dist directory as a symbolic link to source_pats/build/build/VenomPlugin_artefacts
-        os.symlink(os.path.join(source_path, "build", "VenomPlugin_artefacts"),
-                   os.path.join(source_path, "dist"))
 
-        # copy boilerplate project from the same directory as this file
-        shutil.copytree(os.path.join(os.path.dirname(__file__), "..", "boilerplate_plugin_project"),
-                        os.path.join(source_path, "build"),
-                        ignore=shutil.ignore_patterns('__pycache__', '*.pyc', 'build', 'tests', 'docs', 'examples'))
+    if (_source_path / "build").exists():
+        p_bar.set_description("Cleaning previous build directory")
+        shutil.rmtree(_source_path / "build")
+    p_bar.set_description("Creating build directory")
 
-        source_dir = os.path.join(os.path.dirname(__file__), "..", "boilerplate_plugin_project")
-        destination_dir = os.path.join(source_path, "build")
-        files_to_copy = [
-            'CMakeLists.txt',
-            'create_plugin.cpp',
-            'PyAudioProcessor.h',
-            'PyAudioProcessorEditor.h',
-            'PyAudioProcessor.py',
-        ]
+    p_bar.update(2)
+    p_bar.set_description("Initializing CMake")
+    p_bar.refresh()
 
-        if not os.path.exists(destination_dir):
-            os.makedirs(destination_dir)
+    # Initialize CMake with the given arguments
+    cmake_args = [
+        f"-DPLUGIN_NAME={config.name}",
+        f"-DPLUGIN_VERSION={config.version}",
+        f"-DPLUGIN_AUTHOR={config.author}",
+        f"-DPLUGIN_FILE={(_source_path / config.entrypoint).resolve()}",
+        f"-DPROJECT_SOURCE_DIR={_source_path.resolve()}",
+        "-DFORMATS=VST3", #TODO: Add support for other formats
+        "-DDEFAULT_LOG_LEVEL=0", #TODO: Add other log levels
+        *cmake_args,
+    ]
 
-        # Copy each file from the source to the destination
-        for file_name in files_to_copy:
-            source_file = os.path.join(source_dir, file_name)
-            destination_file = os.path.join(destination_dir, file_name)
+    if "CMAKE_ARGS" in os.environ:
+        cmake_args += [item for item in os.environ["CMAKE_ARGS"].split(" ") if item]
 
-            if os.path.exists(source_file):
-                shutil.copy2(source_file, destination_file)
-                print(f"Copied {file_name} to {destination_dir}")
-            else:
-                print(f"Warning: {file_name} not found in {source_dir}")
-
-
-        # setup CMakeLists.txt with config
-        modify_cmake_lists(source_path, config)
-        p_bar.update(2)
-        p_bar.set_description("Initializing CMake")
-        p_bar.refresh()
-        cmake.init(os.path.join(source_path, "build"), p_bar)
+    venom_source = Path(site.getsitepackages()[0]) / "venom_source"
+    cmake.init(venom_source.as_posix(), p_bar, cmake_args)
 
     p_bar.update(1)
     p_bar.set_description("Building CMake")
     p_bar.refresh()
-    cmake.build_target(os.path.join(source_path, "build"), p_bar)
+
+    # Build the target
+    build_args = [
+        "--target",
+        "BoilerplatePlugin",
+    ]
+
+    # Set CMAKE_BUILD_PARALLEL_LEVEL to control the parallel build level
+    # across all generators.
+    if "CMAKE_BUILD_PARALLEL_LEVEL" not in os.environ:
+        # self.parallel is a Python 3 only way to set parallel jobs by hand
+        # using -j in the build_ext call, not supported by pip or PyPA-build.
+        # CMake 3.12+ only.
+        build_args += [f"-j{os.cpu_count()//2}"]
+
+    cmake.build_target(venom_source.as_posix(), p_bar, build_args)
     p_bar.update(4)
     p_bar.set_description("Done")
     p_bar.refresh()

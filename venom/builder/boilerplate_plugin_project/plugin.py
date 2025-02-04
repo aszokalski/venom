@@ -1,10 +1,6 @@
-import sys
-import os
 import gc
 from audio_processor.juce_audio_processors import AudioProcessor, AudioProcessorEditor, Colour
 from ui_basics.ui_basics import Slider
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-import venom_effects
 
 gc.disable()
 class PyAudioProcessorEditor(AudioProcessorEditor):
@@ -19,14 +15,18 @@ class PyAudioProcessor(AudioProcessor):
     def __init__(self):
         super().__init__()
         self.sample_rate = 44100
-        self.delay = venom_effects.simple_delay(self.sample_rate, 2, 0.25, 0.5, 0.5)
-        self.clipper = venom_effects.soft_clipper(30)
 
     def prepareToPlay(self, sampleRate, samplesPerBlock):
         self.sample_rate = sampleRate
 
+    def releaseResources(self):
+        pass
+
     def processBlock(self, buffer, midiMessages):
-        self.synth.processBlock(buffer, midiMessages)
+        numChannels = buffer.getNumChannels()
+        for channel in range(numChannels):
+            data = buffer.getWritePointer(channel)
+            data[:] = data * 20.2
 
     def createEditor(self):
         return PyAudioProcessorEditor(self)
@@ -38,9 +38,6 @@ class PyAudioProcessor(AudioProcessor):
         return "PyAudioProcessor"
 
     def acceptsMidi(self):
-        return True
-
-    def isMidiEffect(self):
         return False
 
     def producesMidi(self):

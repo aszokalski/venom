@@ -1,0 +1,122 @@
+name: Run VST3 Validators
+
+on:
+  push:
+    branches: [main, vst-validator]
+  pull_request:
+    branches: [main, vst-validator]
+
+jobs:
+  validate-vst3:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Cache apt package lists
+        uses: actions/cache@v2
+        id: cache-apt-lists
+        with:
+          path: /var/lib/apt/lists
+          key: ${{ runner.os }}-apt-lists-${{ hashFiles('venom/.gitmodules') }}
+          restore-keys: |
+            ${{ runner.os }}-apt-lists-
+
+      - name: Cache apt package directories
+        uses: actions/cache@v2
+        id: cache-apt-packages
+        with:
+          path: /var/cache/apt
+          key: ${{ runner.os }}-apt-packages-${{ hashFiles('venom/.gitmodules') }}
+          restore-keys: |
+            ${{ runner.os }}-apt-packages-
+
+      - name: Install Dependencies
+        if: steps.cache-apt-lists.outputs.cache-hit != 'true' || steps.cache-apt-packages.outputs.cache-hit != 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libx11-dev libxrandr-dev libasound2-dev libgl1-mesa-dev \
+                                  libcurl4-openssl-dev libwebkit2gtk-4.0-dev libgtk-3-dev \
+                                  libxcb-cursor-dev libgtkmm-3.0-dev libxkbcommon-x11-dev \
+                                  libxcb-util-dev libxcb-xkb-dev libxcb-keysyms1-dev \
+                                  tree
+
+      - name: Cache CMake and Ninja
+        uses: actions/cache@v2
+        with:
+          path: ~/.cmake
+          key: ${{ runner.os }}-cmake-${{ hashFiles('venom/.gitmodules') }}
+          restore-keys: |
+            ${{ runner.os }}-cmake-
+
+      - name: Set up CMake
+        if: steps.cache-cmake.outputs.cache-hit != 'true'
+        uses: lukka/get-cmake@v3.25.2
+        with:
+          cmakeVersion: 3.25.2
+          ninjaVersion: 1.11.1
+
+      - name: Cache VST3 Validator
+        id: cache-vst3-validator
+        uses: actions/cache@v2
+        with:
+          path: cmake-build/bin/Release/validator
+          key: ${{ runner.os }}-vst3-validator-${{ hashFiles('venom/.gitmodules') }}
+          restore-keys: |
+            ${{ runner.os }}-vst3-validator-
+
+      - name: Update Submodules
+        run: |
+          set -x
+          git submodule update --init --recursive 2>&1 | tee update_submodules.log
+
+      - name: Configure CMake
+        run: |
+          set -x
+          mkdir -p build 
+          cd build
+          PYTHON_EXECUTABLE=$(which python)
+          cmake -D CMAKE_BUILD_TYPE=Release -DPython_EXECUTABLE=${PYTHON_EXECUTABLE} -DDEFAULT_LOG_LEVEL=2 .. 2>&1 | tee -a ../configure_cmake.log
+
+      - name: Build TestPlugin_VST3
+        run: |
+          set -x
+          cd build
+          cmake --build . --target TestPlugin_VST3 --config Release -- -j 8 2>&1 | tee build_target.log
+
+      - name: Set up VST3 SDK Validator
+        run: |
+          set -x
+          mkdir -p /tmp/vst3sdk
+          git clone --recursive https://github.com/steinbergmedia/vst3sdk.git /tmp/vst3sdk 
+          cd /tmp/vst3sdk
+          cmake -B cmake-build -DCMAKE_BUILD_TYPE=Release
+          cmake --build cmake-build --target validator -- -j 4
+          cp cmake-build/bin/Release/validator vst3_validator
+
+      - name: List Files and Run VST3 Validators
+        run: |
+          set -x
+          pwd
+          cd build
+          tree tests/vst3/TestPlugin_artefacts | tee files.log
+          /tmp/vst3sdk/vst3_validator tests/vst3/TestPlugin_artefacts/Release/VST3/TestPlugin.vst3 2>&1 | tee vst3_validation.log
+          if grep -q "0 tests failed" vst3_validation.log; then
+            exit 0
+          else
+            exit 1
+          fi
+
+      - name: Upload logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs
+          path: |
+            build_setup.log
+            configure_cmake.log
+            build_target.log
+            files.log
+            vst3_validation.log
+            update_submodules.log

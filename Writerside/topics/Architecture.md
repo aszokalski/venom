@@ -130,3 +130,4 @@ This is a high-level overview of the building process:
 - [CLI tool](CLI-tool.md)
 - [Boilerplate JUCE project](Boilerplate-JUCE-project.md)
 - [VENOM project structure](VENOM-Project-Structure.md)
+- [Testing](Testing.md)

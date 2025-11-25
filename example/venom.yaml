@@ -3,6 +3,6 @@ version: 1.0.0
 author: Adam
 entrypoint: plugin.py
 targets:
-  - Standalone
-#  - VST3
+#  - Standalone
+  - VST3
 #  - AU

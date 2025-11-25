@@ -140,7 +140,7 @@ def generate_package_data(directory):
 setup(
     name="venom",
     version="0.0.32",
-    ext_modules=[CMakeExtension("juce")],
+    ext_modules=[CMakeExtension("juce_bindings")],
     packages=find_namespace_packages(),
     cmdclass={"build_ext": CMakeBuild
               },

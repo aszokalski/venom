@@ -12,6 +12,11 @@ venom/
 ├── extern/                             [submodules]
 │   ├── juce/
 │   ├── pybind11/
+│   ├── spdlog/
+├── tests/                              [venom project's tests]
+│   ├── cpp/
+│   ├── pytest/
+│   ├── vst3/
 ├── venom/
 *   ├── builder/                        [CLI tool]
 *   │   ├── boilerplate_plugin_project/
@@ -27,6 +32,7 @@ venom/
 │   │   ├── [JUCE bindings source files]
 │   │   ├── CMakeLists.txt              [JUCE bindings build system pt. 2]
 │   │   ├── __init__.py                 [exposes JUCE bindings as juce package]
+*   ├── python/                         [Python -> C++ bindings]
 *   ├── wrapper/                        [Pythonic API]
 │   │   ├── [Pythonic API wrapping JUCE bindings]
 │   │   ├── __init__.py
